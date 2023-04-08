@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+
 public class TrainController : MonoBehaviour
 {
     // Prefab Definitionen
@@ -15,14 +16,12 @@ public class TrainController : MonoBehaviour
 
 
     // Lerp (Bewegung)
-    public Transform startPosition; // Startposition des Zuges
+    //public Transform startPosition; // Startposition des Zuges
     public Transform endPosition; // Endposition des Zuges
     public float duration; // Dauer der Zugfahrt in Sekunden
 
     private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
-    private float startTime; // Startzeit der Zugfahrt
-    private Vector3 startVector; // Startvektor des Zuges
-    private Vector3 endVector; // Endvektor des Zuges
+    private Sequence movementSequence; // DOTween Bewegungssequenz
 
     private GameObject locomotive;
 
@@ -58,31 +57,18 @@ public class TrainController : MonoBehaviour
         }
         */
     }
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
         {
             // Zugbewegung starten
             isMoving = true;
-            startTime = Time.time;
-            startVector = startPosition.position;
-            endVector = endPosition.position;
-        }
-
-        if (isMoving)
-        {
-            // Zugbewegung durchführen
-            float t = (Time.time - startTime) / duration;
-
-            locomotive.transform.position = Vector3.Lerp(startVector, endVector, t);
-
-            if (t >= 1f)
-            {
-                // Zugbewegung abgeschlossen
-                isMoving = false;
-                Debug.Log("Gestoppt!");
-            }
+            movementSequence = DOTween.Sequence();
+            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, duration).SetEase(Ease.OutCubic))
+                .OnComplete(() => {
+                    isMoving = false;
+                    Debug.Log("Gestoppt!");
+                });
         }
     }
 }

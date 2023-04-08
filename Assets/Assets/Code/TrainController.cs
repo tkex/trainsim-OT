@@ -3,19 +3,33 @@ using UnityEngine;
 
 public class TrainController : MonoBehaviour
 {
-    
+    // Prefab Definitionen
     public GameObject locomotivePrefab;
     public GameObject wagonPrefab;
 
-    // Configurator variables
+
+    // Konfigurator Variabeln
     public int numWagons = 5;
     public float wagonSpacing = 1.0f;
-    public Vector3 trainPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    public Vector3 trainSpawnPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+
+    // Lerp (Bewegung)
+    public Transform startPosition; // Startposition des Zuges
+    public Transform endPosition; // Endposition des Zuges
+    public float duration; // Dauer der Zugfahrt in Sekunden
+
+    private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
+    private float startTime; // Startzeit der Zugfahrt
+    private Vector3 startVector; // Startvektor des Zuges
+    private Vector3 endVector; // Endvektor des Zuges
+
+    private GameObject locomotive;
 
     void Start()
     {
         // Spawn locomotive
-        GameObject locomotive = Instantiate(locomotivePrefab, trainPosition, transform.rotation);
+        locomotive = Instantiate(locomotivePrefab, trainSpawnPosition, transform.rotation);
 
         /*
         // Spawn wagons
@@ -43,5 +57,32 @@ public class TrainController : MonoBehaviour
             joint.connectedAnchor = Vector3.back * wagonSpacing;
         }
         */
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
+        {
+            // Zugbewegung starten
+            isMoving = true;
+            startTime = Time.time;
+            startVector = startPosition.position;
+            endVector = endPosition.position;
+        }
+
+        if (isMoving)
+        {
+            // Zugbewegung durchführen
+            float t = (Time.time - startTime) / duration;
+
+            locomotive.transform.position = Vector3.Lerp(startVector, endVector, t);
+
+            if (t >= 1f)
+            {
+                // Zugbewegung abgeschlossen
+                isMoving = false;
+                Debug.Log("Gestoppt!");
+            }
+        }
     }
 }

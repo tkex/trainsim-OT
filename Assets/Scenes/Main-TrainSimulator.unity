@@ -173,9 +173,9 @@ MonoBehaviour:
     type: 3}
   numWagons: 5
   wagonSpacing: 1
-  trainSpawnPosition: {x: 5, y: 2, z: -10}
+  trainSpawnPosition: {x: 5, y: 2, z: -25}
   endPosition: {fileID: 78739441}
-  duration: 5
+  duration: 10
 --- !u!1 &78739440
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,7 +330,7 @@ Transform:
   m_GameObject: {fileID: 478219248}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6.93, y: 5.05, z: 0}
-  m_LocalScale: {x: 5, y: 0.2, z: 20}
+  m_LocalScale: {x: 5, y: 0.2, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1966398681}
@@ -1231,7 +1231,7 @@ Transform:
   m_GameObject: {fileID: 976458408}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 8.94, y: 2.51, z: 0}
-  m_LocalScale: {x: 1, y: 5, z: 20}
+  m_LocalScale: {x: 1, y: 5, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1966398681}

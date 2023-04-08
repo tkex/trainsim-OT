@@ -4,26 +4,39 @@ using DG.Tweening;
 
 public class TrainController : MonoBehaviour
 {
-    // Prefab Definitionen
+    #region Prefabs
+    [Header("Prefab-Einstellungen")]
     public GameObject locomotivePrefab;
     public GameObject wagonPrefab;
+    #endregion
 
-
-    // Konfigurator Variabeln
+    #region Configurator-Variables
+    [Header("Konfigurator-Einstellungen")]
+    [Tooltip("Number of spawning wagons")]
     public int numWagons = 5;
+
+    [Tooltip("Spacing value for wagon spawning")]
     public float wagonSpacing = 1.0f;
+
+    [Tooltip("Spawn position of the train.")]
     public Vector3 trainSpawnPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
 
-    // Lerp (Bewegung)
+    // Lerp (Bewegung) Variables
     //public Transform startPosition; // Startposition des Zuges
+    [Header("LERP/Bewegung-Einstellungen")]    
+    [Tooltip("End position of train, dependend on empty GO position.")]
     public Transform endPosition; // Endposition des Zuges
+
+    [Tooltip("Duration value for drive in time of the train.")]
+    [Range(0.0f, 10f)]
     public float duration; // Dauer der Zugfahrt in Sekunden
 
     private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
     private Sequence movementSequence; // DOTween Bewegungssequenz
-
     private GameObject locomotive;
+
+    #endregion
 
     void Start()
     {
@@ -57,6 +70,8 @@ public class TrainController : MonoBehaviour
         }
         */
     }
+
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
@@ -71,4 +86,5 @@ public class TrainController : MonoBehaviour
                 });
         }
     }
+   
 }

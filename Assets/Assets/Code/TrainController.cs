@@ -46,6 +46,9 @@ public class TrainController : MonoBehaviour
 
     // Lerp (Movement) Variables
     [Header("LERP/Movement Settings")]
+    [Tooltip("Delay before the train moves into the platform.")]
+    public float trainMoveInDelay = 2f; // Delay before the train moves in (when space is pressed)
+
     [Tooltip("End position of train, dependent on empty GO position.")]
     public Transform endPosition; // End position of the train
 
@@ -131,6 +134,7 @@ public class TrainController : MonoBehaviour
             isMoving = true;
             movementSequence = DOTween.Sequence();
             movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+                .SetDelay(trainMoveInDelay)
                 .OnComplete(() => {
                     isMoving = false;
                     Debug.Log("Gestoppt!");

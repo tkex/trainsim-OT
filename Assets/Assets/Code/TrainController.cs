@@ -24,7 +24,6 @@ public class TrainController : MonoBehaviour
         InProgress,
         Maintained
     }
-
     #endregion
 
     #region Prefabs
@@ -99,6 +98,7 @@ public class TrainController : MonoBehaviour
             WagonState randomWagonState = (WagonState)UnityEngine.Random.Range(0, Enum.GetValues(typeof(WagonState)).Length);
             Debug.Log("Wagon " + i + " State: " + randomWagonState);
 
+            // Set wagon state to not maintained yet as default
             MaintenanceState maintenanceState = MaintenanceState.NotMaintainedYet;
             Debug.Log("Wagon " + i + " Maintenance state: " + maintenanceState);
         }

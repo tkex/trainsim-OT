@@ -31,6 +31,7 @@ public class TrainController : MonoBehaviour
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 10f)]
     public float duration; // Dauer der Zugfahrt in Sekunden
+    public float decoupleDuration; // Dauer der Dekoppelieurng in Sekunden
 
     private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
     private Sequence movementSequence; // DOTween Bewegungssequenz
@@ -44,9 +45,12 @@ public class TrainController : MonoBehaviour
         // Spawn Locomotive
         locomotive = Instantiate(locomotivePrefab, transform.position, transform.rotation);
 
+        // Spawne Wagons
         SpawnWagons();
-    }
 
+        // Posiitoniere den gesamten Zug
+        PositionTrain(locomotive);
+    }
 
     void SpawnWagons()
     {
@@ -58,7 +62,16 @@ public class TrainController : MonoBehaviour
             Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;  // Berechne die Position des Wagons basierend auf der Position und Rotation der Locomotive
             Quaternion wagonRotation = locomotive.transform.rotation;  // Der Wagon hat die gleiche Rotation wie die Locomotive
             wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);  // Erzeuge den Wagon
+
+            wagons[i].transform.parent = locomotive.transform;  // Setze das Wagon-Objekt als Kind des Locomotive-Objekts 
+            // dh. alle Transformationsänderungen, die am Locomotive-Objekt vorgenommen werden, wirken sich auch auf das Wagon-Objekt aus
         }
+    }
+
+    void PositionTrain(GameObject locomotiveGO)
+    {
+        // Verschiebe den gesamten Zug auf der Position trainSpawnPosition
+        locomotive.transform.position = trainSpawnPosition;
     }
 
     void Update()
@@ -72,8 +85,17 @@ public class TrainController : MonoBehaviour
                 .OnComplete(() => {
                     isMoving = false;
                     Debug.Log("Gestoppt!");
+
+                   
+                    // Dekoppeln des Zuges
+                    for (int i = 0; i < numWagons; i++)
+                    {
+                        Vector3 wagonPosition = locomotive.transform.position + (i + 1) * -2 * locomotive.transform.forward; // Berechne die neue Position des Wagens
+                        wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animiere die Position des Wagens
+
+                        // Ggf. Zeitpause damit jeder Wagon nacheinander dekoppelt
+                    }
                 });
         }
-    }
-   
+    }   
 }

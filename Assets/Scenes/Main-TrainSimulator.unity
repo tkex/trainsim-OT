@@ -176,6 +176,7 @@ MonoBehaviour:
   trainSpawnPosition: {x: 5, y: 2, z: -25}
   endPosition: {fileID: 78739441}
   duration: 10
+  decoupleDuration: 3
 --- !u!1 &78739440
 GameObject:
   m_ObjectHideFlags: 0

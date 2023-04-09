@@ -167,12 +167,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b27b7cfdad650443a9c4634a08d63e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locomotivePrefab: {fileID: 1834091203726011805, guid: e6dcf4b3d2a9f6f4e981e392e382929a,
+  locomotivePrefab: {fileID: 5787053724149359391, guid: e6dcf4b3d2a9f6f4e981e392e382929a,
     type: 3}
-  wagonPrefab: {fileID: 4999209095135110773, guid: 6550f6d2866edbc468c646cbb3866f44,
+  wagonPrefab: {fileID: 4919583739231077386, guid: 6550f6d2866edbc468c646cbb3866f44,
     type: 3}
   numWagons: 5
-  wagonSpacing: 1
+  wagonSpacing: 1.2
   trainSpawnPosition: {x: 5, y: 2, z: -25}
   endPosition: {fileID: 78739441}
   duration: 10

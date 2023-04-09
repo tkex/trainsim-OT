@@ -34,44 +34,33 @@ public class TrainController : MonoBehaviour
 
     private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
     private Sequence movementSequence; // DOTween Bewegungssequenz
-    private GameObject locomotive;
 
+    private GameObject locomotive;
+    private GameObject[] wagons;  // Ein Array, um alle erzeugten Wagons zu speichern
     #endregion
 
     void Start()
     {
-        // Spawn locomotive
-        locomotive = Instantiate(locomotivePrefab, trainSpawnPosition, transform.rotation);
+        // Spawn Locomotive
+        locomotive = Instantiate(locomotivePrefab, transform.position, transform.rotation);
 
-        /*
-        // Spawn wagons
-        List<GameObject> wagons = new List<GameObject>();
-        for (int i = 0; i < numWagons; i++)
-        {
-            Vector3 wagonPos = transform.position + Vector3.forward * (i + 1) * wagonSpacing;
-            GameObject wagon = Instantiate(wagonPrefab, wagonPos, transform.rotation);
-            wagons.Add(wagon);
-        }
-
-        // Attach wagons to locomotive
-        Rigidbody locomotiveRB = locomotive.GetComponent<Rigidbody>();
-        foreach (GameObject wagon in wagons)
-        {
-            ConfigurableJoint joint = wagon.AddComponent<ConfigurableJoint>();
-            joint.connectedBody = locomotiveRB;
-            joint.xMotion = ConfigurableJointMotion.Locked;
-            joint.yMotion = ConfigurableJointMotion.Locked;
-            joint.zMotion = ConfigurableJointMotion.Locked;
-            joint.angularXMotion = ConfigurableJointMotion.Locked;
-            joint.angularYMotion = ConfigurableJointMotion.Locked;
-            joint.angularZMotion = ConfigurableJointMotion.Locked;
-            joint.anchor = Vector3.zero;
-            joint.connectedAnchor = Vector3.back * wagonSpacing;
-        }
-        */
+        SpawnWagons();
     }
 
-    
+
+    void SpawnWagons()
+    {
+        wagons = new GameObject[numWagons];  // Initialisiere das Wagon-Array mit der Anzahl der zu spawnenden Wagons
+
+        // Spawne die Wagons nacheinander mit einem Abstand von wagonSpacing
+        for (int i = 0; i < numWagons; i++)
+        {
+            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;  // Berechne die Position des Wagons basierend auf der Position und Rotation der Locomotive
+            Quaternion wagonRotation = locomotive.transform.rotation;  // Der Wagon hat die gleiche Rotation wie die Locomotive
+            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);  // Erzeuge den Wagon
+        }
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isMoving)

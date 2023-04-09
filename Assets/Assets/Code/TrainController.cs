@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class TrainController : MonoBehaviour
 {
@@ -30,7 +31,9 @@ public class TrainController : MonoBehaviour
 
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 10f)]
-    public float duration; // Dauer der Zugfahrt in Sekunden
+    public float trainMoveInDuration; // Dauer der Zugfahrt in Sekunden
+    [Tooltip("Duration how long the decouple process takes.")]
+    [Range(0.0f, 10f)]
     public float decoupleDuration; // Dauer der Dekoppelieurng in Sekunden
 
     private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
@@ -38,6 +41,11 @@ public class TrainController : MonoBehaviour
 
     private GameObject locomotive;
     private GameObject[] wagons;  // Ein Array, um alle erzeugten Wagons zu speichern
+
+    [Tooltip("The individual decouple distance for each wagon.")]
+    public float decoupleDistance = 2f;
+    [Tooltip("Value how long it takes for each wagon to separate.")]
+    public float decoupleInterval = 1.0f;
     #endregion
 
     void Start()
@@ -74,6 +82,19 @@ public class TrainController : MonoBehaviour
         locomotive.transform.position = trainSpawnPosition;
     }
 
+    IEnumerator ExecuteDecoupleAfterTime(float time)
+    {
+        // Dekoppel-Logik
+        for (int i = wagons.Length - 1; i >= 0; i--)
+        {
+            Vector3 wagonPosition = locomotive.transform.position + (i + 1) * -decoupleDistance * locomotive.transform.forward; // Berechne die neue Position des Wagens
+            wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animiere die Position des Wagens
+
+            yield return new WaitForSeconds(time);
+        }
+    }
+
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
@@ -81,20 +102,13 @@ public class TrainController : MonoBehaviour
             // Zugbewegung starten
             isMoving = true;
             movementSequence = DOTween.Sequence();
-            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, duration).SetEase(Ease.OutCubic))
+            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
                 .OnComplete(() => {
                     isMoving = false;
                     Debug.Log("Gestoppt!");
 
-                   
                     // Dekoppeln des Zuges
-                    for (int i = 0; i < numWagons; i++)
-                    {
-                        Vector3 wagonPosition = locomotive.transform.position + (i + 1) * -2 * locomotive.transform.forward; // Berechne die neue Position des Wagens
-                        wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animiere die Position des Wagens
-
-                        // Ggf. Zeitpause damit jeder Wagon nacheinander dekoppelt
-                    }
+                    StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
                 });
         }
     }   

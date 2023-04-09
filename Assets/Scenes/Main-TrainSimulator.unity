@@ -175,8 +175,9 @@ MonoBehaviour:
   wagonSpacing: 1.2
   trainSpawnPosition: {x: 5, y: 2, z: -25}
   endPosition: {fileID: 78739441}
-  duration: 10
+  trainMoveInDuration: 6.06
   decoupleDuration: 3
+  decoupleDistance: 2
 --- !u!1 &78739440
 GameObject:
   m_ObjectHideFlags: 0

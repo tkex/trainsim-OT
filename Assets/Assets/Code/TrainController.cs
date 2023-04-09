@@ -6,13 +6,13 @@ using System.Collections;
 public class TrainController : MonoBehaviour
 {
     #region Prefabs
-    [Header("Prefab-Einstellungen")]
+    [Header("Prefab Settings")]
     public GameObject locomotivePrefab;
     public GameObject wagonPrefab;
     #endregion
 
     #region Configurator-Variables
-    [Header("Konfigurator-Einstellungen")]
+    [Header("Configurator Settings")]
     [Tooltip("Number of spawning wagons")]
     public int numWagons = 5;
 
@@ -23,24 +23,23 @@ public class TrainController : MonoBehaviour
     public Vector3 trainSpawnPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
 
-    // Lerp (Bewegung) Variables
-    //public Transform startPosition; // Startposition des Zuges
-    [Header("LERP/Bewegung-Einstellungen")]    
-    [Tooltip("End position of train, dependend on empty GO position.")]
-    public Transform endPosition; // Endposition des Zuges
+    // Lerp (Movement) Variables
+    [Header("LERP/Movement Settings")]
+    [Tooltip("End position of train, dependent on empty GO position.")]
+    public Transform endPosition; // End position of the train
 
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 10f)]
-    public float trainMoveInDuration; // Dauer der Zugfahrt in Sekunden
+    public float trainMoveInDuration; // Duration of the train ride in seconds
     [Tooltip("Duration how long the decouple process takes.")]
     [Range(0.0f, 10f)]
-    public float decoupleDuration; // Dauer der Dekoppelieurng in Sekunden
+    public float decoupleDuration; // Duration of the decoupling process in seconds
 
-    private bool isMoving = false; // Wird true, wenn der Zug sich bewegt
-    private Sequence movementSequence; // DOTween Bewegungssequenz
+    private bool isMoving = false; // Becomes true when the train is moving
+    private Sequence movementSequence; // DOTween movement sequence
 
     private GameObject locomotive;
-    private GameObject[] wagons;  // Ein Array, um alle erzeugten Wagons zu speichern
+    private GameObject[] wagons;  // An array to store all created wagons
 
     [Tooltip("The individual decouple distance for each wagon.")]
     public float decoupleDistance = 2f;
@@ -53,42 +52,42 @@ public class TrainController : MonoBehaviour
         // Spawn Locomotive
         locomotive = Instantiate(locomotivePrefab, transform.position, transform.rotation);
 
-        // Spawne Wagons
+        // Spawn Wagons
         SpawnWagons();
 
-        // Posiitoniere den gesamten Zug
+        // Position the entire train
         PositionTrain(locomotive);
     }
 
     void SpawnWagons()
     {
-        wagons = new GameObject[numWagons];  // Initialisiere das Wagon-Array mit der Anzahl der zu spawnenden Wagons
+        wagons = new GameObject[numWagons];  // Initialize the wagon array with the number of wagons to spawn
 
-        // Spawne die Wagons nacheinander mit einem Abstand von wagonSpacing
+        // Spawn the wagons one after the other with a spacing of wagonSpacing
         for (int i = 0; i < numWagons; i++)
         {
-            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;  // Berechne die Position des Wagons basierend auf der Position und Rotation der Locomotive
-            Quaternion wagonRotation = locomotive.transform.rotation;  // Der Wagon hat die gleiche Rotation wie die Locomotive
-            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);  // Erzeuge den Wagon
+            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;  // Calculate the position of the wagon based on the position and rotation of the locomotive
+            Quaternion wagonRotation = locomotive.transform.rotation;  // The wagon has the same rotation as the locomotive
+            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);  // Create the wagon
 
-            wagons[i].transform.parent = locomotive.transform;  // Setze das Wagon-Objekt als Kind des Locomotive-Objekts 
-            // dh. alle Transformationsänderungen, die am Locomotive-Objekt vorgenommen werden, wirken sich auch auf das Wagon-Objekt aus
+            wagons[i].transform.parent = locomotive.transform;  // Set the wagon object as a child of the locomotive object
+                                                                // i.e. all transformation changes made to the locomotive object will also affect the wagon object
         }
     }
 
     void PositionTrain(GameObject locomotiveGO)
     {
-        // Verschiebe den gesamten Zug auf der Position trainSpawnPosition
+        // Move the entire train to the trainSpawnPosition
         locomotive.transform.position = trainSpawnPosition;
     }
 
     IEnumerator ExecuteDecoupleAfterTime(float time)
     {
-        // Dekoppel-Logik
+        // Decouple logic
         for (int i = wagons.Length - 1; i >= 0; i--)
         {
-            Vector3 wagonPosition = locomotive.transform.position + (i + 1) * -decoupleDistance * locomotive.transform.forward; // Berechne die neue Position des Wagens
-            wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animiere die Position des Wagens
+            Vector3 wagonPosition = locomotive.transform.position + (i + 1) * -decoupleDistance * locomotive.transform.forward; // Calculate new position of each wagon
+            wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animate and move position of each wagon
 
             yield return new WaitForSeconds(time);
         }
@@ -99,7 +98,7 @@ public class TrainController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
         {
-            // Zugbewegung starten
+            // Start train movement
             isMoving = true;
             movementSequence = DOTween.Sequence();
             movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
@@ -107,7 +106,7 @@ public class TrainController : MonoBehaviour
                     isMoving = false;
                     Debug.Log("Gestoppt!");
 
-                    // Dekoppeln des Zuges
+                    // Decoupling of train
                     StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
                 });
         }

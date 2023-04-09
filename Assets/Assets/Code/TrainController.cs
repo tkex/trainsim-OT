@@ -2,9 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using System;
 
 public class TrainController : MonoBehaviour
 {
+
+    #region States
+    // Enum for wagon states
+    public enum WagonState
+    {
+        CleaningTodo,
+        CheckOfElectronics,
+        ReplacementOfParts,
+        SecurityCheck
+    }
+
+    // Enum for maintenance state
+    public enum MaintenanceState
+    {
+        NotMaintainedYet,
+        InProgress,
+        Maintained
+    }
+
+    #endregion
+
     #region Prefabs
     [Header("Prefab Settings")]
     public GameObject locomotivePrefab;
@@ -72,6 +94,13 @@ public class TrainController : MonoBehaviour
 
             wagons[i].transform.parent = locomotive.transform;  // Set the wagon object as a child of the locomotive object
                                                                 // i.e. all transformation changes made to the locomotive object will also affect the wagon object
+
+            // Set wagon states randomly from the enum list
+            WagonState randomWagonState = (WagonState)UnityEngine.Random.Range(0, Enum.GetValues(typeof(WagonState)).Length);
+            Debug.Log("Wagon " + i + " State: " + randomWagonState);
+
+            MaintenanceState maintenanceState = MaintenanceState.NotMaintainedYet;
+            Debug.Log("Wagon " + i + " Maintenance state: " + maintenanceState);
         }
     }
 

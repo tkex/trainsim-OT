@@ -174,8 +174,9 @@ MonoBehaviour:
   numWagons: 3
   wagonSpacing: 1.2
   trainSpawnPosition: {x: 5, y: 2, z: -25}
+  trainMoveInDelay: 2
   endPosition: {fileID: 78739441}
-  trainMoveInDuration: 6.06
+  trainMoveInDuration: 10
   decoupleDuration: 3
   decoupleDistance: 2
   decoupleInterval: 1

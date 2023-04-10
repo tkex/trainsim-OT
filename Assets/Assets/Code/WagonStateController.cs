@@ -75,6 +75,23 @@ public class WagonStateController : MonoBehaviour
         }
     }
 
+    // Show all wagon states in the dictionary
+    public void ShowAllWagonStates()
+    {
+        foreach (var kvp in wagonStatesDict)
+        {
+            GameObject wagonGO = kvp.Key;
+            HashSet<WagonState> wagonStates = kvp.Value;
+
+            Debug.Log("Wagon " + wagonGO.name + " states:");
+
+            foreach (WagonState state in wagonStates)
+            {
+                Debug.Log(state);
+            }
+        }
+    }
+
     // Remove all states from all wagons in the dictionary
     public void CleanStates()
     {

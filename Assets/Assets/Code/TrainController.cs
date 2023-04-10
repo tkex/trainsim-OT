@@ -134,6 +134,10 @@ public class TrainController : MonoBehaviour
             wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);
             wagons[i].transform.parent = locomotive.transform;
 
+            // Assign a name to the wagon based on its index
+            wagons[i].name = "Wagon " + (i + 1);
+
+            // Set maintenance state by default to not maintained yet
             MaintenanceState maintenanceState = MaintenanceState.NotMaintainedYet;
             Debug.Log("Wagon " + i + " Maintenance state: " + maintenanceState);
 

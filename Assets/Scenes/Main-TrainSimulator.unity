@@ -171,7 +171,7 @@ MonoBehaviour:
     type: 3}
   wagonPrefab: {fileID: 4919583739231077386, guid: 6550f6d2866edbc468c646cbb3866f44,
     type: 3}
-  numWagons: 3
+  numWagons: 8
   wagonSpacing: 1.2
   trainSpawnPosition: {x: 5, y: 2, z: -25}
   trainMoveInDelay: 2

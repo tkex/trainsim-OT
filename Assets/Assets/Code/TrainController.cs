@@ -180,4 +180,43 @@ public class TrainController : MonoBehaviour
 
         return randomState;
     }
+
+    // Dictionary Helpers
+
+    // Add a state to a wagon
+    void AddState(GameObject wagon, WagonState state)
+    {
+        if (wagonStatesDict.TryGetValue(wagon, out HashSet<WagonState> states))
+        {
+            states.Add(state);
+        }
+    }
+
+    // Remove a state from a wagon
+    void RemoveState(GameObject wagon, WagonState state)
+    {
+        if (wagonStatesDict.TryGetValue(wagon, out HashSet<WagonState> states))
+        {
+            states.Remove(state);
+        }
+    }
+
+    // Remove all states from all wagons
+    void CleanAllStates()
+    {
+        foreach (var kvp in wagonStatesDict)
+        {
+            kvp.Value.Clear();
+        }
+    }
+
+    // Check if a wagon has a specific state
+    bool CheckIfWagonHasState(GameObject wagon, WagonState state)
+    {
+        if (wagonStatesDict.TryGetValue(wagon, out HashSet<WagonState> states))
+        {
+            return states.Contains(state);
+        }
+        return false;
+    }
 }

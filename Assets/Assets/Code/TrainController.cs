@@ -70,6 +70,8 @@ public class TrainController : MonoBehaviour
     public float decoupleInterval = 1.0f;
     #endregion
 
+    Dictionary<GameObject, HashSet<WagonState>> wagonStatesDict = new Dictionary<GameObject, HashSet<WagonState>>();
+
     void Start()
     {
         // Spawn Locomotive
@@ -101,30 +103,6 @@ public class TrainController : MonoBehaviour
         }
     }
 
-
-    void SpawnWagons()
-    {
-        wagons = new GameObject[numWagons]; // Initialize the wagon array with the number of wagons to spawn
-
-        // Spawn the wagons one after the other with a spacing of wagonSpacing
-        for (int i = 0; i < numWagons; i++)
-        {
-            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;  // Calculate the position of the wagon based on the position and rotation of the locomotive
-            Quaternion wagonRotation = locomotive.transform.rotation;  // The wagon has the same rotation as the locomotive
-            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);  // Create the wagon
-
-            wagons[i].transform.parent = locomotive.transform;  // Set the wagon object as a child of the locomotive object
-                                                                // i.e. all transformation changes made to the locomotive object will also affect the wagon object
-
-            // Set the wagon state to not maintained yet as default
-            MaintenanceState maintenanceState = MaintenanceState.NotMaintainedYet;
-            Debug.Log("Wagon " + i + " Maintenance state: " + maintenanceState);
-
-            // Set random wagon states for the wagon // Set wagon states randomly from the enum list
-            SetRandomWagonStates(wagons[i], UnityEngine.Random.Range(1, 4)); // Randomly set between 1 and 3 states for each wagon
-        }
-    }
-
     void PositionTrain(GameObject locomotiveGO)
     {
         // Move the entire train to the trainSpawnPosition
@@ -143,33 +121,59 @@ public class TrainController : MonoBehaviour
         }
     }
 
+
+
+    void SpawnWagons()
+    {
+        wagons = new GameObject[numWagons];
+
+        for (int i = 0; i < numWagons; i++)
+        {
+            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;
+            Quaternion wagonRotation = locomotive.transform.rotation;
+            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);
+            wagons[i].transform.parent = locomotive.transform;
+
+            MaintenanceState maintenanceState = MaintenanceState.NotMaintainedYet;
+            Debug.Log("Wagon " + i + " Maintenance state: " + maintenanceState);
+
+            // Use HashSet to store unique wagon states for each wagon
+            HashSet<WagonState> wagonStates = new HashSet<WagonState>();
+            SetRandomWagonStates(wagons[i], UnityEngine.Random.Range(1, 4), wagonStates);
+            wagonStatesDict.Add(wagons[i], wagonStates); // Add the wagon and its states to the dictionary
+        }
+    }
+
     // Add a method to set a random number of WagonStates for each wagon
     // while making sure each WagonState is unique.
-    void SetRandomWagonStates(GameObject wagonGO, int maxNumStates)
+    void SetRandomWagonStates(GameObject wagonGO, int maxNumStates, HashSet<WagonState> existingStates)
     {
         int numStates = UnityEngine.Random.Range(1, maxNumStates + 1); // Get a random number of states for the wagon between 1 and maxNumStates    
-        List<WagonState> wagonStates = new List<WagonState>(); // Create a list to store the wagon states
+        HashSet<WagonState> wagonStates = new HashSet<WagonState>(); // Create a HashSet to store the wagon states
 
         // Loop through and randomly select unique states for the wagon
         for (int i = 0; i < numStates; i++)
         {
-            // Get a random WagonState that is not already in the wagonStates list
+            // Get a random WagonState that is not already in the wagonStates HashSet
             WagonState randomWagonState = GetRandomUniqueWagonState(wagonStates);
 
-            // Add the WagonState to the wagonStates list
+            // Add the WagonState to the wagonStates HashSet
             wagonStates.Add(randomWagonState);
 
             Debug.Log("Wagon " + wagonGO.name + " State " + i + ": " + randomWagonState);
         }
     }
 
+
     // Helper method to get a random WagonState that is not already in the given list
-    WagonState GetRandomUniqueWagonState(List<WagonState> existingStates)
+    WagonState GetRandomUniqueWagonState(HashSet<WagonState> existingStates)
     {
+        HashSet<WagonState> existingStateSet = new HashSet<WagonState>(existingStates); // Create a HashSet from the existing states list
+
         WagonState randomState = (WagonState)UnityEngine.Random.Range(0, Enum.GetValues(typeof(WagonState)).Length); // Get a random WagonState
 
         // Loop until the randomState is not already in the existingStates list
-        while (existingStates.Contains(randomState))
+        while (existingStateSet.Contains(randomState))
         {
             randomState = (WagonState)UnityEngine.Random.Range(0, Enum.GetValues(typeof(WagonState)).Length); // Get a new random WagonState
         }

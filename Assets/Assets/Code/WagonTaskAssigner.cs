@@ -29,19 +29,24 @@ public class WagonTask
 
 public class WagonTaskAssigner : MonoBehaviour
 {
+
+    [Header("WagonTaskAssigner Settings")]
+
+    [Tooltip("The maintenance state of the wagon.")]
     public WagonState wagonState;
+    [Tooltip("List of tasks and their status.")]
     public List<WagonTask> tasks = new List<WagonTask>();
+    [Tooltip("The max. possible task a wagon can have.")]
+    public int maxNumberOfPossibleTask = 6;
 
     private bool isTasksInitialized = false;
 
-    private TrainController trainController;
-
-
     private void Start()
     {
-        trainController = transform.parent.GetComponent<TrainController>();
+        // Set default maintenance state of wagon as not maintained.
         wagonState =  WagonState.NotMaintained;
 
+        // Assign random tasks to the wagon.
         AssignTasksToWagon();
     }
 
@@ -65,7 +70,7 @@ public class WagonTaskAssigner : MonoBehaviour
         tasks.Clear();
 
         // Determine how many tasks to assign.
-        int numberOfTasks = UnityEngine.Random.Range(1, 6);
+        int numberOfTasks = UnityEngine.Random.Range(1, maxNumberOfPossibleTask + 1);
 
         // Randomly assign tasks until the desired number is reached.
         for (int i = 0; i < numberOfTasks; i++)

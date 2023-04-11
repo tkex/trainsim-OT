@@ -55,10 +55,6 @@ public class TrainController : MonoBehaviour
     public int maxNumStatesPerWagon = 3;
     #endregion
 
-
-    // Declare a private WagonStateController variable in TrainController to store a reference to the WagonStateController instance
-    private WagonStateController wagonStateController;
-
     void Start()
     {
         // Spawn Locomotive
@@ -121,15 +117,6 @@ public class TrainController : MonoBehaviour
 
             // Assign a name to the wagon based on its index
             wagons[i].name = "Wagon " + (i + 1);
-
-            // Set maintenance state by default to not maintained yet
-            MaintenanceStates maintenanceState = MaintenanceStates.NotMaintainedYet;
-            //Debug.Log("Wagon " + wagons[i] + " Maintenance state: " + maintenanceState);
-
-            // Set random wagon states for this wagon
-            WagonStateController wagonStateController = GetComponent<WagonStateController>();
-            HashSet<WagonState> existingStates = new HashSet<WagonState>(); // Create an empty HashSet to start with
-            wagonStateController.SetRandomWagonStates(wagons[i], maxNumStatesPerWagon, existingStates);
         }
     }
 }

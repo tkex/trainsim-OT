@@ -111,3 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wagonState: 0
+  tasks:
+  - taskType: 1
+    isDone: 0

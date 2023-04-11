@@ -67,14 +67,23 @@ public class TrainController : MonoBehaviour
 
     void Start()
     {
+        // Spawn Empty Tain GameObject
+        GameObject emptyTrainGameObject = new GameObject("EmptyGameObject");
+
         // Spawn Locomotive
         locomotive = Instantiate(locomotivePrefab, transform.position, transform.rotation);
+
+        // Set parent of locomotive
+        locomotive.transform.SetParent(emptyTrainGameObject.transform);
+
+        // Assign a name to the emptyTrainGameObject
+        emptyTrainGameObject.name = "Train";
 
         // Spawn Wagons
         SpawnWagons();
 
         // Position the entire train
-        PositionTrain(locomotive);
+        PositionTrain(emptyTrainGameObject);
     }
 
     void Update()

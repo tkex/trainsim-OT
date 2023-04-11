@@ -7,6 +7,16 @@ using System;
 public class TrainController : MonoBehaviour
 {
 
+    public enum TrainState
+    {
+        NotMaintained,
+        InProgress,
+        Maintained
+    }
+
+    public TrainState trainState = TrainState.NotMaintained;
+
+
     #region Prefabs
     [Header("Prefab Settings")]
     public GameObject locomotivePrefab;

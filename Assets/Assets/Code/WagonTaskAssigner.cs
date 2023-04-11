@@ -2,23 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public enum WagonState
-{
-    NotMaintained,
-    InProgress,
-    Maintained
-}
-
-public enum TaskType
-{
-    Cleaning,           // Wagon reinigen
-    CheckBrakes,        // Bremsen überprüfen
-    InspectCouplers,    // Kupplungen inspizieren
-    RepairLighting,     // Beleuchtung reparieren
-    CleanInterior,      // Innenraum reinigen
-    LubricateDoors,     // Türen schmieren
-    RefuelEngine,       // Motor betanken
-}
 
 [System.Serializable]
 public class WagonTask
@@ -33,7 +16,7 @@ public class WagonTaskAssigner : MonoBehaviour
     [Header("WagonTaskAssigner Settings")]
 
     [Tooltip("The maintenance state of the wagon.")]
-    public WagonState wagonState;
+    public WagonStates wagonState;
     [Tooltip("List of tasks and their status.")]
     public List<WagonTask> tasks = new List<WagonTask>();
     [Tooltip("The max. possible task a wagon can have.")]
@@ -44,7 +27,7 @@ public class WagonTaskAssigner : MonoBehaviour
     private void Start()
     {
         // Set default maintenance state of wagon as not maintained.
-        wagonState =  WagonState.NotMaintained;
+        wagonState =  WagonStates.NotMaintained;
 
         // Assign random tasks to the wagon.
         AssignTasksToWagon();

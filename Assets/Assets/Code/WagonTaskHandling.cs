@@ -6,6 +6,7 @@ using UnityEngine;
 public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
+    private GameObject cleaningObject;
 
     private void Start()
     {
@@ -33,6 +34,9 @@ public class WagonTaskHandling : MonoBehaviour
                     // Set the isDone flag of the task to true.
                     task.isDone = true;
                     Debug.Log("Cleaning task is now done.");
+
+                    // Destroy the cleaning object.
+                    Destroy(cleaningObject);
                 }
             }
         }
@@ -66,7 +70,7 @@ public class WagonTaskHandling : MonoBehaviour
     private void SpawnCleaningObject()
     {
         // Spawn an empty game object at the wagon's position.
-        GameObject cleaningObject = new GameObject("CleaningObject");
+        cleaningObject = new GameObject("CleaningObject");
         cleaningObject.transform.position = transform.position;
 
         // Set spawned empty game object as children of the current wagon.

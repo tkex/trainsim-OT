@@ -7,24 +7,15 @@ using System;
 public class TrainController : MonoBehaviour
 {
 
-    #region States
-    // Enum for wagon states
-    public enum WagonState
+    public enum TrainState
     {
-        CleaningTodo,
-        CheckOfElectronics,
-        ReplacementOfParts,
-        SecurityCheck
-    }
-
-    // Enum for maintenance state
-    public enum MaintenanceState
-    {
-        NotMaintainedYet,
+        NotMaintained,
         InProgress,
         Maintained
     }
-    #endregion
+
+    public TrainState trainState = TrainState.NotMaintained;
+
 
     #region Prefabs
     [Header("Prefab Settings")]
@@ -46,6 +37,9 @@ public class TrainController : MonoBehaviour
 
     // Lerp (Movement) Variables
     [Header("LERP/Movement Settings")]
+    [Tooltip("Delay before the train moves into the platform.")]
+    public float trainMoveInDelay = 2f; // Delay before the train moves in (when space is pressed)
+
     [Tooltip("End position of train, dependent on empty GO position.")]
     public Transform endPosition; // End position of the train
 
@@ -66,41 +60,48 @@ public class TrainController : MonoBehaviour
     public float decoupleDistance = 2f;
     [Tooltip("Value how long it takes for each wagon to separate.")]
     public float decoupleInterval = 1.0f;
+
+    [Tooltip("Value how many states a wagon can have.")]
+    public int maxNumStatesPerWagon = 3;
     #endregion
 
     void Start()
     {
+        // Spawn Empty Tain GameObject
+        GameObject emptyTrainGameObject = new GameObject("EmptyGameObject");
+
         // Spawn Locomotive
         locomotive = Instantiate(locomotivePrefab, transform.position, transform.rotation);
+
+        // Set parent of locomotive
+        locomotive.transform.SetParent(emptyTrainGameObject.transform);
+
+        // Assign a name to the emptyTrainGameObject
+        emptyTrainGameObject.name = "Train";
 
         // Spawn Wagons
         SpawnWagons();
 
         // Position the entire train
-        PositionTrain(locomotive);
+        PositionTrain(emptyTrainGameObject);
     }
 
-    void SpawnWagons()
+    void Update()
     {
-        wagons = new GameObject[numWagons];  // Initialize the wagon array with the number of wagons to spawn
-
-        // Spawn the wagons one after the other with a spacing of wagonSpacing
-        for (int i = 0; i < numWagons; i++)
+        if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
         {
-            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;  // Calculate the position of the wagon based on the position and rotation of the locomotive
-            Quaternion wagonRotation = locomotive.transform.rotation;  // The wagon has the same rotation as the locomotive
-            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);  // Create the wagon
+            // Start train movement
+            isMoving = true;
+            movementSequence = DOTween.Sequence();
+            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+                .SetDelay(trainMoveInDelay)
+                .OnComplete(() => {
+                    isMoving = false;
+                    Debug.Log("Gestoppt!");
 
-            wagons[i].transform.parent = locomotive.transform;  // Set the wagon object as a child of the locomotive object
-                                                                // i.e. all transformation changes made to the locomotive object will also affect the wagon object
-
-            // Set wagon states randomly from the enum list
-            WagonState randomWagonState = (WagonState)UnityEngine.Random.Range(0, Enum.GetValues(typeof(WagonState)).Length);
-            Debug.Log("Wagon " + i + " State: " + randomWagonState);
-
-            // Set wagon state to not maintained yet as default
-            MaintenanceState maintenanceState = MaintenanceState.NotMaintainedYet;
-            Debug.Log("Wagon " + i + " Maintenance state: " + maintenanceState);
+                    // Decoupling of train
+                    StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
+                });
         }
     }
 
@@ -122,22 +123,19 @@ public class TrainController : MonoBehaviour
         }
     }
 
-
-    void Update()
+    void SpawnWagons()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
-        {
-            // Start train movement
-            isMoving = true;
-            movementSequence = DOTween.Sequence();
-            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
-                .OnComplete(() => {
-                    isMoving = false;
-                    Debug.Log("Gestoppt!");
+        wagons = new GameObject[numWagons];
 
-                    // Decoupling of train
-                    StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
-                });
+        for (int i = 0; i < numWagons; i++)
+        {
+            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;
+            Quaternion wagonRotation = locomotive.transform.rotation;
+            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);
+            wagons[i].transform.parent = locomotive.transform;
+
+            // Assign a name to the wagon based on its index
+            wagons[i].name = "Wagon " + (i + 1);
         }
-    }   
+    }
 }

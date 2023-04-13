@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3285919231660430961}
   - component: {fileID: 7696854357567448529}
   - component: {fileID: 5782908858786125339}
+  - component: {fileID: 7846086008151127833}
   m_Layer: 0
   m_Name: Wagon
   m_TagString: Untagged
@@ -113,3 +114,15 @@ MonoBehaviour:
   wagonState: 0
   tasks: []
   maxNumberOfPossibleTask: 5
+--- !u!114 &7846086008151127833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919583739231077386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83623303f3bbc5b4a95fba0b8cf94aaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

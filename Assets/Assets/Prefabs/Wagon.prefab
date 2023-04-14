@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5782908858786125339}
   - component: {fileID: 6099154056877881030}
   - component: {fileID: 7846086008151127833}
+  - component: {fileID: -921253546799735532}
   m_Layer: 0
   m_Name: Wagon
   m_TagString: Untagged
@@ -139,3 +140,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83623303f3bbc5b4a95fba0b8cf94aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-921253546799735532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919583739231077386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10261ffb52b627b4b829ed5dbfc40d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wagonStateMachine: {fileID: 6099154056877881030}

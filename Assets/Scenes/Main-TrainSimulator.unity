@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 31492699}
   - component: {fileID: 31492700}
+  - component: {fileID: 31492701}
   m_Layer: 0
   m_Name: TrainController
   m_TagString: Untagged
@@ -167,21 +168,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b27b7cfdad650443a9c4634a08d63e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainState: 0
   locomotivePrefab: {fileID: 5787053724149359391, guid: e6dcf4b3d2a9f6f4e981e392e382929a,
     type: 3}
   wagonPrefab: {fileID: 4919583739231077386, guid: 6550f6d2866edbc468c646cbb3866f44,
     type: 3}
-  numWagons: 1
+  numWagons: 2
   wagonSpacing: 1.2
   trainSpawnPosition: {x: 5, y: 2, z: -25}
   trainMoveInDelay: 2
   endPosition: {fileID: 78739441}
   trainMoveInDuration: 10
   decoupleDuration: 3
+  wagons: []
   decoupleDistance: 2
   decoupleInterval: 1
   maxNumStatesPerWagon: 3
+--- !u!114 &31492701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31492698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d16d801f53c2a45a9b28885dc081b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainState: 0
 --- !u!1 &78739440
 GameObject:
   m_ObjectHideFlags: 0

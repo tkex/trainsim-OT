@@ -27,6 +27,6 @@ public class WagonStateObserver : MonoBehaviour
     {
         // Do something in response to the wagon state changing
         // Like in this case output a debug message
-        Debug.Log(gameObject.name + " state changed to: " + newState);
+        //Debug.Log(gameObject.name + " state changed to: " + newState);
     }
 }

@@ -53,7 +53,7 @@ public class WagonTaskStateMachine : MonoBehaviour
         // Trigger the OnWagonStateChanged event, passing the new state as a parameter
         OnWagonStateChanged?.Invoke(newState);
 
-        // Do something with the new state (now in the observer)
+        // Do something with the new state (now in the observer) (to remove)
         //Debug.Log(gameObject.name + " state changed to: " + newState);
     }
 

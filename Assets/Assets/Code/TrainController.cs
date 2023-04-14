@@ -6,17 +6,6 @@ using System;
 
 public class TrainController : MonoBehaviour
 {
-
-    public enum TrainState
-    {
-        NotMaintained,
-        InProgress,
-        Maintained
-    }
-
-    public TrainState trainState = TrainState.NotMaintained;
-
-
     #region Prefabs
     [Header("Prefab Settings")]
     public GameObject locomotivePrefab;
@@ -54,7 +43,7 @@ public class TrainController : MonoBehaviour
     private Sequence movementSequence; // DOTween movement sequence
 
     private GameObject locomotive;
-    private GameObject[] wagons;  // An array to store all created wagons
+    public  GameObject[] wagons;  // An array to store all created wagons
 
     [Tooltip("The individual decouple distance for each wagon.")]
     public float decoupleDistance = 2f;

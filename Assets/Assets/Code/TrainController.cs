@@ -32,6 +32,9 @@ public class TrainController : MonoBehaviour
     [Tooltip("End position of train, dependent on empty GO position.")]
     public Transform endPosition; // End position of the train
 
+    [Tooltip("End position of train after its maintenance.")]
+    public Transform maintenanceTargetPosition; // End position of the train when its maintained and drives away.
+
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 10f)]
     public float trainMoveInDuration; // Duration of the train ride in seconds
@@ -53,6 +56,14 @@ public class TrainController : MonoBehaviour
     [Tooltip("Value how many states a wagon can have.")]
     public int maxNumStatesPerWagon = 3;
     #endregion
+
+
+    private TrainStateMachine trainStateMachine;
+
+    private void Awake()
+    {
+        trainStateMachine = GetComponent<TrainStateMachine>();
+    }
 
     void Start()
     {
@@ -92,13 +103,41 @@ public class TrainController : MonoBehaviour
                     StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
                 });
         }
+
+
+        // Based on the StateMachine, do some actions.
+        // Get the TrainStateMachine component and read out the current state
+        TrainState currentState = gameObject.GetComponent<TrainStateMachine>().trainState;
+
+        // Debug log based on the current state.
+        if (currentState == TrainState.Maintained)
+        {
+            // Debug.Log("Train is maintained, tut tut!");
+            //MoveTrainAfterMaintenance();
+          
+        }
+        else if (currentState == TrainState.InProgress)
+        {
+            // Debug.Log("Train is in progress!");
+        }
+        else
+        {
+            // Debug.Log("Train is not maintained yet.");
+        }
     }
 
-    void PositionTrain(GameObject locomotiveGO)
+
+    public void MoveTrainAfterMaintenance()
     {
-        // Move the entire train to the trainSpawnPosition
-        locomotive.transform.position = trainSpawnPosition;
+        StartCoroutine(ExecuteEncoupleAfterTime(2f));
     }
+
+    IEnumerator ExecuteEncoupleAfterTime(float time)
+    {
+        // Bla
+        return null;
+    }
+
 
     IEnumerator ExecuteDecoupleAfterTime(float time)
     {
@@ -111,6 +150,12 @@ public class TrainController : MonoBehaviour
             yield return new WaitForSeconds(time);
         }
     }
+
+    void PositionTrain(GameObject locomotiveGO)
+    {
+        // Move the entire train to the trainSpawnPosition
+        locomotive.transform.position = trainSpawnPosition;
+    }  
 
     void SpawnWagons()
     {

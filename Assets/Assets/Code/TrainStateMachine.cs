@@ -3,14 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TrainStateMachine : MonoBehaviour
-{
-    public enum TrainState
-    {
-        NotMaintained,
-        InProgress,
-        Maintained
-    }
-
+{   
     // The trainController component attached
     private TrainController trainController;
 
@@ -72,6 +65,6 @@ public class TrainStateMachine : MonoBehaviour
             trainState = TrainState.Maintained;
         }
 
-        Debug.Log("Train state: " + trainState);
+        //Debug.Log("Train state: " + trainState);
     }
 }

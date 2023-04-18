@@ -68,10 +68,12 @@ public class TrainController : MonoBehaviour
     [Tooltip("Flag to determine whether train drives out after maintenance nor not.")]
     public bool startTrainMovementAfterMaintenance = true;
 
-    [Header("Dynamic - No touch here")]    
+    [Header("Dynamic - No touch here")]
+    private GameObject emptyTrainGameObject; // Empty train parent
+    private GameObject locomotive; // Locomotive GO
     public GameObject[] wagons;  // An array to store all created wagons
-    private GameObject locomotive;
-
+  
+    
 
     #endregion
 
@@ -83,7 +85,7 @@ public class TrainController : MonoBehaviour
         trainStateMachine = GetComponent<TrainStateMachine>();
     }
 
-    GameObject emptyTrainGameObject;
+    
 
     void Start()
     {

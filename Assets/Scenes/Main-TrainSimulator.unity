@@ -185,7 +185,10 @@ MonoBehaviour:
   wagons: []
   decoupleDistance: 2
   decoupleInterval: 1
-  maxNumStatesPerWagon: 3
+  decoupleWhenInHall: 1
+  encoupleWhenMaintained: 1
+  startTrainMovementAfterMaintenance: 1
+  delayBetweenEncoupleAndDriveOut: 4
 --- !u!114 &31492701
 MonoBehaviour:
   m_ObjectHideFlags: 0

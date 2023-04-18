@@ -48,6 +48,8 @@ public class TrainController : MonoBehaviour
     private GameObject locomotive;
     public  GameObject[] wagons;  // An array to store all created wagons
 
+    Vector3[] initialWagonPositions; // An array to store all prior positions of created wagons before decoupling
+
     [Tooltip("The individual decouple distance for each wagon.")]
     public float decoupleDistance = 2f;
     [Tooltip("Value how long it takes for each wagon to separate.")]
@@ -57,7 +59,7 @@ public class TrainController : MonoBehaviour
     public int maxNumStatesPerWagon = 3;
     #endregion
 
-
+    // State machine from train
     private TrainStateMachine trainStateMachine;
 
     private void Awake()
@@ -112,8 +114,8 @@ public class TrainController : MonoBehaviour
         // Debug log based on the current state.
         if (currentState == TrainState.Maintained)
         {
-            // Debug.Log("Train is maintained, tut tut!");
-            //MoveTrainAfterMaintenance();
+            Debug.Log("Train is maintained, tut tut!");
+            MoveTrainAfterMaintenance();
           
         }
         else if (currentState == TrainState.InProgress)
@@ -132,16 +134,32 @@ public class TrainController : MonoBehaviour
         StartCoroutine(ExecuteEncoupleAfterTime(2f));
     }
 
+
     IEnumerator ExecuteEncoupleAfterTime(float time)
     {
-        // Bla
-        return null;
+        // Encouple logic
+        for (int i = 0; i < wagons.Length; i++)
+        {
+            Vector3 wagonPosition = initialWagonPositions[i]; // Get initial position of wagon
+            wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animate and move position of each wagon
+
+            yield return new WaitForSeconds(time);
+        }
     }
 
 
     IEnumerator ExecuteDecoupleAfterTime(float time)
     {
-        // Decouple logic
+
+        // Save initial positions of wagons (so encoupling is easier)
+        initialWagonPositions = new Vector3[wagons.Length];
+
+        for (int i = 0; i < wagons.Length; i++)
+        {
+            initialWagonPositions[i] = wagons[i].transform.position;
+        }
+
+        // Starting here, decouple logic
         for (int i = wagons.Length - 1; i >= 0; i--)
         {
             Vector3 wagonPosition = locomotive.transform.position + (i + 1) * -decoupleDistance * locomotive.transform.forward; // Calculate new position of each wagon

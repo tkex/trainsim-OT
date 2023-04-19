@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
+// ## TO USE: FindObjectOfType<AudioManager>().Play("TrainHorn"); (in other script); later object reference
+
+
 // Declare a serializable class for sound properties (configurable in inspector)
 [System.Serializable]
 public class Sound

@@ -174,7 +174,7 @@ MonoBehaviour:
     type: 3}
   wagonPrefab: {fileID: 4919583739231077386, guid: 6550f6d2866edbc468c646cbb3866f44,
     type: 3}
-  numWagons: 2
+  numWagons: 3
   wagonSpacing: 1.2
   trainSpawnPosition: {x: 5, y: 2, z: -25}
   trainMoveInDelay: 2
@@ -2101,8 +2101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 1142832796}
-  startTime: 0
-  countDown: 0
+  startTime: 20
+  countDown: 1
 --- !u!1 &1022773185
 GameObject:
   m_ObjectHideFlags: 0
@@ -2968,7 +2968,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

@@ -3,7 +3,6 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-
     [Header("Timer Settings")]
     [Tooltip("Drag in the Timer text.")]
     public TextMeshProUGUI timerText; // Reference to the TextMeshProUGUI component that will display the timer
@@ -17,8 +16,11 @@ public class Timer : MonoBehaviour
 
     void Start()
     {
-        currentTime = startTime; // Set the current time to the starting time
-        isRunning = true; // Start the timer
+        // Set time inits
+        currentTime = startTime;
+
+        // Disable later and start when game start is init.
+        StartTimer();
     }
 
     void Update()
@@ -52,9 +54,28 @@ public class Timer : MonoBehaviour
             // Check if the timer has run out
             if (currentTime == 0f)
             {
-                isRunning = false; // Stop the timer
+                StopTimer();
+
                 Debug.Log("Time's up!"); // Do something when the timer runs out
             }
         }
+    }
+
+    public void StartTimer()
+    {
+        isRunning = true;
+    }
+
+    public void StopTimer()
+    {
+        isRunning = false;
+    }
+
+    public void ResetTimer()
+    {        
+        isRunning = false;
+        string minutesStr = ((int)(currentTime / 60f)).ToString().PadLeft(2, '0');
+        string secondsStr = ((int)(currentTime % 60f)).ToString().PadLeft(2, '0');
+        timerText.SetText(minutesStr + ":" + secondsStr);
     }
 }

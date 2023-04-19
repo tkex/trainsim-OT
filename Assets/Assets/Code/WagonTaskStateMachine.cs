@@ -16,6 +16,18 @@ public class WagonTaskStateMachine : MonoBehaviour
     // Define an event that will be triggered whenever the wagon state changes
     public event Action<WagonStates> OnWagonStateChanged;
 
+    // State colours
+    [Header("Maintenance State Colours")]
+    public Color notMaintainedColor = Color.red;
+    public Color inProgressColor = Color.yellow;
+    public Color maintainedColor = Color.green;
+    private Renderer renderer;
+
+    private void Awake()
+    {
+        renderer = GetComponent<Renderer>();       
+    }
+
     private void Start()
     {
         // Get the WagonTaskAssigner component from the same GameObject
@@ -32,16 +44,20 @@ public class WagonTaskStateMachine : MonoBehaviour
         {
             // If no tasks or no task is completed, set wagon state as not maintained
             ChangeState(WagonStates.NotMaintained);
+
+            renderer.material.color = notMaintainedColor;
         }
         else if (CheckIfAllTasksCompleted())
         {
             // If all tasks are completed, set wagon state as maintained
             ChangeState(WagonStates.Maintained);
+            renderer.material.color = maintainedColor;
         }
         else if (wagonState != WagonStates.InProgress && CheckIfAnyTasksCompleted())
         {
             // If some tasks are completed, set wagon state as in progress
             ChangeState(WagonStates.InProgress);
+            renderer.material.color = inProgressColor;
         }
     }
 

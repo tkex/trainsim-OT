@@ -8,6 +8,7 @@ public class WagonStateObserver : MonoBehaviour
     // A reference to the WagonTaskStateMachine that this observer is observing
     public WagonTaskStateMachine wagonStateMachine;
 
+
     // Called when this script is enabled
     private void OnEnable()
     {

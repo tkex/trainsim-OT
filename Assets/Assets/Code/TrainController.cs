@@ -34,7 +34,7 @@ public class TrainController : MonoBehaviour
     public Transform endPosition; // End position of the train
 
     [Tooltip("End position of train after its maintenance.")]
-    public Transform maintenanceTargetPosition; // End position of the train when its maintained and drives away.
+    public Transform maintenanceTargetPosition; // End position of the train when its maintained and drives away
 
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 10f)]
@@ -179,7 +179,7 @@ public class TrainController : MonoBehaviour
     IEnumerator MoveTrainAfterMaintenance(float delayAmount)
     {
         // Check if control flag is enabled
-        if (startTrainMovementAfterMaintenance)
+        if (startTrainMovementAfterMaintenance && !isExecutingMaintenance)
         {
             // The delay between encoupling and maintenance drive out
             yield return new WaitForSeconds(delayAmount);
@@ -198,8 +198,8 @@ public class TrainController : MonoBehaviour
 
     IEnumerator ExecuteEncoupleAfterTime(float time)
     {
-        // Check if control flag is enabled
-        if (encoupleWhenMaintained)
+        // Check if control flag is enabled (Flag in inspector and maintenance is over)
+        if (encoupleWhenMaintained && !isExecutingMaintenance)
         {
             // Encouple logic
             for (int i = 0; i < wagons.Length; i++)

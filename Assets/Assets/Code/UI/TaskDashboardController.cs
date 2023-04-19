@@ -36,8 +36,11 @@ public class TaskDashboardController : MonoBehaviour
             foreach (WagonTask task in taskAssigner.tasks)
             {
                 // Display the task type with checkbox and description
-                string checkbox = task.isDone ? "<color=#00FF00>[x]</color>" : "[ ]";
+                string checkbox = task.isDone ? "<color=#00FF00>[x]</color>" : "[ ]";                
                 string description = taskDescriptions[task.taskType];
+
+                // Concatened info output of the checkbot and the task type / desc
+                //string text = $"{checkbox} {task.taskType}";
                 string text = $"{checkbox} {description}";
 
                 // Cross out the task text if it's done

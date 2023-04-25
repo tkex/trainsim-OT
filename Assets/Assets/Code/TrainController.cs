@@ -187,7 +187,7 @@ public class TrainController : MonoBehaviour
             // Start train movement
             isMoving = true;
             movementSequence = DOTween.Sequence();
-            movementSequence.Append(locomotive.transform.DOMove(maintenanceTargetPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+            movementSequence.Append(locomotive.transform.DOMove(maintenanceTargetPosition.position, trainMoveInDuration).SetEase(Ease.InQuint))
                 .SetDelay(trainMoveInDelay)
                 .OnComplete(() => {
                     isMoving = false;

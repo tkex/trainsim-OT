@@ -20,6 +20,7 @@ public class WagonTaskHandling : MonoBehaviour
         SpawnTasks();
     }
 
+    /*
     private void Update()
     {
         // Check for space input.
@@ -41,6 +42,18 @@ public class WagonTaskHandling : MonoBehaviour
             }
         }
     }
+    */
+
+    // Spawn functions
+    private void SpawnCleaningObject()
+    {
+        // Spawn an empty game object at the wagon's position.
+        cleaningObject = new GameObject("CleaningObject");
+        cleaningObject.transform.position = transform.position;
+
+        // Set spawned empty game object as children of the current wagon.
+        cleaningObject.transform.SetParent(transform);
+    }
 
     private void SpawnTasks()
     {
@@ -50,12 +63,49 @@ public class WagonTaskHandling : MonoBehaviour
             {
                 // Cases and what happens when a specific task case has been found on the wagon.
                 case TaskType.Cleaning:
+
                     SpawnCleaningObject();
+
                     Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
             }
         }
     }
+
+    // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+
+    // Functions to fulfill the tasks
+    private void OnTriggerStay(Collider other)
+    {
+        //Debug.Log("Trigger happened on: " + gameObject.name);
+
+        if (other.CompareTag("Player"))
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("Space pressed on: " +gameObject.name);
+
+                foreach (WagonTask task in wagonTaskAssigner.tasks)
+                {
+                    if (task.taskType == TaskType.Cleaning && task.isDone == false)
+                    {
+                        Debug.Log("Set isDone to true and set cleaning task as done");
+
+                        task.isDone = true;
+                        Debug.Log("Cleaning task is now done.");
+
+                        Destroy(cleaningObject);
+
+                        break;
+                    }
+                }       
+            }
+        }
+    }
+ 
+
+    // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
     // Helper function to see what tasks a wagon has.
     private void LogWagonTasks()
@@ -65,15 +115,5 @@ public class WagonTaskHandling : MonoBehaviour
         {
             Debug.Log(gameObject.name + " has task(s): " + task.taskType.ToString() + ", isDone: " + task.isDone.ToString());
         }
-    }
-
-    private void SpawnCleaningObject()
-    {
-        // Spawn an empty game object at the wagon's position.
-        cleaningObject = new GameObject("CleaningObject");
-        cleaningObject.transform.position = transform.position;
-
-        // Set spawned empty game object as children of the current wagon.
-        cleaningObject.transform.SetParent(transform);
     }
 }

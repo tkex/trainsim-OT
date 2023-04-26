@@ -47,6 +47,15 @@ public class MaintenanceHallsController : MonoBehaviour
         SpawnMaintenanceHalls();
     }
 
+    private void Update()
+    {
+        // Update maintenance timers
+        foreach (MaintenanceHall hall in maintenanceHalls)
+        {
+            
+        }
+    }
+
     private void SpawnMaintenanceHalls()
     {
         // Create parent object for maintenance halls

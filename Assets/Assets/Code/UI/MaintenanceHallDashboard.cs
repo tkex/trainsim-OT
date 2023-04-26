@@ -16,16 +16,16 @@ public class MaintenanceHallDashboard : MonoBehaviour
         foreach (MaintenanceHall hall in maintenanceHalls.maintenanceHalls)
         {
             // Display the maintenance hall name and status information
-            maintenanceHallDashboardText.text += $"<b><color=#FFD700>{hall.maintenanceType} Maintenance Hall</color></b>\n";
-            maintenanceHallDashboardText.text += $"Occupied: {hall.isOccupied}\n";
-            maintenanceHallDashboardText.text += $"Wagon inside: {hall.hasWagon}\n";
-            maintenanceHallDashboardText.text += $"Maintenance duration: {hall.maintenanceTimeLength} seconds\n";
+            maintenanceHallDashboardText.text += $"<b><color=#FFD700>{hall.maintenanceType} Wartungshalle</color></b>\n";
+            maintenanceHallDashboardText.text += $"Beschäftigt: {hall.isOccupied}\n";
+            maintenanceHallDashboardText.text += $"Wagon drinne: {hall.hasWagon}\n";
+            maintenanceHallDashboardText.text += $"Dauer der Wartung: {hall.maintenanceTimeLength} Sekunden\n";
 
             // Display remaining maintenance time if both occupied and has wagon are set
             if (hall.isOccupied && hall.hasWagon)
             {
                 float remainingTime = hall.maintenanceTimeLength - hall.timer;
-                maintenanceHallDashboardText.text += $"Time left: {remainingTime:F1} seconds\n";
+                maintenanceHallDashboardText.text += $"Restzeit: {remainingTime:F1} Sekunden\n";
             }
 
             maintenanceHallDashboardText.text += "\n";

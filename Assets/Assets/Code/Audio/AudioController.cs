@@ -26,7 +26,7 @@ public class Sound
 }
 
 // Define the audio manager class.
-public class AudioManager : MonoBehaviour
+public class AudioController : MonoBehaviour
 {
     public Sound[] sounds; // An array of sounds to manage.
 

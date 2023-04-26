@@ -13,7 +13,7 @@ public class MaintenanceHall
     [SerializeField] private float maintenanceTimeLength = 10f;
 
     // Control flag to indicate if the maintenance hall is currently occupied or not with a wagon
-    public bool isOccupied;
+    public bool isOccupied = false;
 }
 
 public class MaintenanceHallsController : MonoBehaviour

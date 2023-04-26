@@ -31,7 +31,7 @@ public class MaintenanceHallsController : MonoBehaviour
     [SerializeField] private float distanceBetweenHallsX = 10f;
 
     // Distance between each maintenance hall in the Y direction
-    [SerializeField] private float distanceBetweenHallsY = 10f;
+    [SerializeField] private float distanceBetweenHallsZ = 10f;
 
 
 
@@ -54,7 +54,7 @@ public class MaintenanceHallsController : MonoBehaviour
             hall.isOccupied = false;
 
             // Update spawn position for next maintenance hall
-            spawnPosition += new Vector3(distanceBetweenHallsX, distanceBetweenHallsY, 0);
+            spawnPosition += new Vector3(distanceBetweenHallsX, 0, distanceBetweenHallsZ);
         }
     }
 }

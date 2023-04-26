@@ -3337,11 +3337,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0888ac699d626af439df5cca1abbbe4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maintenanceHallPrefab: {fileID: 0}
+  maintenanceHallPrefab: {fileID: 2095005179883936724, guid: 79c22bae1629a1f47928fc06e84869c4,
+    type: 3}
   maintenanceHalls:
   - maintenanceType: 0
-    maintenanceTimeLength: 0
-  distanceBetweenHalls: 10
+    maintenanceTimeLength: 20
+    isOccupied: 0
+  - maintenanceType: 1
+    maintenanceTimeLength: 10
+    isOccupied: 0
+  startingSpawnPosition: {x: -50, y: 5, z: 0}
+  distanceBetweenHallsX: 0
+  distanceBetweenHallsZ: 15
 --- !u!1 &1497971695
 GameObject:
   m_ObjectHideFlags: 0

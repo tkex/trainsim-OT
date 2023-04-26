@@ -176,7 +176,7 @@ MonoBehaviour:
     type: 3}
   numWagons: 3
   wagonSpacing: 1.2
-  trainSpawnPosition: {x: 5, y: 2, z: -25}
+  trainSpawnPosition: {x: 5, y: 2, z: -30}
   trainMoveInDelay: 2
   endPosition: {fileID: 78739441}
   maintenanceTargetPosition: {fileID: 677865686}
@@ -692,7 +692,7 @@ Transform:
   m_Children:
   - {fileID: 771309794}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &388676161
 GameObject:
@@ -739,6 +739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entranceGo: {fileID: 620891970}
+  openDoor: 0
   delay: 1
   duration: 3
   distance: 3
@@ -832,14 +833,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 458986569}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.26465, y: 1.9698, z: 0.87661}
   m_LocalScale: {x: 0.06818, y: 0.06818, z: 0.06818}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 873973109}
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 1942487231}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &458986574
 MonoBehaviour:
@@ -2340,37 +2341,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
---- !u!1 &780615645
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 780615646}
-  m_Layer: 0
-  m_Name: Cameras
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &780615646
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 780615645}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &789008054
 GameObject:
   m_ObjectHideFlags: 0
@@ -3269,7 +3239,7 @@ Transform:
   m_Children:
   - {fileID: 2137902264}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1219665643
 GameObject:
@@ -5428,6 +5398,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entranceGo: {fileID: 1299447597}
+  openDoor: 0
   delay: 1
   duration: 3
   distance: 3
@@ -5499,8 +5470,9 @@ Transform:
   - {fileID: 1299447601}
   - {fileID: 620891971}
   - {fileID: 2045640041}
+  - {fileID: 458986573}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1966398680
 GameObject:
@@ -5535,7 +5507,7 @@ Transform:
   - {fileID: 478219252}
   - {fileID: 624981773}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2001406375
 GameObject:

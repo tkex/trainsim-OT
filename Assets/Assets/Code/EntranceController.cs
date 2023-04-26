@@ -5,35 +5,60 @@ using DG.Tweening;
 
 public class EntranceController : MonoBehaviour
 {
-    public GameObject entranceGo; // The game object representing the door
 
-    [Header("Einfahrt-Einstellungen")]
+    [Header("Door Settings")]
+    // The game object representing the door
+    [SerializeField] private GameObject entranceGo;
+
+    // Flag to progress if the door should be opened
+    [SerializeField] private bool openDoor = false;
+
     [Tooltip("Delay before the start of the vertical door movement")]
-    public float delay = 1f; // Delay before the door movement starts
-    [Tooltip("Duration of the vertical door movement")]
-    public float duration = 3f; // Duration of the door movement
-    [Tooltip("Distance of the vertical door movement")]
-    public float distance = 3f; // Distance by which the door should move
+    // Delay before the door movement starts
 
-    private Vector3 originalPosition; // Original position of the door
-    private Vector3 targetPosition; // Target position of the door
+    [SerializeField] private float delay = 1f;
+    [Tooltip("Duration of the vertical door movement")]
+    // Duration of the door movement
+
+    [SerializeField] private float duration = 3f;
+    [Tooltip("Distance of the vertical door movement")]
+
+    // Distance the door will move
+    [SerializeField] private float distance = 3f;
+
+    // Original position of the door
+    private Vector3 originalPosition;
+    // Target position of the door
+    private Vector3 targetPosition;
+
 
     private void Start()
     {
-        originalPosition = entranceGo.transform.position; // store the original position of the door
-        targetPosition = originalPosition + Vector3.up * distance; // calculate the target position of the door
+        // Store the original position of the door
+        originalPosition = entranceGo.transform.position; 
 
-        // Start the door movement
-        entranceGo.transform.DOMove(targetPosition, duration)
-            .SetDelay(delay)
-            .SetEase(Ease.OutQuad);
+        // Calculate the target position of the door
+        targetPosition = originalPosition + Vector3.up * distance;
     }
 
-    public void OpenDoor()
+    private void Update()
     {
-        // Door movement to open the door
-        entranceGo.transform.DOMove(targetPosition, duration)
-            .SetEase(Ease.OutQuad);
+        if (openDoor)
+        {
+            // Door movement to open the door
+            entranceGo.transform.DOMove(targetPosition, duration)
+                .SetEase(Ease.OutQuad);
+        } else
+        {
+            entranceGo.transform.DOMove(originalPosition, duration)
+                .SetEase(Ease.OutQuad);
+        }
+    }
+
+    public void SetOpenDoor(bool value)
+    {
+        // Set the value of the openDoor flag
+        openDoor = value;
     }
 
     public void CloseDoor()

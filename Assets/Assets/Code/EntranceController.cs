@@ -18,8 +18,8 @@ public class EntranceController : MonoBehaviour
 
     [SerializeField] private float delay = 1f;
     [Tooltip("Duration of the vertical door movement")]
-    // Duration of the door movement
 
+    // Duration of the door movement
     [SerializeField] private float duration = 3f;
     [Tooltip("Distance of the vertical door movement")]
 
@@ -28,6 +28,7 @@ public class EntranceController : MonoBehaviour
 
     // Original position of the door
     private Vector3 originalPosition;
+
     // Target position of the door
     private Vector3 targetPosition;
 
@@ -46,12 +47,11 @@ public class EntranceController : MonoBehaviour
         if (openDoor)
         {
             // Door movement to open the door
-            entranceGo.transform.DOMove(targetPosition, duration)
-                .SetEase(Ease.OutQuad);
+            OpenDoor();
+           
         } else
         {
-            entranceGo.transform.DOMove(originalPosition, duration)
-                .SetEase(Ease.OutQuad);
+            CloseDoor();
         }
     }
 
@@ -59,6 +59,12 @@ public class EntranceController : MonoBehaviour
     {
         // Set the value of the openDoor flag
         openDoor = value;
+    }
+
+    public void OpenDoor()
+    {
+        entranceGo.transform.DOMove(targetPosition, duration)
+               .SetEase(Ease.OutQuad);
     }
 
     public void CloseDoor()

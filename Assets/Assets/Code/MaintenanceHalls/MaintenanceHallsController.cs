@@ -18,18 +18,24 @@ public class MaintenanceHall
 
 public class MaintenanceHallsController : MonoBehaviour
 {
+    [Header("Prefab Settings")]
+    [Tooltip("Drag in the maintenance hall prefab that shall be spawned.")]
     // Prefab of the maintenance hall
     public GameObject maintenanceHallPrefab;
 
     // List of maintenance halls to spawn
     [SerializeField] private List<MaintenanceHall> maintenanceHalls;
 
+    [Header("Position Settings")]
+    [Tooltip("Set the starting spawn position of the first maintenance hall.")]
     // Starting position of the first maintenance hall
     [SerializeField] private Vector3 startingSpawnPosition;
 
+    [Tooltip("The X distance between each maintenance hall.")
     // Distance between each maintenance hall in the X direction
     [SerializeField] private float distanceBetweenHallsX = 10f;
 
+    [Tooltip("The Z distance between each maintenance hall.")]
     // Distance between each maintenance hall in the Y direction
     [SerializeField] private float distanceBetweenHallsZ = 10f;
 

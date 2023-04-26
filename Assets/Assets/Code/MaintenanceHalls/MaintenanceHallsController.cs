@@ -49,12 +49,18 @@ public class MaintenanceHallsController : MonoBehaviour
 
     private void SpawnMaintenanceHalls()
     {
+        // Create parent object for maintenance halls
+        GameObject maintenanceHallsParent = new GameObject("MaintenanceHalls");
+
         Vector3 spawnPosition = startingSpawnPosition;
 
         foreach (MaintenanceHall hall in maintenanceHalls)
         {
-            // Instantiate maintenance hall prefab
-            GameObject hallObject = Instantiate(maintenanceHallPrefab, spawnPosition, Quaternion.identity);
+            // Instantiate maintenance hall prefab as child of parent object
+            GameObject hallObject = Instantiate(maintenanceHallPrefab, spawnPosition, Quaternion.identity, maintenanceHallsParent.transform);
+
+            // Set the name of the maintenance hall based on its maintenance type
+            hallObject.name = string.Format("{0} Maintenance Hall", hall.maintenanceType);
 
             // Set isOccupied flag to false initially
             hall.isOccupied = false;

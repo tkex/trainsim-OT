@@ -10,11 +10,18 @@ public class MaintenanceHall
     public TaskType maintenanceType;
 
     // Length of the timer in seconds
-    [SerializeField] private float maintenanceTimeLength = 10f;
+    public float maintenanceTimeLength;
 
-    // Control flag to indicate if the maintenance hall is currently occupied or not with a wagon
+    // Flag to check if the maintenance hall is currently occupied or not with a wagon
     public bool isOccupied = false;
+
+    // Flag to check if the maintenance hall has a wagon inside or not
+    public bool hasWagon = false;
+
+    // Timer for maintenance
+    public float timer = 0f;
 }
+
 
 public class MaintenanceHallsController : MonoBehaviour
 {
@@ -52,7 +59,21 @@ public class MaintenanceHallsController : MonoBehaviour
         // Update maintenance timers
         foreach (MaintenanceHall hall in maintenanceHalls)
         {
-            
+            if (hall.hasWagon && hall.isOccupied)
+            {
+                hall.timer += Time.deltaTime;
+
+                if (hall.timer >= hall.maintenanceTimeLength)
+                {
+                    Debug.Log(string.Format("{0} Maintenance Hall has completed maintenance.", hall.maintenanceType));
+
+                    // TODO Remove wagon function later here
+                    hall.isOccupied = false;
+
+                    // Reset timer
+                    hall.timer = 0f;
+                }
+            }
         }
     }
 
@@ -71,11 +92,8 @@ public class MaintenanceHallsController : MonoBehaviour
             // Set the name of the maintenance hall based on its maintenance type
             hallObject.name = string.Format("{0} Maintenance Hall", hall.maintenanceType);
 
-            // Set isOccupied flag to false initially
-            hall.isOccupied = false;
-
             // Update spawn position for next maintenance hall
             spawnPosition += new Vector3(distanceBetweenHallsX, 0, distanceBetweenHallsZ);
         }
-    }
+    } 
 }

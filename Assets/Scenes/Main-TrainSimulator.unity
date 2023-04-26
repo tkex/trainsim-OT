@@ -3341,11 +3341,20 @@ MonoBehaviour:
     type: 3}
   maintenanceHalls:
   - maintenanceType: 0
-    maintenanceTimeLength: 20
-    isOccupied: 0
-  - maintenanceType: 1
     maintenanceTimeLength: 10
     isOccupied: 0
+    hasWagon: 0
+    timer: 0
+  - maintenanceType: 1
+    maintenanceTimeLength: 20
+    isOccupied: 0
+    hasWagon: 0
+    timer: 0
+  - maintenanceType: 2
+    maintenanceTimeLength: 30
+    isOccupied: 0
+    hasWagon: 0
+    timer: 0
   startingSpawnPosition: {x: -50, y: 5, z: 0}
   distanceBetweenHallsX: 0
   distanceBetweenHallsZ: 15

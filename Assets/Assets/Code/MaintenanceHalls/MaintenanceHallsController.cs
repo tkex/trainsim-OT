@@ -11,6 +11,9 @@ public class MaintenanceHall
 
     // Length of the timer in seconds
     [SerializeField] private float maintenanceTimeLength = 10f;
+
+    // Control flag to indicate if the maintenance hall is currently occupied or not with a wagon
+    public bool isOccupied;
 }
 
 public class MaintenanceHallsController : MonoBehaviour
@@ -21,8 +24,16 @@ public class MaintenanceHallsController : MonoBehaviour
     // List of maintenance halls to spawn
     [SerializeField] private List<MaintenanceHall> maintenanceHalls;
 
-    // Distance between each maintenance hall
-    [SerializeField] private float distanceBetweenHalls = 10f;
+    // Starting position of the first maintenance hall
+    [SerializeField] private Vector3 startingSpawnPosition;
+
+    // Distance between each maintenance hall in the X direction
+    [SerializeField] private float distanceBetweenHallsX = 10f;
+
+    // Distance between each maintenance hall in the Y direction
+    [SerializeField] private float distanceBetweenHallsY = 10f;
+
+
 
     private void Start()
     {
@@ -32,13 +43,18 @@ public class MaintenanceHallsController : MonoBehaviour
 
     private void SpawnMaintenanceHalls()
     {
-        // Starting position of the first maintenance hall
-        Vector3 spawnPosition = transform.position;
+        Vector3 spawnPosition = startingSpawnPosition;
 
         foreach (MaintenanceHall hall in maintenanceHalls)
         {
             // Instantiate maintenance hall prefab
             GameObject hallObject = Instantiate(maintenanceHallPrefab, spawnPosition, Quaternion.identity);
+
+            // Set isOccupied flag to false initially
+            hall.isOccupied = false;
+
+            // Update spawn position for next maintenance hall
+            spawnPosition += new Vector3(distanceBetweenHallsX, distanceBetweenHallsY, 0);
         }
     }
 }

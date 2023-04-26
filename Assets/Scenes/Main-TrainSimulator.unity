@@ -3337,6 +3337,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0888ac699d626af439df5cca1abbbe4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maintenanceHallPrefab: {fileID: 0}
+  maintenanceHalls:
+  - maintenanceType: 0
+    maintenanceTimeLength: 0
+  distanceBetweenHalls: 10
 --- !u!1 &1497971695
 GameObject:
   m_ObjectHideFlags: 0

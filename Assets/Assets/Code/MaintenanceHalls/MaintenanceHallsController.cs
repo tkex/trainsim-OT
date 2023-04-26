@@ -31,7 +31,7 @@ public class MaintenanceHallsController : MonoBehaviour
     public GameObject maintenanceHallPrefab;
 
     // List of maintenance halls to spawn
-    [SerializeField] private List<MaintenanceHall> maintenanceHalls;
+    [SerializeField] public List<MaintenanceHall> maintenanceHalls;
 
     [Header("Position Settings")]
     [Tooltip("Set the starting spawn position of the first maintenance hall.")]

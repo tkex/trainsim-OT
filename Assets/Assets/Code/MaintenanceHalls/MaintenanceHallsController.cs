@@ -31,7 +31,7 @@ public class MaintenanceHallsController : MonoBehaviour
     // Starting position of the first maintenance hall
     [SerializeField] private Vector3 startingSpawnPosition;
 
-    [Tooltip("The X distance between each maintenance hall.")
+    [Tooltip("The X distance between each maintenance hall.")]
     // Distance between each maintenance hall in the X direction
     [SerializeField] private float distanceBetweenHallsX = 10f;
 

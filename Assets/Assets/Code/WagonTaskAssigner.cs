@@ -6,36 +6,22 @@ using System;
 [System.Serializable]
 public class WagonTask
 {
-    [SerializeField] private TaskType taskType;
-    [SerializeField] private bool isDone;
-
+    public TaskType TaskType;
+    public bool IsDone;
     public event Action<WagonTask> TaskCompleted;
-
-    public TaskType TaskType
-    {
-        get { return taskType; }
-        set { taskType = value; }
-    }
-
-    public bool IsDone
-    {
-        get { return isDone; }
-        set { isDone = value; }
-    }
 
     public void CompleteTask()
     {
         IsDone = true;
         TaskCompleted?.Invoke(this);
     }
-
 }
 
 public class WagonTaskAssigner : MonoBehaviour
 {
 
     [Header("WagonTaskAssigner Settings")]
-    
+
     [Tooltip("List of tasks and their status.")]
     public List<WagonTask> tasks = new List<WagonTask>();
     [Tooltip("The max. possible task a wagon can have.")]
@@ -88,6 +74,6 @@ public class WagonTaskAssigner : MonoBehaviour
         }
 
         // Mark tasks as initialized to avoid assigning them again.
-        isTasksInitialized = true;    
+        isTasksInitialized = true;
     }
 }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
@@ -10,49 +9,22 @@ public class WagonTaskHandling : MonoBehaviour
 
     private void Start()
     {
-        // Get the WagonTaskAssigner component from the wagon.
+        Initialize();
+    }
+
+    private void Initialize()
+    {
         wagonTaskAssigner = GetComponent<WagonTaskAssigner>();
-
-        // Log the tasks of the wagon.
         LogWagonTasks();
-
-        // Spawn tasks.
         SpawnTasks();
     }
 
-    /*
-    private void Update()
+    private void LogWagonTasks()
     {
-        // Check for space input.
-        if (Input.GetKeyDown(KeyCode.Space))
+        foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            // Iterate through the tasks of the wagon.
-            foreach (WagonTask task in wagonTaskAssigner.tasks)
-            {
-                // Check if the task is a cleaning task and has not been done yet.
-                if (task.taskType == TaskType.Cleaning && !task.isDone)
-                {
-                    // Set the isDone flag of the task to true.
-                    task.isDone = true;
-                    Debug.Log("Cleaning task is now done.");
-
-                    // Destroy the cleaning object.
-                    Destroy(cleaningObject);
-                }
-            }
+            Debug.Log(gameObject.name + " has task(s): " + task.taskType.ToString() + ", isDone: " + task.isDone.ToString());
         }
-    }
-    */
-
-    // Spawn functions
-    private void SpawnCleaningObject()
-    {
-        // Spawn an empty game object at the wagon's position.
-        cleaningObject = new GameObject("CleaningObject");
-        cleaningObject.transform.position = transform.position;
-
-        // Set spawned empty game object as children of the current wagon.
-        cleaningObject.transform.SetParent(transform);
     }
 
     private void SpawnTasks()
@@ -61,59 +33,43 @@ public class WagonTaskHandling : MonoBehaviour
         {
             switch (task.taskType)
             {
-                // Cases and what happens when a specific task case has been found on the wagon.
                 case TaskType.Cleaning:
-
                     SpawnCleaningObject();
-
                     Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
             }
         }
     }
 
-    // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+    private void SpawnCleaningObject()
+    {
+        cleaningObject = new GameObject("CleaningObject");
+        cleaningObject.transform.position = transform.position;
+        cleaningObject.transform.SetParent(transform);
+    }
 
-
-    // Functions to fulfill the tasks
     private void OnTriggerStay(Collider other)
     {
-        //Debug.Log("Trigger happened on: " + gameObject.name);
-
         if (other.CompareTag("Player"))
         {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                Debug.Log("Space pressed on: " +gameObject.name);
-
-                foreach (WagonTask task in wagonTaskAssigner.tasks)
-                {
-                    if (task.taskType == TaskType.Cleaning && task.isDone == false)
-                    {
-                        Debug.Log("Set isDone to true and set cleaning task as done");
-
-                        task.isDone = true;
-                        Debug.Log("Cleaning task is now done.");
-
-                        Destroy(cleaningObject);
-
-                        break;
-                    }
-                }       
-            }
+            HandleCleaningTask();
         }
     }
- 
 
-    // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-
-    // Helper function to see what tasks a wagon has.
-    private void LogWagonTasks()
+    private void HandleCleaningTask()
     {
-        // Iterate through the tasks of the wagon and log them.
-        foreach (WagonTask task in wagonTaskAssigner.tasks)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log(gameObject.name + " has task(s): " + task.taskType.ToString() + ", isDone: " + task.isDone.ToString());
+            foreach (WagonTask task in wagonTaskAssigner.tasks)
+            {
+                if (task.taskType == TaskType.Cleaning && !task.isDone)
+                {
+                    task.isDone = true;
+                    Debug.Log("Cleaning task is now done.");
+                    Destroy(cleaningObject);
+                    break;
+                }
+            }
         }
     }
 }

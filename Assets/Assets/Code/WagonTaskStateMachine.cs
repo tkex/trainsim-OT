@@ -78,7 +78,7 @@ public class WagonTaskStateMachine : MonoBehaviour
         // Check if all tasks are completed
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            if (!task.isDone)
+            if (!task.IsDone)
             {
                 return false;
             }
@@ -91,7 +91,7 @@ public class WagonTaskStateMachine : MonoBehaviour
         // Check if any task is completed
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            if (task.isDone)
+            if (task.IsDone)
             {
                 return true;
             }

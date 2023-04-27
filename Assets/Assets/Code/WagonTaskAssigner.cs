@@ -6,15 +6,29 @@ using System;
 [System.Serializable]
 public class WagonTask
 {
-    public TaskType taskType;
-    public bool isDone;
+    [SerializeField] private TaskType taskType;
+    [SerializeField] private bool isDone;
+
     public event Action<WagonTask> TaskCompleted;
+
+    public TaskType TaskType
+    {
+        get { return taskType; }
+        set { taskType = value; }
+    }
+
+    public bool IsDone
+    {
+        get { return isDone; }
+        set { isDone = value; }
+    }
 
     public void CompleteTask()
     {
-        isDone = true;
+        IsDone = true;
         TaskCompleted?.Invoke(this);
     }
+
 }
 
 public class WagonTaskAssigner : MonoBehaviour
@@ -68,8 +82,8 @@ public class WagonTaskAssigner : MonoBehaviour
             // Add the selected task to the list of assigned tasks, with isDone set to false.
             tasks.Add(new WagonTask
             {
-                taskType = randomTask,
-                isDone = false
+                TaskType = randomTask,
+                IsDone = false
             });
         }
 

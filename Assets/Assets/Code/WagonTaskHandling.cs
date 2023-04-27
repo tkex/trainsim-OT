@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
@@ -26,9 +27,9 @@ public class WagonTaskHandling : MonoBehaviour
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            if (!task.isDone)
+            if (!task.IsDone)
             {
-                switch (task.taskType)
+                switch (task.TaskType)
                 {
                     case TaskType.Cleaning:
                         HandleCleaningTask(task);
@@ -38,7 +39,7 @@ public class WagonTaskHandling : MonoBehaviour
                         break;
                     // add more cases for other task types
                     default:
-                        Debug.LogWarning("Unknown task type: " + task.taskType);
+                        Debug.LogWarning("Unknown task type: " + task.TaskType);
                         break;
                 }
             }
@@ -48,7 +49,7 @@ public class WagonTaskHandling : MonoBehaviour
     private void HandleCleaningTask(WagonTask task)
     {
         Debug.Log("Handling cleaning task for wagon " + gameObject.name);
-        task.isDone = true;
+        task.IsDone = true;
         Debug.Log("Cleaning task is now done.");
         task.CompleteTask();
     }
@@ -56,7 +57,7 @@ public class WagonTaskHandling : MonoBehaviour
     private void HandleRefuelTask(WagonTask task)
     {
         Debug.Log("Handling refuel task for wagon " + gameObject.name);
-        task.isDone = true;
+        task.IsDone = true;
         Debug.Log("Refuel task is now done.");
         task.CompleteTask();
     }
@@ -65,18 +66,18 @@ public class WagonTaskHandling : MonoBehaviour
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            switch (task.taskType)
+            switch (task.TaskType)
             {
                 case TaskType.Cleaning:
                     SpawnCleaningObject();
-                    //Debug.Log(gameObject.name + " has a cleaning task!");
+                    Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
                 case TaskType.RefuelEngine:
-                    //Debug.Log(gameObject.name + " has a refuel task!");
+                    Debug.Log(gameObject.name + " has a refuel task!");
                     break;
                 // add more cases for other task types
                 default:
-                    Debug.LogWarning("Unknown task type: " + task.taskType);
+                    Debug.LogWarning("Unknown task type: " + task.TaskType);
                     break;
             }
         }
@@ -93,7 +94,7 @@ public class WagonTaskHandling : MonoBehaviour
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            Debug.Log(gameObject.name + " has task(s): " + task.taskType + ", isDone: " + task.isDone);
+            Debug.Log(gameObject.name + " has task(s): " + task.TaskType + ", isDone: " + task.IsDone);
         }
     }
 }

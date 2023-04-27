@@ -261,6 +261,12 @@ public class TrainController : MonoBehaviour
 
             // Assign a name to the wagon based on its index
             wagons[i].name = "Wagon " + (i + 1);
+
+            // Here later on, if a wagon gets random states or with user input
+            // Thus disabling the WagonTaskAssigner on the wagonPrefab or choosing states defined
+            // by the user here (in decoupled)
+
+            // Here to go then
         }
     }
 }

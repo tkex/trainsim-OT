@@ -69,10 +69,10 @@ public class WagonTaskHandling : MonoBehaviour
             {
                 case TaskType.Cleaning:
                     SpawnCleaningObject();
-                    Debug.Log(gameObject.name + " has a cleaning task!");
+                    //Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
                 case TaskType.RefuelEngine:
-                    Debug.Log(gameObject.name + " has a refuel task!");
+                    //Debug.Log(gameObject.name + " has a refuel task!");
                     break;
                 // add more cases for other task types
                 default:

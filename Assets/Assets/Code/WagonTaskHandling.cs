@@ -5,26 +5,60 @@ using UnityEngine;
 public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
-    private GameObject cleaningObject;
 
     private void Start()
     {
-        Initialize();
-    }
-
-    private void Initialize()
-    {
         wagonTaskAssigner = GetComponent<WagonTaskAssigner>();
+
         LogWagonTasks();
         SpawnTasks();
     }
 
-    private void LogWagonTasks()
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            HandleTasks();
+        }
+    }
+
+    private void HandleTasks()
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            Debug.Log(gameObject.name + " has task(s): " + task.taskType.ToString() + ", isDone: " + task.isDone.ToString());
+            if (!task.isDone)
+            {
+                switch (task.taskType)
+                {
+                    case TaskType.Cleaning:
+                        HandleCleaningTask(task);
+                        break;
+                    case TaskType.RefuelEngine:
+                        HandleRefuelTask(task);
+                        break;
+                    // add more cases for other task types
+                    default:
+                        Debug.LogWarning("Unknown task type: " + task.taskType);
+                        break;
+                }
+            }
         }
+    }
+
+    private void HandleCleaningTask(WagonTask task)
+    {
+        Debug.Log("Handling cleaning task for wagon " + gameObject.name);
+        task.isDone = true;
+        Debug.Log("Cleaning task is now done.");
+        task.CompleteTask();
+    }
+
+    private void HandleRefuelTask(WagonTask task)
+    {
+        Debug.Log("Handling refuel task for wagon " + gameObject.name);
+        task.isDone = true;
+        Debug.Log("Refuel task is now done.");
+        task.CompleteTask();
     }
 
     private void SpawnTasks()
@@ -37,39 +71,29 @@ public class WagonTaskHandling : MonoBehaviour
                     SpawnCleaningObject();
                     Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
+                case TaskType.RefuelEngine:
+                    Debug.Log(gameObject.name + " has a refuel task!");
+                    break;
+                // add more cases for other task types
+                default:
+                    Debug.LogWarning("Unknown task type: " + task.taskType);
+                    break;
             }
         }
     }
 
     private void SpawnCleaningObject()
     {
-        cleaningObject = new GameObject("CleaningObject");
+        GameObject cleaningObject = new GameObject("CleaningObject");
         cleaningObject.transform.position = transform.position;
         cleaningObject.transform.SetParent(transform);
     }
 
-    private void OnTriggerStay(Collider other)
+    private void LogWagonTasks()
     {
-        if (other.CompareTag("Player"))
+        foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
-            HandleCleaningTask();
-        }
-    }
-
-    private void HandleCleaningTask()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            foreach (WagonTask task in wagonTaskAssigner.tasks)
-            {
-                if (task.taskType == TaskType.Cleaning && !task.isDone)
-                {
-                    task.isDone = true;
-                    Debug.Log("Cleaning task is now done.");
-                    Destroy(cleaningObject);
-                    break;
-                }
-            }
+            Debug.Log(gameObject.name + " has task(s): " + task.taskType + ", isDone: " + task.isDone);
         }
     }
 }

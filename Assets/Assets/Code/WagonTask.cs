@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
 [System.Serializable]
-public abstract class WagonTask
+public abstract class WagonTask : ScriptableObject
 {
     public TaskType TaskType;
     public bool IsDone;
@@ -18,6 +17,5 @@ public abstract class WagonTask
     }
 
     public abstract void SpawnTaskObject(GameObject go, Transform parentTransform);
-    public abstract void HandleTask();   
-
+    public abstract void HandleTask();
 }

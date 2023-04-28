@@ -15,17 +15,9 @@ public class WagonTaskAssigner : MonoBehaviour
 
     private bool isTasksInitialized = false;
 
-    // Create a list of all possible task types.
-    List<Type> taskTypes = new List<Type>()
-    {
-        typeof(CleaningTask),
-        typeof(RefuelTask),
-    };
-
-
     private void Start()
     {
-        // Assign random tasks to the wagon.
+        // Assign random tasks to the wagon
         AssignTasksToWagon();
     }
 
@@ -51,10 +43,10 @@ public class WagonTaskAssigner : MonoBehaviour
             }
         }
 
-        // Clear the existing tasks list.
+        // Clear the existing tasks list
         tasks.Clear();
 
-        // Determine how many tasks to assign.
+        // Determine how many tasks to assign
         int numberOfTasks = UnityEngine.Random.Range(1, maxNumberOfPossibleTask + 1);
 
         // Randomly assign tasks until the desired number is reached

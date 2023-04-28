@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[System.Serializable]
 public class RefuelTask : WagonTask
 {
+    [SerializeField]
     public RefuelTask()
     {
         TaskType = TaskType.RefuelEngine;
@@ -19,8 +21,8 @@ public class RefuelTask : WagonTask
         CompleteTask();
     }
 
-    public override void SpawnTaskObject(GameObject go)
+    public override void SpawnTaskObject(GameObject go, Transform parentTransform)
     {
-        GameObject cleaningObject = GameObject.Instantiate(go, go.transform.position, go.transform.rotation);
+        GameObject refuelObject = GameObject.Instantiate(go, parentTransform);
     }
 }

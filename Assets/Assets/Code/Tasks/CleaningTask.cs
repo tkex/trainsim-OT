@@ -19,8 +19,8 @@ public class CleaningTask : WagonTask
         CompleteTask();
     }
 
-    public override void SpawnTaskObject(GameObject go)
+    public override void SpawnTaskObject(GameObject go, Transform parentTransform)
     {
-        GameObject cleaningObject = GameObject.Instantiate(go, go.transform.position, go.transform.rotation);
+        GameObject cleaningObject = GameObject.Instantiate(go, parentTransform);
     }
 }

@@ -7,6 +7,8 @@ public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
 
+    // Tasks that get spawned on a  wagon
+    public GameObject refuelPrefab;
     public GameObject cleaningPrefab;
 
     private void Start()
@@ -33,10 +35,11 @@ public class WagonTaskHandling : MonoBehaviour
             switch (task.TaskType)
             {
                 case TaskType.Cleaning:
-                    task.SpawnTaskObject(cleaningPrefab);
+                    task.SpawnTaskObject(cleaningPrefab, transform);
                     Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
                 case TaskType.RefuelEngine:
+                    task.SpawnTaskObject(refuelPrefab, transform);
                     Debug.Log(gameObject.name + " has a refuel task!");
                     break;
                 // add more cases for other task types

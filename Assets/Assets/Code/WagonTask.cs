@@ -17,7 +17,7 @@ public abstract class WagonTask
         TaskCompleted?.Invoke(this);
     }
 
-    public abstract void SpawnTaskObject(GameObject go);
+    public abstract void SpawnTaskObject(GameObject go, Transform parentTransform);
     public abstract void HandleTask();   
 
 }

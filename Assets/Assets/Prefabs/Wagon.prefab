@@ -113,7 +113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8aee2c3d8990b849a4ee2f00fb3b36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tasks: []
   maxNumberOfPossibleTask: 5
 --- !u!114 &6099154056877881030
 MonoBehaviour:
@@ -143,6 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83623303f3bbc5b4a95fba0b8cf94aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cleaningPrefab: {fileID: 955152896699838735, guid: 74a0fdfe4c660d04d92a50710acd27b9,
+    type: 3}
 --- !u!114 &-921253546799735532
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using System;
 
 
 [System.Serializable]
-public class WagonTask
+public abstract class WagonTask
 {
     public TaskType TaskType;
     public bool IsDone;
@@ -16,4 +16,8 @@ public class WagonTask
         IsDone = true;
         TaskCompleted?.Invoke(this);
     }
+
+    public abstract void SpawnTaskObject(GameObject go);
+    public abstract void HandleTask();   
+
 }

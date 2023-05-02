@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8aee2c3d8990b849a4ee2f00fb3b36f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tasks: []
   maxNumberOfPossibleTask: 3
 --- !u!114 &6099154056877881030
 MonoBehaviour:

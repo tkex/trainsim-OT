@@ -31,6 +31,7 @@ public class TrainStateMachine : MonoBehaviour
         allMaintained = true;
         inProgress = false;
 
+
         foreach (GameObject wagon in trainController.wagons)
         {
             WagonTaskStateMachine wagonTaskStateMachine = wagon.GetComponent<WagonTaskStateMachine>();

@@ -28,28 +28,33 @@ public class TaskDashboardController : MonoBehaviour
         // Loop through all wagons in the TrainController
         foreach (GameObject wagon in trainController.wagons)
         {
-            // Display the wagon parent object name in bold color
-            dashboardText.text += $"<b><color=#FFD700>{wagon.gameObject.name}:</color></b>\n";
-
-            // Loop through all tasks in the WagonTaskAssigner component
+            // Get the WagonTaskAssigner component
             WagonTaskAssigner taskAssigner = wagon.GetComponent<WagonTaskAssigner>();
-            foreach (WagonTask task in taskAssigner.tasks)
+
+            if (taskAssigner.tasks != null)
             {
-                // Display the task type with checkbox and description
-                string checkbox = task.IsDone ? "<color=#00FF00>[x]</color>" : "[ ]";                
-                string description = taskDescriptions[task.TaskType];
+                // Display the wagon parent object name in bold color
+                dashboardText.text += $"<b><color=#FFD700>{wagon.gameObject.name}:</color></b>\n";
 
-                // Concatened info output of the checkbot and the task type / desc
-                //string text = $"{checkbox} {task.taskType}";
-                string text = $"{checkbox} {description}";
-
-                // Cross out the task text if it's done
-                if (task.IsDone)
+                // Loop through all tasks in the WagonTaskAssigner component                
+                foreach (WagonTask task in taskAssigner.tasks)
                 {
-                    text = $"<s>{text}</s>";
-                }
+                    // Display the task type with checkbox and description
+                    string checkbox = task.IsDone ? "<color=#00FF00>[x]</color>" : "[ ]";
+                    string description = taskDescriptions[task.TaskType];
 
-                dashboardText.text += text + "\n";
+                    // Concatened info output of the checkbot and the task type / desc
+                    //string text = $"{checkbox} {task.taskType}";
+                    string text = $"{checkbox} {description}";
+
+                    // Cross out the task text if it's done
+                    if (task.IsDone)
+                    {
+                        text = $"<s>{text}</s>";
+                    }
+
+                    dashboardText.text += text + "\n";
+                }
             }
 
             // Add a separator between wagons

@@ -71,28 +71,49 @@ public class TrainController : MonoBehaviour
     [Header("State Settings")]
     [Tooltip("Flag to determine whether wagons get random states or defined ones.")]
     public bool useRandomStates;   
-    WagonTaskAssigner wagonTaskAssigner;  // Activate or deactivate the script dependend on the useRandomState boolean flag
 
     [Header("Dynamic - No touch here")]
     private GameObject emptyTrainGameObject; // Empty train parent
     private GameObject locomotive; // Locomotive GO
     public GameObject[] wagons;  // An array to store all created wagons
-  
-    
-
     #endregion
 
-    // State machine from train
-    private TrainStateMachine trainStateMachine;
-
-    private void Awake()
-    {
-        trainStateMachine = GetComponent<TrainStateMachine>();
-    }
-
-    
 
     void Start()
+    {
+        SetupTrain();
+    }
+
+    void Update()
+    {
+        // Check all the time for the train maintenance states
+        CheckTrainState();        
+    }
+
+
+    private void MoveTrainInHall()
+    {
+        //if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
+        //{
+            // Start train movement
+            isMoving = true;
+            movementSequence = DOTween.Sequence();
+            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+                .SetDelay(trainMoveInDelay)
+                .OnComplete(() => {
+                    isMoving = false;
+                    Debug.Log("Gestoppt!");
+
+                    // Decoupling of train
+                    StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
+
+                    // Set flag for showing maintenance has started
+                    isExecutingMaintenance = true;
+                });
+        //}
+    }
+
+    private void SetupTrain()
     {
         // Spawn Empty Tain GameObject
         emptyTrainGameObject = new GameObject("Train");
@@ -113,32 +134,6 @@ public class TrainController : MonoBehaviour
         PositionTrain(emptyTrainGameObject);
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && !isMoving)
-        {
-            // Start train movement
-            isMoving = true;
-            movementSequence = DOTween.Sequence();
-            movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
-                .SetDelay(trainMoveInDelay)
-                .OnComplete(() => {
-                    isMoving = false;
-                    Debug.Log("Gestoppt!");
-
-                    // Decoupling of train
-                    StartCoroutine(ExecuteDecoupleAfterTime(decoupleInterval));
-
-                    // Set flag for showing maintenance has started
-                    isExecutingMaintenance = true;
-                });
-        }
-
-        CheckTrainState();        
-    }
-
-    
-
     void CheckTrainState()
     {
         // Get the TrainStateMachine component and read out the current state
@@ -158,8 +153,8 @@ public class TrainController : MonoBehaviour
                 // Set flag so no endless loop for positioning for wagons happen
                 hasEncoupled = true; 
 
-                // Start encoupling process and maintenance movement
-                StartCoroutine(MoveTrainAfterMaintenanceWithDelay());
+                // Start encoupling process and maintenance movement (need to uncomment)
+                //StartCoroutine(MoveTrainAfterMaintenanceWithDelay());
             }
         }
         else if (currentState == TrainState.InProgress)
@@ -267,13 +262,8 @@ public class TrainController : MonoBehaviour
             // Assign a name to the wagon based on its index
             wagons[i].name = "Wagon " + (i + 1);
 
-
-            // Here later on, if a wagon gets random states or with user input
-            // Thus disabling the WagonTaskAssigner on the wagonPrefab or choosing states defined
-            // by the user here (in decoupled)
-
-            // Here to go then
-
+               
+            // Check if wagons are going to use random tasks or specific single tasks that are added in runtime
             if (useRandomStates)
             {
                 // Activitate the random state script on the wagon
@@ -281,6 +271,9 @@ public class TrainController : MonoBehaviour
             }
             else
             {
+                Debug.Log("Manual tasks can be set up here!");
+
+                /*
                 // Set up manual tasks (in this case a new Cleaning Task)
                 WagonTaskAssigner wagonTaskAssigner = wagons[i].GetComponent<WagonTaskAssigner>();
                 CleaningTask cleaningTask = new CleaningTask();
@@ -289,6 +282,7 @@ public class TrainController : MonoBehaviour
                 {
                     wagonTaskAssigner.AssignSpecificTaskToWagon(cleaningTask);
                 }
+                */
             }
         }
     }

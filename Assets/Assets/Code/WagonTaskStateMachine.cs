@@ -75,27 +75,36 @@ public class WagonTaskStateMachine : MonoBehaviour
 
     private bool CheckIfAllTasksCompleted()
     {
-        // Check if all tasks are completed
-        foreach (WagonTask task in wagonTaskAssigner.tasks)
+
+        if (wagonTaskAssigner.tasks != null)
         {
-            if (!task.IsDone)
+            // Check if all tasks are completed
+            foreach (WagonTask task in wagonTaskAssigner.tasks)
             {
-                return false;
-            }
+                if (!task.IsDone)
+                {
+                    return false;
+                }
+            }          
         }
+
         return true;
     }
 
     private bool CheckIfAnyTasksCompleted()
     {
-        // Check if any task is completed
-        foreach (WagonTask task in wagonTaskAssigner.tasks)
+        if (wagonTaskAssigner.tasks != null)
         {
-            if (task.IsDone)
+            // Check if any task is completed
+            foreach (WagonTask task in wagonTaskAssigner.tasks)
             {
-                return true;
+                if (!task.IsDone)
+                {
+                    return false;
+                }
             }
         }
-        return false;
+
+        return true;
     }
 }

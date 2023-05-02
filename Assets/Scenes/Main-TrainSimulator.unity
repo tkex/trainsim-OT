@@ -188,7 +188,7 @@ MonoBehaviour:
   decoupleWhenInHall: 1
   encoupleWhenMaintained: 1
   startTrainMovementAfterMaintenance: 1
-  useRandomStates: 0
+  useRandomStates: 1
   wagons: []
 --- !u!114 &31492701
 MonoBehaviour:

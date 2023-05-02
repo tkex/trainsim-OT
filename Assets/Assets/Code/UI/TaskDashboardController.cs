@@ -31,11 +31,11 @@ public class TaskDashboardController : MonoBehaviour
             // Get the WagonTaskAssigner component
             WagonTaskAssigner taskAssigner = wagon.GetComponent<WagonTaskAssigner>();
 
-            if (taskAssigner.tasks != null)
-            {
-                // Display the wagon parent object name in bold color
-                dashboardText.text += $"<b><color=#FFD700>{wagon.gameObject.name}:</color></b>\n";
+            // Display the wagon parent object name in bold color
+            dashboardText.text += $"<b><color=#FFD700>{wagon.gameObject.name}:</color></b>\n";
 
+            if (taskAssigner.tasks != null && taskAssigner.tasks.Count > 0 && taskAssigner.tasks[0] != null)
+            {
                 // Loop through all tasks in the WagonTaskAssigner component                
                 foreach (WagonTask task in taskAssigner.tasks)
                 {
@@ -56,7 +56,6 @@ public class TaskDashboardController : MonoBehaviour
                     dashboardText.text += text + "\n";
                 }
             }
-
             // Add a separator between wagons
             dashboardText.text += "\n";
         }

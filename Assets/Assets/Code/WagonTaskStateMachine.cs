@@ -40,11 +40,16 @@ public class WagonTaskStateMachine : MonoBehaviour
     private void Update()
     {
         // Check if the state needs to be updated
-        if (wagonTaskAssigner.tasks.Count == 0 || !CheckIfAnyTasksCompleted())
+        if (wagonTaskAssigner.tasks == null || wagonTaskAssigner.tasks.Count == 0)
+        {
+            // If no tasks are there, set wagon to maintained
+            ChangeState(WagonStates.Maintained);
+            renderer.material.color = maintainedColor;
+        }
+        else if (!CheckIfAnyTasksCompleted())
         {
             // If no tasks or no task is completed, set wagon state as not maintained
             ChangeState(WagonStates.NotMaintained);
-
             renderer.material.color = notMaintainedColor;
         }
         else if (CheckIfAllTasksCompleted())
@@ -76,8 +81,8 @@ public class WagonTaskStateMachine : MonoBehaviour
     private bool CheckIfAllTasksCompleted()
     {
 
-        if (wagonTaskAssigner.tasks != null)
-        {
+        if (wagonTaskAssigner.tasks != null && wagonTaskAssigner.tasks.Count > 0 && wagonTaskAssigner.tasks[0] != null)
+            {
             // Check if all tasks are completed
             foreach (WagonTask task in wagonTaskAssigner.tasks)
             {
@@ -93,18 +98,18 @@ public class WagonTaskStateMachine : MonoBehaviour
 
     private bool CheckIfAnyTasksCompleted()
     {
-        if (wagonTaskAssigner.tasks != null)
+        if (wagonTaskAssigner.tasks != null && wagonTaskAssigner.tasks.Count > 0 && wagonTaskAssigner.tasks[0] != null)
         {
             // Check if any task is completed
             foreach (WagonTask task in wagonTaskAssigner.tasks)
             {
-                if (!task.IsDone)
+                if (task.IsDone)
                 {
-                    return false;
+                    return true;
                 }
             }
         }
 
-        return true;
+        return false;
     }
 }

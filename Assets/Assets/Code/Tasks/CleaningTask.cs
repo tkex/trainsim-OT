@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 // CreateAssetMenu to enable creating manually ScriptableObjects (only needed for that) so can be dragged into the inspector for manual task assignment
 // Project windows -> Create -> Task -> CleaningTask
 [CreateAssetMenu(fileName = "CleaningTask", menuName = "Task/Cleaning Task")]
@@ -11,6 +12,7 @@ public class CleaningTask : WagonTask
     public CleaningTask()
     {
         TaskType = TaskType.Cleaning;
+        IsDone = false;
     }
 
     public override void HandleTask()
@@ -25,5 +27,5 @@ public class CleaningTask : WagonTask
     public override void SpawnTaskObject(GameObject go, Transform parentTransform)
     {
        GameObject cleaningObject = GameObject.Instantiate(go, parentTransform);
-    }
+    }   
 }

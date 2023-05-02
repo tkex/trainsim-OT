@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[CreateAssetMenu(fileName = "RefuelTask", menuName = "Task/Refuel Task")]
 [System.Serializable]
 public class RefuelTask : WagonTask
 {
@@ -10,6 +11,7 @@ public class RefuelTask : WagonTask
     public RefuelTask()
     {
         TaskType = TaskType.RefuelEngine;
+        IsDone = false;
     }
 
     public override void HandleTask()

@@ -188,7 +188,7 @@ MonoBehaviour:
   decoupleWhenInHall: 1
   encoupleWhenMaintained: 1
   startTrainMovementAfterMaintenance: 1
-  useRandomStates: 1
+  useRandomStates: 0
   wagons: []
 --- !u!114 &31492701
 MonoBehaviour:
@@ -414,16 +414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
-  - name: 
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0.1
-    loop: 0
-    source: {fileID: 0}
-  - name: 
-    clip: {fileID: 8300000, guid: 16fba6d30ed741d4a9fdd6e79ee2f3ac, type: 3}
-    volume: 0
-    pitch: 0
+  - name: BackgroundMusic
+    clip: {fileID: 8300000, guid: e98bc45c5ab32d94f9fcea3ab3f0b38c, type: 3}
+    volume: 0.528
+    pitch: 1.17
     loop: 0
     source: {fileID: 0}
   - name: 
@@ -432,9 +426,9 @@ MonoBehaviour:
     pitch: 0
     loop: 0
     source: {fileID: 0}
-  - name: 
-    clip: {fileID: 0}
-    volume: 0
+  - name: CarVroomSound
+    clip: {fileID: 8300000, guid: 354c37cd61ec24bbcbbc7921d0a71bc1, type: 3}
+    volume: 0.304
     pitch: 0
     loop: 0
     source: {fileID: 0}

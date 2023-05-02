@@ -277,21 +277,18 @@ public class TrainController : MonoBehaviour
             if (useRandomStates)
             {
                 // Activitate the random state script on the wagon
-                wagonTaskAssigner = wagons[i].GetComponent<WagonTaskAssigner>();
-                wagonTaskAssigner.enabled = true;
+                wagons[i].GetComponent<WagonTaskAssigner>().AssignRandomTasksToWagon();
             }
             else
             {
-                // Use defined states if useRandomStates is false and deaactivate random tasks on wagon
-                wagonTaskAssigner.enabled = false;
+                // Set up manual tasks (in this case a new Cleaning Task)
+                WagonTaskAssigner wagonTaskAssigner = wagons[i].GetComponent<WagonTaskAssigner>();
+                CleaningTask cleaningTask = new CleaningTask();
 
-                // Create and add a cleaning task to the wagon
-                CleaningTask cleaningTask = ScriptableObject.CreateInstance<CleaningTask>();
-                wagonTaskAssigner.tasks.Add(cleaningTask);
-
-                // Create and add a refueling task to the wagon
-                RefuelTask refuelingTask = ScriptableObject.CreateInstance<RefuelTask>();
-                wagonTaskAssigner.tasks.Add(refuelingTask);
+                if (wagonTaskAssigner != null)
+                {
+                    wagonTaskAssigner.AssignSpecificTaskToWagon(cleaningTask);
+                }
             }
         }
     }

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1467f784cc5769046b3c1aa545c30448, type: 3}
   m_Name: CleaningTask
   m_EditorClassIdentifier: 
-  TaskType: 0
+  TaskType: 6
   IsDone: 0

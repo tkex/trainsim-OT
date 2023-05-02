@@ -11,17 +11,34 @@ public class WagonTaskAssigner : MonoBehaviour
     [Tooltip("List of tasks and their status.")]
     public List<WagonTask> tasks = new List<WagonTask>();
     [Tooltip("The max. possible task a wagon can have.")]
-    public int maxNumberOfPossibleTask = 6;
+    public int maxNumberOfPossibleTask = 5;
 
     private bool isTasksInitialized = false;
 
     private void Start()
     {
         // Assign random tasks to the wagon
-        AssignTasksToWagon();
+        //AssignTasksToWagon();
     }
 
-    public void AssignTasksToWagon()
+    // Function to assign a single specific task to a wagon
+    // Useage (from other class): 
+    // WagonTask taskToAssign = new MyCustomTask(); (like Cleaning)
+    // wagonTaskAssigner.AssignSpecificTaskToWagon(taskToAssign);
+    public void AssignSpecificTaskToWagon(WagonTask task)
+    {
+        if (tasks.Count < maxNumberOfPossibleTask)
+        {
+            tasks.Add(task);
+        }
+        else
+        {
+            Debug.LogWarning("Cannot assign task: maximum number of possible tasks for this wagon has been reached.");
+        }
+    }
+
+    // Function to assign various random tasks to a wagon
+    public void AssignRandomTasksToWagon()
     {
 
         // If tasks have already been initialized, exit the method to avoid assigning tasks again
@@ -69,10 +86,27 @@ public class WagonTaskAssigner : MonoBehaviour
             tasks.Add(randomTask);
         }
 
-            // Mark tasks as initialized to avoid assigning them again
-            isTasksInitialized = true;
+        // Mark tasks as initialized to avoid assigning them again
+        isTasksInitialized = true;
+    }
+
+    // Function for clearing all tasks at once
+    public void ClearAllTasks()
+    {
+        tasks.Clear();
+    }
+
+    // Function to show all tasks
+    public void ShowAllTasks()
+    {
+        Debug.Log("Tasks assigned to this wagon:");
+
+        foreach (WagonTask task in tasks)
+        {
+            Debug.Log("- " + task.name);
         }
     }
+}
 
 /*
  * 

@@ -15,11 +15,6 @@ public class WagonTaskAssigner : MonoBehaviour
 
     private bool isTasksInitialized = false;
 
-    private void Start()
-    {
-        // Assign random tasks to the wagon
-        //AssignTasksToWagon();
-    }
 
     // Function to assign a single specific task to a wagon
     // Useage (from other class): 

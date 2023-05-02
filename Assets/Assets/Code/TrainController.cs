@@ -68,6 +68,11 @@ public class TrainController : MonoBehaviour
     [Tooltip("Flag to determine whether train drives out after maintenance nor not.")]
     public bool startTrainMovementAfterMaintenance = true;
 
+    [Header("State Settings")]
+    [Tooltip("Flag to determine whether wagons get random states or defined ones.")]
+    public bool useRandomStates;   
+    WagonTaskAssigner wagonTaskAssigner;  // Activate or deactivate the script dependend on the useRandomState boolean flag
+
     [Header("Dynamic - No touch here")]
     private GameObject emptyTrainGameObject; // Empty train parent
     private GameObject locomotive; // Locomotive GO
@@ -262,11 +267,32 @@ public class TrainController : MonoBehaviour
             // Assign a name to the wagon based on its index
             wagons[i].name = "Wagon " + (i + 1);
 
+
             // Here later on, if a wagon gets random states or with user input
             // Thus disabling the WagonTaskAssigner on the wagonPrefab or choosing states defined
             // by the user here (in decoupled)
 
             // Here to go then
+
+            if (useRandomStates)
+            {
+                // Activitate the random state script on the wagon
+                wagonTaskAssigner = wagons[i].GetComponent<WagonTaskAssigner>();
+                wagonTaskAssigner.enabled = true;
+            }
+            else
+            {
+                // Use defined states if useRandomStates is false and deaactivate random tasks on wagon
+                wagonTaskAssigner.enabled = false;
+
+                // Create and add a cleaning task to the wagon
+                CleaningTask cleaningTask = ScriptableObject.CreateInstance<CleaningTask>();
+                wagonTaskAssigner.tasks.Add(cleaningTask);
+
+                // Create and add a refueling task to the wagon
+                RefuelTask refuelingTask = ScriptableObject.CreateInstance<RefuelTask>();
+                wagonTaskAssigner.tasks.Add(refuelingTask);
+            }
         }
     }
 }

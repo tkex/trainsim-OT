@@ -7,6 +7,10 @@ public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
 
+    // Tasks that get spawned on a  wagon
+    public GameObject refuelPrefab;
+    public GameObject cleaningPrefab;
+
     private void Start()
     {
         wagonTaskAssigner = GetComponent<WagonTaskAssigner>();
@@ -23,45 +27,7 @@ public class WagonTaskHandling : MonoBehaviour
         }
     }
 
-    private void HandleTasks()
-    {
-        foreach (WagonTask task in wagonTaskAssigner.tasks)
-        {
-            if (!task.IsDone)
-            {
-                switch (task.TaskType)
-                {
-                    case TaskType.Cleaning:
-                        HandleCleaningTask(task);
-                        break;
-                    case TaskType.RefuelEngine:
-                        HandleRefuelTask(task);
-                        break;
-                    // add more cases for other task types
-                    default:
-                        Debug.LogWarning("Unknown task type: " + task.TaskType);
-                        break;
-                }
-            }
-        }
-    }
-
-    private void HandleCleaningTask(WagonTask task)
-    {
-        Debug.Log("Handling cleaning task for wagon " + gameObject.name);
-        task.IsDone = true;
-        Debug.Log("Cleaning task is now done.");
-        task.CompleteTask();
-    }
-
-    private void HandleRefuelTask(WagonTask task)
-    {
-        Debug.Log("Handling refuel task for wagon " + gameObject.name);
-        task.IsDone = true;
-        Debug.Log("Refuel task is now done.");
-        task.CompleteTask();
-    }
-
+    // Looks good!
     private void SpawnTasks()
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
@@ -69,10 +35,11 @@ public class WagonTaskHandling : MonoBehaviour
             switch (task.TaskType)
             {
                 case TaskType.Cleaning:
-                    SpawnCleaningObject();
+                    task.SpawnTaskObject(cleaningPrefab, transform);
                     Debug.Log(gameObject.name + " has a cleaning task!");
                     break;
                 case TaskType.RefuelEngine:
+                    task.SpawnTaskObject(refuelPrefab, transform);
                     Debug.Log(gameObject.name + " has a refuel task!");
                     break;
                 // add more cases for other task types
@@ -83,13 +50,34 @@ public class WagonTaskHandling : MonoBehaviour
         }
     }
 
-    private void SpawnCleaningObject()
+    private void HandleTasks()
     {
-        GameObject cleaningObject = new GameObject("CleaningObject");
-        cleaningObject.transform.position = transform.position;
-        cleaningObject.transform.SetParent(transform);
+        foreach (WagonTask task in wagonTaskAssigner.tasks)
+        {
+            if (!task.IsDone)
+            {
+                switch (task.TaskType)
+                {
+                    case TaskType.Cleaning:
+                        //HandleCleaningTask(task);
+                        task.HandleTask();
+                        break;
+                    case TaskType.RefuelEngine:
+                        task.HandleTask();
+                        //HandleRefuelTask(task);
+                        break;
+                    // add more cases for other task types
+                    default:
+                        Debug.LogWarning("Unknown task type: " + task.TaskType);
+                        break;
+                }
+            }
+        }
     }
 
+
+
+    // Looks good!
     private void LogWagonTasks()
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)

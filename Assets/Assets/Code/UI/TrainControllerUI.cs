@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using TMPro;
+
 public class TrainControllerUI : MonoBehaviour
 {
     public TrainController trainController;
@@ -22,6 +24,7 @@ public class TrainControllerUI : MonoBehaviour
 
     // Reference to the wagon task panel prefab (containing structure=
     public GameObject wagonTaskPanelPrefab;
+    private List<GameObject> wagonTaskPanels = new List<GameObject>();
 
 
     private int numWagons;
@@ -40,11 +43,17 @@ public class TrainControllerUI : MonoBehaviour
 
         // Hide the tasks panel initially
         tasksPanel.SetActive(false);
+
+        // Initialize the wagon task panels
+        InitializeWagonTaskPanels();
     }
 
     void OnNumWagonsChanged(float value)
     {
         numWagons = (int)value;
+
+        // Update the wagon task panels based on the new number of wagons
+        UpdateWagonTaskPanels();
     }
 
     void OnUseRandomStatesChanged(bool value)
@@ -54,6 +63,28 @@ public class TrainControllerUI : MonoBehaviour
         // Show or hide the tasks panel depending on whether useRandomStates is selected or not
         tasksPanel.SetActive(!useRandomStates);
 
+        // Initialize the wagon task panels if useRandomStates is false
+        if (!useRandomStates)
+        {
+            UpdateWagonTaskPanels();
+        }
+    }
+
+    void InitializeWagonTaskPanels()
+    {
+        Debug.Log("WagonTaskPanel initialisiert");
+    }
+
+
+
+    void UpdateWagonTaskPanels()
+    {
+        Debug.Log("TaskPanel updated");
+    }
+
+    void OnAddTaskButtonClicked(GameObject panel)
+    {
+        Debug.Log("Task Dropdown MenuButton was pressed");
     }
 
 

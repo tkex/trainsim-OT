@@ -1,6 +1,8 @@
+
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Collections.Generic;
+using System;
 public class TrainControllerUI : MonoBehaviour
 {
     public TrainController trainController;
@@ -15,9 +17,15 @@ public class TrainControllerUI : MonoBehaviour
     // Delay before the train moves into the platform
     public float trainMoveInDelay = 2f;
 
+    // References to the UI elements for assigning tasks to wagons
+    public GameObject tasksPanel;
+
+    // Reference to the wagon task panel prefab (containing structure=
+    public GameObject wagonTaskPanelPrefab;
+
+
     private int numWagons;
     private bool useRandomStates;
-
 
     void Start()
     {
@@ -29,6 +37,9 @@ public class TrainControllerUI : MonoBehaviour
         // Set the initial values
         numWagons = (int)numWagonsSlider.value;
         useRandomStates = useRandomStatesToggle.isOn;
+
+        // Hide the tasks panel initially
+        tasksPanel.SetActive(false);
     }
 
     void OnNumWagonsChanged(float value)
@@ -39,7 +50,12 @@ public class TrainControllerUI : MonoBehaviour
     void OnUseRandomStatesChanged(bool value)
     {
         useRandomStates = value;
+
+        // Show or hide the tasks panel depending on whether useRandomStates is selected or not
+        tasksPanel.SetActive(!useRandomStates);
+
     }
+
 
     void OnSpawnTrainClicked()
     {
@@ -53,10 +69,26 @@ public class TrainControllerUI : MonoBehaviour
         int numWagons = (int)numWagonsSlider.value;
         bool useRandomStates = useRandomStatesToggle.isOn;
 
-        // Call the SpawnTrain method of the TrainController and pass in the configurator variables
-        trainController.SpawnTrain(numWagons, useRandomStates);
+        if (useRandomStates)
+        {
+            // Call the SpawnTrain method of the TrainController and pass in the configurator variables
+            trainController.SpawnTrain(numWagons, useRandomStates);
+        }
+        // If not random, assign tasks manually
+        else if (!useRandomStates)
+        {
+            // Call the SpawnTrain method of the TrainController and pass in the configurator variables
+            trainController.SpawnTrain(numWagons, useRandomStates);
 
-        // Call the MoveTrainInHall method of the TrainController after the specified delay
-        // Invoke("MoveTrainInHall", trainMoveInDelay);
+            // Then assign the UI tasks to the spawned wagons
+            //AssignTasksToWagons();
+        }
+
+        // Move the train into the platform after a delay
+        //Invoke("MoveTrainInHall", trainMoveInDelay);
     }
+
+
 }
+
+   

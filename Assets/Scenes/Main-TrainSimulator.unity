@@ -1633,7 +1633,7 @@ MonoBehaviour:
   _disableOtherInputModules: 1
   _autoEnableOnWorldCanvases: 1
   _autoAssignEventCamera: 1
-  _interactionTypeOnAutoEnable: 0
+  _interactionTypeOnAutoEnable: 1
   _fingerTipMinHoverDistance: 0.05
   _dragThreshold: 40
 --- !u!114 &460595063

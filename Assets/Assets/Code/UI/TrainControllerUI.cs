@@ -31,6 +31,9 @@ public class TrainControllerUI : MonoBehaviour
     // Define the horizontal distance between the wagon task panels
     private const float panelSpacing = 20f;
 
+    private GameObject firstDropdownPanel;
+
+
     //
     public Dictionary<string, Type> taskTypeMapping = new Dictionary<string, Type>();
 
@@ -40,6 +43,9 @@ public class TrainControllerUI : MonoBehaviour
 
     void Start()
     {
+        // Find the first dropdown menu in the tasks panel and disable it
+        DisableFirstDropdownMenu();
+
         // Initialize the UI elements
         numWagonsSlider.onValueChanged.AddListener(OnNumWagonsChanged);
         useRandomStatesToggle.onValueChanged.AddListener(OnUseRandomStatesChanged);
@@ -54,6 +60,8 @@ public class TrainControllerUI : MonoBehaviour
 
         // Initialize the wagon task panels
         InitializeWagonTaskPanels();
+
+ 
     }
 
     void OnNumWagonsChanged(float value)
@@ -103,7 +111,25 @@ public class TrainControllerUI : MonoBehaviour
             Button addTaskButton = wagonTaskPanel.GetComponentInChildren<Button>();
             addTaskButton.onClick.AddListener(() => OnAddTaskButtonClicked(wagonTaskPanel));
         }
+
+        // Disable the first dropdown menu in the first panel
+        DisableFirstDropdownMenu();
     }
+
+    void DisableFirstDropdownMenu()
+    {
+        // Get the first dropdown menu in the tasks panel
+        TMP_Dropdown firstDropdown = tasksPanel.GetComponentInChildren<TMP_Dropdown>();
+
+        // If a dropdown menu exists and it has options, disable it
+        if (firstDropdown != null && firstDropdown.options.Count > 0)
+        {
+            firstDropdown.interactable = false;
+            firstDropdown.captionText.color = Color.gray;
+            firstDropdown.value = 0;
+        }
+    }
+
     void UpdateWagonTaskPanels()
     {
         // Destroy all existing wagon task panels
@@ -117,7 +143,6 @@ public class TrainControllerUI : MonoBehaviour
         // Create new wagon task panels based on the updated number of wagons
         InitializeWagonTaskPanels();
     }
-
     public void OnAddTaskButtonClicked(GameObject panel)
     {
         // Find the "Dropdown" child element of the panel
@@ -138,7 +163,8 @@ public class TrainControllerUI : MonoBehaviour
             newDropdown.transform.SetParent(panel.transform);
 
             // Get all available WagonTask types
-            List<Type> taskTypes = GetAllWagonTaskTypes();
+            List<Type> taskTypes = GetAllWagonTaskTypes(panel);
+
 
             // Get the TMP_Dropdown component from the newDropdown game object
             TMP_Dropdown dropdown = newDropdown.GetComponent<TMP_Dropdown>();
@@ -151,16 +177,66 @@ public class TrainControllerUI : MonoBehaviour
             foreach (Type taskType in taskTypes)
             {
                 string taskTypeName = taskType.Name;
-                dropdownOptions.Add(new TMP_Dropdown.OptionData(taskTypeName));
-                taskTypeMapping[taskTypeName] = taskType;
+
+                // Check if the task type is already selected in another dropdown in this panel
+                bool taskTypeSelected = false;
+
+                // Get all dropdown menus in the same panel
+                TMP_Dropdown[] dropdownsInPanel = panel.GetComponentsInChildren<TMP_Dropdown>();
+
+                // Loop through each dropdown and check if the task type is selected
+                foreach (TMP_Dropdown d in dropdownsInPanel)
+                {
+                    if (d.value > 0 && d.options[d.value].text == taskTypeName)
+                    {
+                        taskTypeSelected = true;
+                        break;
+                    }
+                }
+
+                // Add the task type to the dropdown options if it's not already selected
+                if (!taskTypeSelected)
+                {
+                    dropdownOptions.Add(new TMP_Dropdown.OptionData(taskTypeName));
+                    taskTypeMapping[taskTypeName] = taskType;
+                }
             }
+
             dropdown.AddOptions(dropdownOptions);
+
+            // Set the value of the new dropdown to the first option if available
+            if (dropdown.options.Count > 0)
+            {
+                dropdown.value = 0;
+            }
+            else
+            {
+                // Disable the dropdown if there are no options
+                dropdown.interactable = false;
+            }
         }
     }
 
-
-    private List<Type> GetAllWagonTaskTypes()
+    private bool IsTaskTypeSelected(string taskTypeName, GameObject panel)
     {
+        // Check all dropdowns in the panel to see if they have the task type selected
+        foreach (TMP_Dropdown dropdown in panel.GetComponentsInChildren<TMP_Dropdown>())
+        {
+            if (dropdown != null)
+            {
+                TMP_Dropdown.OptionData selectedOption = dropdown.options[dropdown.value];
+                if (selectedOption != null && selectedOption.text == taskTypeName)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private List<Type> GetAllWagonTaskTypes(GameObject panel)
+    {
+        firstDropdownPanel = tasksPanel.transform.GetChild(0).gameObject;
+
         List<Type> taskTypes = new List<Type>();
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
@@ -168,7 +244,14 @@ public class TrainControllerUI : MonoBehaviour
             {
                 if (type.IsSubclassOf(typeof(WagonTask)) && !type.IsAbstract)
                 {
-                    taskTypes.Add(type);
+                    // Check if the wagon task type is already selected in another dropdown in this panel or the first dropdown
+                    bool taskTypeSelected = IsTaskTypeSelected(type.Name, panel) || IsTaskTypeSelected(type.Name, firstDropdownPanel);
+
+                    // Add the task type to the list if it's not already selected
+                    if (!taskTypeSelected)
+                    {
+                        taskTypes.Add(type);
+                    }
                 }
             }
         }

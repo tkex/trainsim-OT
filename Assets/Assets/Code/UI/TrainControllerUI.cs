@@ -113,7 +113,6 @@ public class TrainControllerUI : MonoBehaviour
         // Create new wagon task panels based on the updated number of wagons
         InitializeWagonTaskPanels();
     }
-
     public void OnAddTaskButtonClicked(GameObject panel)
     {
         // Find the "Dropdown" child element of the panel
@@ -124,10 +123,11 @@ public class TrainControllerUI : MonoBehaviour
             // Instantiate a new dropdown by copying the found dropdown
             GameObject newDropdown = Instantiate(dropdownTransform.gameObject, panel.transform);
 
-            // Set the position of the new dropdown under the found dropdown
-            RectTransform dropdownRectTransform = dropdownTransform.GetComponent<RectTransform>();
-            RectTransform newDropdownRectTransform = newDropdown.GetComponent<RectTransform>();
-            newDropdownRectTransform.anchoredPosition = dropdownRectTransform.anchoredPosition;
+            // Calculate the new position based on the number of dropdown menus
+            int dropdownCount = panel.transform.childCount - 3; // Exclude the "Dropdown" template
+            float yOffset = -0.15f * dropdownCount;
+            Vector3 newPosition = new Vector3(dropdownTransform.position.x, dropdownTransform.position.y + yOffset, dropdownTransform.position.z);
+            newDropdown.transform.position = newPosition;
 
             // Add the new dropdown to the panel
             newDropdown.transform.SetParent(panel.transform);

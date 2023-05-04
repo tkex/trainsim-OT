@@ -26,6 +26,8 @@ public class TrainControllerUI : MonoBehaviour
     public GameObject wagonTaskPanelPrefab;
     private List<GameObject> wagonTaskPanels = new List<GameObject>();
 
+    // Define the horizontal distance between the wagon task panels
+    private const float panelSpacing = 20f;
 
     private int numWagons;
     private bool useRandomStates;
@@ -72,55 +74,32 @@ public class TrainControllerUI : MonoBehaviour
 
     void InitializeWagonTaskPanels()
     {
-        // Destroy any existing wagon task panels
-        foreach (var panel in wagonTaskPanels)
+        // Instantiate wagonTaskPanelPrefab for each wagon
+        for (int i = 0; i < numWagons; i++)
+        {
+            GameObject wagonTaskPanel = Instantiate(wagonTaskPanelPrefab, tasksPanel.transform);
+            wagonTaskPanels.Add(wagonTaskPanel);
+
+            // Set the wagon number in the panel's title
+            wagonTaskPanel.GetComponentInChildren<TextMeshProUGUI>().text = $"Wagon {i + 1}";
+
+            // Add listener to the Add Task button on this panel
+            Button addTaskButton = wagonTaskPanel.GetComponentInChildren<Button>();
+            addTaskButton.onClick.AddListener(() => OnAddTaskButtonClicked(wagonTaskPanel));
+        }
+    }
+    void UpdateWagonTaskPanels()
+    {
+        // Destroy all existing wagon task panels
+        foreach (GameObject panel in wagonTaskPanels)
         {
             Destroy(panel);
         }
 
-        // Instantiate new wagon task panels based on the number of wagons
-        for (int i = 0; i < numWagons; i++)
-        {
-            GameObject panel = Instantiate(wagonTaskPanelPrefab, tasksPanel.transform);
-            wagonTaskPanels.Add(panel);
+        wagonTaskPanels.Clear();
 
-            // Set the wagon number in the panel's title
-            panel.GetComponentInChildren<TextMeshProUGUI>().text = $"Wagon {i + 1}";
-
-            // Add a listener to the panel's "Add Task" button
-            Button addTaskButton = panel.transform.Find("AddTaskButton").GetComponent<Button>();
-            addTaskButton.onClick.AddListener(() => OnAddTaskButtonClicked(panel));
-        }
-    }
-
-    void UpdateWagonTaskPanels()
-    {
-        // If the number of wagons has increased, instantiate new panels
-        if (numWagons > wagonTaskPanels.Count)
-        {
-            for (int i = wagonTaskPanels.Count; i < numWagons; i++)
-            {
-                GameObject panel = Instantiate(wagonTaskPanelPrefab, tasksPanel.transform);
-                wagonTaskPanels.Add(panel);
-
-                // Set the wagon number in the panel's title
-                panel.GetComponentInChildren<TextMeshProUGUI>().text = $"Wagon {i + 1}";
-
-                // Add a listener to the panel's "Add Task" button
-                Button addTaskButton = panel.transform.Find("AddTaskButton").GetComponent<Button>();
-                addTaskButton.onClick.AddListener(() => OnAddTaskButtonClicked(panel));
-            }
-        }
-        // If the number of wagons has decreased, destroy extra panels
-        else if (numWagons < wagonTaskPanels.Count)
-        {
-            for (int i = wagonTaskPanels.Count - 1; i >= numWagons; i--)
-            {
-                GameObject panel = wagonTaskPanels[i];
-                wagonTaskPanels.RemoveAt(i);
-                Destroy(panel);
-            }
-        }
+        // Create new wagon task panels based on the updated number of wagons
+        InitializeWagonTaskPanels();
     }
 
     void OnAddTaskButtonClicked(GameObject panel)

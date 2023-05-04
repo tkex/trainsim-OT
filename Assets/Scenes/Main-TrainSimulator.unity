@@ -785,6 +785,7 @@ MonoBehaviour:
   tasksPanel: {fileID: 436940579}
   wagonTaskPanelPrefab: {fileID: 7158241221404672342, guid: 4bca99219a0194b48a19a82bfa97a7d1,
     type: 3}
+  dropdownPrefab: {fileID: 0}
 --- !u!4 &286997850
 Transform:
   m_ObjectHideFlags: 0
@@ -10621,7 +10622,7 @@ PrefabInstance:
     - target: {fileID: 3406847717721769390, guid: 4bca99219a0194b48a19a82bfa97a7d1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3406847717721769390, guid: 4bca99219a0194b48a19a82bfa97a7d1,
         type: 3}

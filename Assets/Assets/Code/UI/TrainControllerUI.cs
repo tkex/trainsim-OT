@@ -24,6 +24,8 @@ public class TrainControllerUI : MonoBehaviour
 
     // Reference to the wagon task panel prefab (containing structure=
     public GameObject wagonTaskPanelPrefab;
+    public Dropdown dropdownPrefab;
+
     private List<GameObject> wagonTaskPanels = new List<GameObject>();
 
     // Define the horizontal distance between the wagon task panels
@@ -112,11 +114,25 @@ public class TrainControllerUI : MonoBehaviour
         InitializeWagonTaskPanels();
     }
 
-    void OnAddTaskButtonClicked(GameObject panel)
+    public void OnAddTaskButtonClicked(GameObject panel)
     {
-        Debug.Log("Task Dropdown MenuButton was pressed");
-    }
+        // Find the "Dropdown" child element of the panel
+        Transform dropdownTransform = panel.transform.Find("Dropdown");
 
+        if (dropdownTransform != null)
+        {
+            // Instantiate a new dropdown by copying the found dropdown
+            GameObject newDropdown = Instantiate(dropdownTransform.gameObject, panel.transform);
+
+            // Set the position of the new dropdown under the found dropdown
+            RectTransform dropdownRectTransform = dropdownTransform.GetComponent<RectTransform>();
+            RectTransform newDropdownRectTransform = newDropdown.GetComponent<RectTransform>();
+            newDropdownRectTransform.anchoredPosition = dropdownRectTransform.anchoredPosition;
+
+            // Add the new dropdown to the panel
+            newDropdown.transform.SetParent(panel.transform);
+        }
+    }
 
     void OnSpawnTrainClicked()
     {

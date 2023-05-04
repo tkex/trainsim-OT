@@ -165,7 +165,6 @@ public class TrainControllerUI : MonoBehaviour
             // Get all available WagonTask types
             List<Type> taskTypes = GetAllWagonTaskTypes(panel);
 
-
             // Get the TMP_Dropdown component from the newDropdown game object
             TMP_Dropdown dropdown = newDropdown.GetComponent<TMP_Dropdown>();
 
@@ -214,6 +213,20 @@ public class TrainControllerUI : MonoBehaviour
                 // Disable the dropdown if there are no options
                 dropdown.interactable = false;
             }
+
+            // Disable the "+" button if all task types are already selected in the other dropdown menus
+            bool allTaskTypesSelected = true;
+            foreach (Type taskType in taskTypes)
+            {
+                if (!IsTaskTypeSelected(taskType.Name, panel))
+                {
+                    allTaskTypesSelected = false;
+                    break;
+                }
+            }
+
+            Button addTaskButton = panel.GetComponentInChildren<Button>();
+            addTaskButton.interactable = !allTaskTypesSelected;
         }
     }
 

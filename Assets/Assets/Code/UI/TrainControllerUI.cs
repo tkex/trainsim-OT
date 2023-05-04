@@ -78,6 +78,16 @@ public class TrainControllerUI : MonoBehaviour
         for (int i = 0; i < numWagons; i++)
         {
             GameObject wagonTaskPanel = Instantiate(wagonTaskPanelPrefab, tasksPanel.transform);
+
+            // Set the position of the wagonTaskPanel
+            if (i > 0)
+            {
+                RectTransform rectTransform = wagonTaskPanel.GetComponent<RectTransform>();
+                RectTransform prevRectTransform = wagonTaskPanels[i - 1].GetComponent<RectTransform>();
+                Vector2 position = prevRectTransform.anchoredPosition + new Vector2(prevRectTransform.sizeDelta.x / 2.5f, 0f);
+                rectTransform.anchoredPosition = position;
+            }
+
             wagonTaskPanels.Add(wagonTaskPanel);
 
             // Set the wagon number in the panel's title

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 using TMPro;
+using System.Reflection;
 
 public class TrainControllerUI : MonoBehaviour
 {
@@ -24,12 +25,15 @@ public class TrainControllerUI : MonoBehaviour
 
     // Reference to the wagon task panel prefab (containing structure=
     public GameObject wagonTaskPanelPrefab;
-    public Dropdown dropdownPrefab;
 
     private List<GameObject> wagonTaskPanels = new List<GameObject>();
 
     // Define the horizontal distance between the wagon task panels
     private const float panelSpacing = 20f;
+
+    //
+    public Dictionary<string, Type> taskTypeMapping = new Dictionary<string, Type>();
+
 
     private int numWagons;
     private bool useRandomStates;
@@ -113,6 +117,7 @@ public class TrainControllerUI : MonoBehaviour
         // Create new wagon task panels based on the updated number of wagons
         InitializeWagonTaskPanels();
     }
+
     public void OnAddTaskButtonClicked(GameObject panel)
     {
         // Find the "Dropdown" child element of the panel
@@ -131,7 +136,44 @@ public class TrainControllerUI : MonoBehaviour
 
             // Add the new dropdown to the panel
             newDropdown.transform.SetParent(panel.transform);
+
+            // Get all available WagonTask types
+            List<Type> taskTypes = GetAllWagonTaskTypes();
+
+            // Get the TMP_Dropdown component from the newDropdown game object
+            TMP_Dropdown dropdown = newDropdown.GetComponent<TMP_Dropdown>();
+
+            // Clear the default options from the dropdown
+            dropdown.ClearOptions();
+
+            // Add the available task types as new options to the dropdown
+            List<TMP_Dropdown.OptionData> dropdownOptions = new List<TMP_Dropdown.OptionData>();
+            foreach (Type taskType in taskTypes)
+            {
+                string taskTypeName = taskType.Name;
+                dropdownOptions.Add(new TMP_Dropdown.OptionData(taskTypeName));
+                taskTypeMapping[taskTypeName] = taskType;
+            }
+            dropdown.AddOptions(dropdownOptions);
         }
+    }
+
+
+    private List<Type> GetAllWagonTaskTypes()
+    {
+        List<Type> taskTypes = new List<Type>();
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.IsSubclassOf(typeof(WagonTask)) && !type.IsAbstract)
+                {
+                    taskTypes.Add(type);
+                }
+            }
+        }
+
+        return taskTypes;
     }
 
     void OnSpawnTrainClicked()

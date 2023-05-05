@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using TMPro;
 using System.Reflection;
+using System.Collections;
 
 public class TrainControllerUI : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class TrainControllerUI : MonoBehaviour
     private bool useRandomStates;
 
     void Start()
-    {  
+    {
         // Initialize the UI elements
         numWagonsSlider.onValueChanged.AddListener(OnNumWagonsChanged);
         useRandomStatesToggle.onValueChanged.AddListener(OnUseRandomStatesChanged);
@@ -153,7 +154,7 @@ public class TrainControllerUI : MonoBehaviour
                 }
             }
             */
-        }      
+        }
     }
 
 
@@ -364,9 +365,11 @@ public class TrainControllerUI : MonoBehaviour
 
         trainController.SpawnTrain(numWagons, useRandomStates);
 
+
         if (!useRandomStates)
         {
-            AssignTasksTOWagon();
+            StartCoroutine(DelayedAssignTasksToWagon(2.0f));
+
         }
         else
         {
@@ -374,9 +377,59 @@ public class TrainControllerUI : MonoBehaviour
         }
     }
 
-    private void AssignTasksTOWagon()
+    private IEnumerator DelayedAssignTasksToWagon(float delay)
     {
-        throw new NotImplementedException();
+        yield return new WaitForSeconds(delay);
+        AssignTasksToWagon();
+    }
+
+    void AssignTasksToWagon()
+    {
+        if (trainController.emptyTrainGameObject != null)
+        {
+            Debug.Log("Empty train game object found");
+            Transform locomotive = trainController.emptyTrainGameObject.transform.Find("Locomotive");
+            if (locomotive != null)
+            {
+                Debug.Log("Locomotive found");
+                for (int i = 0; i < locomotive.transform.childCount; i++)
+                {
+                    Transform wagon = locomotive.transform.GetChild(i);
+                    WagonTaskAssigner wagonTaskAssigner = wagon.GetComponent<WagonTaskAssigner>();
+                    if (wagonTaskAssigner != null)
+                    {
+                        Debug.Log("WagonTaskAssigner found for wagon " + wagon.name);
+                        if (wagonTasks.TryGetValue(i, out HashSet<string> assignedTaskNames))
+                        {
+                            foreach (string taskName in assignedTaskNames)
+                            {
+                                if (taskTypeMapping.TryGetValue(taskName, out Type taskType))
+                                {
+                                    WagonTask taskToAssign = (WagonTask)Activator.CreateInstance(taskType);
+                                    wagonTaskAssigner.AssignSpecificTaskToWagon(taskToAssign);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogWarning("No wagon tasks found for wagon " + wagon.name);
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("WagonTaskAssigner not found for wagon " + wagon.name);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Locomotive not found");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Empty train game object not found");
+        }
     }
 }
 

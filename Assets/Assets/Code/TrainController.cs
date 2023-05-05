@@ -335,6 +335,9 @@ public class TrainController : MonoBehaviour
         // Spawn Locomotive
         locomotive = Instantiate(locomotivePrefab, transform.position, transform.rotation);
 
+        // Spawn Empty Tain GameObject
+        locomotive.name = "Locomotive";
+
         // Set parent of locomotive
         locomotive.transform.SetParent(emptyTrainGameObject.transform);
 

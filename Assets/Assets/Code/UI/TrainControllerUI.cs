@@ -123,6 +123,7 @@ public class TrainControllerUI : MonoBehaviour
 
             // # # # # # # # # # # # # # # 
 
+            /*
             // Print the contents of the dictionary
             foreach (var entry in wagonTasks)
             {
@@ -136,6 +137,7 @@ public class TrainControllerUI : MonoBehaviour
                     Debug.Log($" - {task}");
                 }
             }
+            */
         }      
     }
 
@@ -153,16 +155,20 @@ public class TrainControllerUI : MonoBehaviour
         InitializeWagonTaskPanels();
     }
 
-    // Method to handle the dropdown value change
-    private void OnDropdownValueChanged(int wagonIndex, TMP_Dropdown dropdown)
+    private void OnDropdownValueChanged(int wagonIndex, TMP_Dropdown changedDropdown)
     {
-        // Remove the old task from the HashSet
-        string oldTask = dropdown.options[dropdown.value].text;
-        wagonTasks[wagonIndex].Remove(oldTask);
+        // Clear the HashSet for the wagonIndex before adding the new tasks
+        wagonTasks[wagonIndex].Clear();
 
-        // Add the new task to the HashSet
-        string newTask = dropdown.options[dropdown.value].text;
-        wagonTasks[wagonIndex].Add(newTask);
+        // Get all dropdowns in the wagon task panel
+        TMP_Dropdown[] dropdowns = wagonTaskPanels[wagonIndex].GetComponentsInChildren<TMP_Dropdown>();
+
+        // Iterate through all dropdowns and add their values to the HashSet
+        foreach (TMP_Dropdown dropdown in dropdowns)
+        {
+            string task = dropdown.options[dropdown.value].text;
+            wagonTasks[wagonIndex].Add(task);
+        }
 
         // Print the updated wagon tasks for debugging
         Debug.Log($"Wagon {wagonIndex + 1} tasks updated:");

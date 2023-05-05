@@ -114,6 +114,21 @@ public class TrainControllerUI : MonoBehaviour
 
             // Get the first task from the dropdown menu
             TMP_Dropdown firstDropdown = wagonTaskPanel.transform.Find("Dropdown").GetComponent<TMP_Dropdown>();
+
+            // Clear the default options from the dropdown
+            firstDropdown.ClearOptions();
+
+            // Add the available task types as new options to the dropdown
+            List<TMP_Dropdown.OptionData> dropdownOptions = new List<TMP_Dropdown.OptionData>();
+            List<Type> taskTypes = GetAllWagonTaskTypes();
+            foreach (Type taskType in taskTypes)
+            {
+                dropdownOptions.Add(new TMP_Dropdown.OptionData(taskType.Name));
+                taskTypeMapping[taskType.Name] = taskType;
+            }
+            firstDropdown.AddOptions(dropdownOptions);
+
+            // Add to hashset
             string firstTask = firstDropdown.options[firstDropdown.value].text;
             wagonTasks[i].Add(firstTask);
 
@@ -139,6 +154,24 @@ public class TrainControllerUI : MonoBehaviour
             }
             */
         }      
+    }
+
+
+    private List<Type> GetAllWagonTaskTypes()
+    {
+        List<Type> taskTypes = new List<Type>();
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.IsSubclassOf(typeof(WagonTask)) && !type.IsAbstract)
+                {
+                    taskTypes.Add(type);
+                }
+            }
+        }
+
+        return taskTypes;
     }
 
     void UpdateWagonTaskPanels()
@@ -171,11 +204,11 @@ public class TrainControllerUI : MonoBehaviour
         }
 
         // Print the updated wagon tasks for debugging
-        Debug.Log($"Wagon {wagonIndex + 1} tasks updated:");
-        foreach (string task in wagonTasks[wagonIndex])
-        {
-            Debug.Log($" - {task}");
-        }
+        //Debug.Log($"Wagon {wagonIndex + 1} tasks updated:");
+        //foreach (string task in wagonTasks[wagonIndex])
+        //{
+        //    Debug.Log($" - {task}");
+        //}
     }
 
     public void OnAddTaskButtonClicked(GameObject panel)

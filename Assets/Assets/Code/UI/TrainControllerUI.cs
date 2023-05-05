@@ -18,6 +18,9 @@ public class TrainControllerUI : MonoBehaviour
     // Reference to the UI button for spawning the train
     public Button spawnTrainButton;
 
+    // Reference to the UI button for spawning the train
+    public Button moveTrainButton;
+
     // Delay before the train moves into the platform
     public float trainMoveInDelay = 2f;
 
@@ -50,6 +53,7 @@ public class TrainControllerUI : MonoBehaviour
         numWagonsSlider.onValueChanged.AddListener(OnNumWagonsChanged);
         useRandomStatesToggle.onValueChanged.AddListener(OnUseRandomStatesChanged);
         spawnTrainButton.onClick.AddListener(OnSpawnTrainClicked);
+        moveTrainButton.onClick.AddListener(OnMoveTrainClicked);
 
         // Set the initial values
         numWagons = (int)numWagonsSlider.value;
@@ -61,6 +65,12 @@ public class TrainControllerUI : MonoBehaviour
         // Initialize the wagon task panels
         InitializeWagonTaskPanels();
 
+    }
+
+    private void OnMoveTrainClicked()
+    {
+        // Move train inside when button is pressed
+        StartCoroutine(trainController.DelayedStartOfTrainMovementInsideHall(1.0f));
     }
 
     void OnNumWagonsChanged(float value)

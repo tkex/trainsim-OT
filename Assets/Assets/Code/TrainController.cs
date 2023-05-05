@@ -79,6 +79,11 @@ public class TrainController : MonoBehaviour
 
     #endregion
 
+    private void Start()
+    {
+        SpawnTrain(numWagons, useRandomStates);
+    }
+
     void Update()
     {
         // Check all the time for the train maintenance states
@@ -118,33 +123,34 @@ public class TrainController : MonoBehaviour
             // Debug.Log("Train is not maintained yet.");
         }
     }
-    private IEnumerator ExecuteDecoupleAfterTime(float delayTime)
+
+
+    public IEnumerator DelayedStartOfTrainMovementInsideHall(float delay)
     {
-        // Delay for a moment, then execute decoupling
-        yield return new WaitForSeconds(delayTime);
-        ExecuteDecoupling();
+        // Delay for a moment, then execute start of train movement
+        yield return new WaitForSeconds(delay);
+
+        MoveTrainInsideHall();
     }
 
-    private void ExecuteDecoupling()
+    private void MoveTrainInsideHall()
     {
-        // Store all initial positions of wagons
-        initialWagonPositions = new Vector3[wagons.Length];
+        isMoving = true;
 
-        for (int i = 0; i < wagons.Length; i++)
+        // Move the locomotive to the maintenanceTargetPosition
+        movementSequence = DOTween.Sequence();
+        movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+            .OnComplete(() =>
+            {
+                // Set the flag that the train is not moving anymore
+                isMoving = false;
+            });
+
+        // Encouple train again
+        if (encoupleWhenMaintained)
         {
-            initialWagonPositions[i] = wagons[i].transform.position;
+            ExecuteEncoupling();
         }
-
-        // Decouple wagons one by one
-        for (int i = 0; i < wagons.Length; i++)
-        {
-            Vector3 decoupleTargetPosition = initialWagonPositions[i] - (Vector3.right * decoupleDistance);
-
-            wagons[i].transform.DOMove(decoupleTargetPosition, decoupleDuration).SetEase(Ease.OutCubic);
-        }
-
-        // Reset the encoupling flag
-        hasEncoupled = false;
     }
 
     private void EncoupleTrain()
@@ -165,7 +171,10 @@ public class TrainController : MonoBehaviour
         }
     }
 
-    IEnumerator DelayedStartOfTrainMovement(float delay)
+
+
+
+    public IEnumerator DelayedStartOfTrainMovement(float delay)
     {
         // Delay for a moment, then execute start of train movement
         yield return new WaitForSeconds(delay);
@@ -204,6 +213,35 @@ public class TrainController : MonoBehaviour
             yield return new WaitForSeconds(delayTime);
             EncoupleTrain();
         }
+    }
+
+    private IEnumerator ExecuteDecoupleAfterTime(float delayTime)
+    {
+        // Delay for a moment, then execute decoupling
+        yield return new WaitForSeconds(delayTime);
+        ExecuteDecoupling();
+    }
+
+    private void ExecuteDecoupling()
+    {
+        // Store all initial positions of wagons
+        initialWagonPositions = new Vector3[wagons.Length];
+
+        for (int i = 0; i < wagons.Length; i++)
+        {
+            initialWagonPositions[i] = wagons[i].transform.position;
+        }
+
+        // Decouple wagons one by one
+        for (int i = 0; i < wagons.Length; i++)
+        {
+            Vector3 decoupleTargetPosition = initialWagonPositions[i] - (Vector3.right * decoupleDistance);
+
+            wagons[i].transform.DOMove(decoupleTargetPosition, decoupleDuration).SetEase(Ease.OutCubic);
+        }
+
+        // Reset the encoupling flag
+        hasEncoupled = false;
     }
 
     private void PositionTrain(GameObject locomotiveGO)

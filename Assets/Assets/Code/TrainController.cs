@@ -267,41 +267,62 @@ public class TrainController : MonoBehaviour
     }
 
 
-    void SpawnWagons(int numWagons, bool useRandomStates)
+    List<GameObject> SpawnWagons(int numWagons, bool useRandomStates)
     {
-        wagons = new GameObject[numWagons];
+        List<GameObject> spawnedWagons = new List<GameObject>();
 
-        for (int i = 0; i < numWagons; i++)
         {
-            Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;
-            Quaternion wagonRotation = locomotive.transform.rotation;
-            wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);
-            wagons[i].transform.parent = locomotive.transform;
+            wagons = new GameObject[numWagons];
 
-            // Assign a name to the wagon based on its index
-            wagons[i].name = "Wagon " + (i + 1);
-
-            // Check if wagons are going to use random tasks or specific single tasks that are added in runtime
-            if (useRandomStates)
+            for (int i = 0; i < numWagons; i++)
             {
-                // Activitate the random state script on the wagon
-                wagons[i].GetComponent<WagonTaskAssigner>().AssignRandomTasksToWagon();
-            }
-            else
-            {
-                Debug.Log("Manual tasks can be set up here!");
+                Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;
+                Quaternion wagonRotation = locomotive.transform.rotation;
+                wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);
+                wagons[i].transform.parent = locomotive.transform;
 
-                /*
-                // Set up manual tasks (in this case a new Cleaning Task)
-                WagonTaskAssigner wagonTaskAssigner = wagons[i].GetComponent<WagonTaskAssigner>();
-                CleaningTask cleaningTask = new CleaningTask();
+                // Assign a name to the wagon based on its index
+                wagons[i].name = "Wagon " + (i + 1);
 
-                if (wagonTaskAssigner != null)
+                // Check if wagons are going to use random tasks or specific single tasks that are added in runtime
+                if (useRandomStates)
                 {
-                    wagonTaskAssigner.AssignSpecificTaskToWagon(cleaningTask);
+                    // Activitate the random state script on the wagon
+                    wagons[i].GetComponent<WagonTaskAssigner>().AssignRandomTasksToWagon();
                 }
-                */
+                else
+                {
+                    //Debug.Log("Manual tasks can be set up here!");
+
+                    /*
+                    // Set up manual tasks (in this case a new Cleaning Task)
+                    WagonTaskAssigner wagonTaskAssigner = wagons[i].GetComponent<WagonTaskAssigner>();
+                    CleaningTask cleaningTask = new CleaningTask();
+
+                    if (wagonTaskAssigner != null)
+                    {
+                        wagonTaskAssigner.AssignSpecificTaskToWagon(cleaningTask);
+                    }
+                    */
+                }
             }
+        }
+
+        return spawnedWagons;
+    }
+
+    public void AssignTaskToWagon(int wagonIndex, WagonTask task)
+    {
+        if (wagonIndex < 0 || wagonIndex >= wagons.Length)
+        {
+            Debug.LogError("Invalid wagon index");
+            return;
+        }
+
+        WagonTaskAssigner wagonTaskAssigner = wagons[wagonIndex].GetComponent<WagonTaskAssigner>();
+        if (wagonTaskAssigner != null)
+        {
+            wagonTaskAssigner.AssignSpecificTaskToWagon(task);
         }
     }
 

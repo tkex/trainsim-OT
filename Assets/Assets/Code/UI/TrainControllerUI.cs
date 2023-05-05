@@ -36,18 +36,12 @@ public class TrainControllerUI : MonoBehaviour
 
     public List<Dropdown> taskDropdowns;
 
-    // Wagon index and their tasks
-    private Dictionary<int, List<WagonTask>> wagonTaskMapping;
-
 
     private int numWagons;
     private bool useRandomStates;
 
     void Start()
-    {
-        // Find the first dropdown menu in the tasks panel and disable it
-        DisableFirstDropdownMenu();
-
+    {  
         // Initialize the UI elements
         numWagonsSlider.onValueChanged.AddListener(OnNumWagonsChanged);
         useRandomStatesToggle.onValueChanged.AddListener(OnUseRandomStatesChanged);
@@ -62,9 +56,6 @@ public class TrainControllerUI : MonoBehaviour
 
         // Initialize the wagon task panels
         InitializeWagonTaskPanels();
-
-        // Init dictionary
-        wagonTaskMapping = new Dictionary<int, List<WagonTask>>();
 
     }
 
@@ -114,27 +105,7 @@ public class TrainControllerUI : MonoBehaviour
             // Add listener to the Add Task button on this panel
             Button addTaskButton = wagonTaskPanel.GetComponentInChildren<Button>();
             addTaskButton.onClick.AddListener(() => OnAddTaskButtonClicked(wagonTaskPanel));
-        }
-
-        // Disable the first dropdown menu in the first panel
-        DisableFirstDropdownMenu();
-    }
-
-    void DisableFirstDropdownMenu()
-    {
-        // Get the first dropdown menu in the tasks panel
-        TMP_Dropdown firstDropdown = tasksPanel.GetComponentInChildren<TMP_Dropdown>();
-
-        // If a dropdown menu exists and it has options, disable it
-        if (firstDropdown != null && firstDropdown.options.Count > 0)
-        {
-            firstDropdown.interactable = false;
-            firstDropdown.captionText.color = Color.gray;
-            firstDropdown.value = 0;
-
-            // Add a listener to the first dropdown to handle value changes
-            firstDropdown.onValueChanged.AddListener((value) => OnTaskDropdownValueChanged(wagonTaskPanels[0], firstDropdown));
-        }
+        }      
     }
 
     void UpdateWagonTaskPanels()
@@ -150,6 +121,7 @@ public class TrainControllerUI : MonoBehaviour
         // Create new wagon task panels based on the updated number of wagons
         InitializeWagonTaskPanels();
     }
+
     public void OnAddTaskButtonClicked(GameObject panel)
     {
         // Find the "Dropdown" child element of the panel
@@ -210,11 +182,6 @@ public class TrainControllerUI : MonoBehaviour
 
             dropdown.AddOptions(dropdownOptions);
 
-            // Add a listener to the dropdown to handle value changes
-            dropdown.onValueChanged.AddListener((value) => OnTaskDropdownValueChanged(panel, dropdown));
-
-            // Call the OnTaskDropdownValueChanged method for the newly added dropdown
-            OnTaskDropdownValueChanged(panel, dropdown);
 
 
             // Set the value of the new dropdown to the first option if available
@@ -244,27 +211,6 @@ public class TrainControllerUI : MonoBehaviour
         }
     }
 
-    private void OnTaskDropdownValueChanged(GameObject panel, TMP_Dropdown dropdown)
-    {
-        int wagonIndex = wagonTaskPanels.IndexOf(panel);
-
-        // Get the selected task type name from the dropdown
-        string taskTypeName = dropdown.options[dropdown.value].text;
-
-        // Get the task type from the taskTypeMapping dictionary
-        Type taskType;
-        if (taskTypeMapping.TryGetValue(taskTypeName, out taskType))
-        {
-            // Create a new instance of the task type and add it to the wagon
-            WagonTask task = (WagonTask)Activator.CreateInstance(taskType);
-            AddTaskToWagon(wagonIndex, task);
-        }
-        else
-        {
-            // Remove the task from the wagon if the dropdown value is changed to none
-            RemoveTaskFromWagon(wagonIndex);
-        }
-    }
 
     private bool IsTaskTypeSelected(string taskTypeName, GameObject panel)
     {
@@ -308,59 +254,6 @@ public class TrainControllerUI : MonoBehaviour
         return taskTypes;
     }
 
-    public void AddTaskToWagon(int wagonIndex, WagonTask task)
-    {
-        if (!wagonTaskMapping.ContainsKey(wagonIndex))
-        {
-            wagonTaskMapping[wagonIndex] = new List<WagonTask>();
-        }
-
-        wagonTaskMapping[wagonIndex].Add(task);
-        Debug.Log($"Added task {task.GetType().Name} to wagon {wagonIndex + 1}");
-    }
-
-    public void RemoveTaskFromWagon(int wagonIndex)
-    {
-        if (wagonTaskMapping.ContainsKey(wagonIndex))
-        {
-            wagonTaskMapping[wagonIndex].Clear();
-            Debug.Log($"Removed task from wagon {wagonIndex + 1}");
-        }
-    }
-
-
-    public void AssignTasksToWagons()
-    {
-        foreach (var entry in wagonTaskMapping)
-        {
-            int wagonIndex = entry.Key;
-            List<WagonTask> tasks = entry.Value;
-
-            foreach (WagonTask task in tasks)
-            {
-                trainController.AssignTaskToWagon(wagonIndex, task);
-                Debug.Log($"Assigned task {task.GetType().Name} to wagon {wagonIndex + 1}");
-            }
-        }
-    }
-
-    public void ShowWagonTaskMapping()
-    {
-        Debug.Log("WagonTaskMapping contents:");
-
-        foreach (var entry in wagonTaskMapping)
-        {
-            int wagonIndex = entry.Key;
-            List<WagonTask> tasks = entry.Value;
-
-            Debug.Log($"Wagon {wagonIndex + 1}:");
-
-            foreach (WagonTask task in tasks)
-            {
-                Debug.Log($"- Task: {task.GetType().Name}");
-            }
-        }
-    }
 
     void OnSpawnTrainClicked()
     {
@@ -378,14 +271,12 @@ public class TrainControllerUI : MonoBehaviour
 
         if (!useRandomStates)
         {
-            AssignTasksToWagons();
+            
         }
         else
         {
             // ....
         }
-
-        ShowWagonTaskMapping();
     }
 }
 

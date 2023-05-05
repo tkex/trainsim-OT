@@ -13,9 +13,13 @@ public class WagonTaskHandling : MonoBehaviour
 
     private void Start()
     {
+        // Get the WagonTaskAssigner component from the wagon
         wagonTaskAssigner = GetComponent<WagonTaskAssigner>();
 
+        // Show what tasks each wagon has (shows only when random is selected)
         LogWagonTasks();
+
+        // Spawn tasks at the start with initial train spawning
         SpawnTasks();
     }
 
@@ -28,7 +32,7 @@ public class WagonTaskHandling : MonoBehaviour
     }
 
     // Looks good!
-    private void SpawnTasks()
+    public void SpawnTasks()
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
@@ -50,7 +54,7 @@ public class WagonTaskHandling : MonoBehaviour
         }
     }
 
-    private void HandleTasks()
+    public void HandleTasks()
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {

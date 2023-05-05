@@ -407,6 +407,14 @@ public class TrainControllerUI : MonoBehaviour
                                 {
                                     WagonTask taskToAssign = (WagonTask)Activator.CreateInstance(taskType);
                                     wagonTaskAssigner.AssignSpecificTaskToWagon(taskToAssign);
+
+                                    // Get a reference to the WagonTaskHandling component attached to the wagon
+                                    WagonTaskHandling wagonTaskHandling = wagon.GetComponent<WagonTaskHandling>();
+                                    if (wagonTaskHandling != null)
+                                    {
+                                        // Call the HandleTask() function on the WagonTaskHandling component
+                                        wagonTaskHandling.SpawnTasks();
+                                    }
                                 }
                             }
                         }

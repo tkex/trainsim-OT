@@ -117,12 +117,16 @@ public class TrainControllerUI : MonoBehaviour
             string firstTask = firstDropdown.options[firstDropdown.value].text;
             wagonTasks[i].Add(firstTask);
 
+            // Add listener to update the dictionary when the dropdown value changes
+            int wagonIndex = i;
+            firstDropdown.onValueChanged.AddListener(delegate { OnDropdownValueChanged(wagonIndex, firstDropdown); });
+
             // # # # # # # # # # # # # # # 
 
             // Print the contents of the dictionary
             foreach (var entry in wagonTasks)
             {
-                int wagonIndex = entry.Key;
+                wagonIndex = entry.Key;
                 HashSet<string> tasks = entry.Value;
 
                 Debug.Log($"Wagon {wagonIndex + 1} has tasks:");
@@ -147,6 +151,25 @@ public class TrainControllerUI : MonoBehaviour
 
         // Create new wagon task panels based on the updated number of wagons
         InitializeWagonTaskPanels();
+    }
+
+    // Method to handle the dropdown value change
+    private void OnDropdownValueChanged(int wagonIndex, TMP_Dropdown dropdown)
+    {
+        // Remove the old task from the HashSet
+        string oldTask = dropdown.options[dropdown.value].text;
+        wagonTasks[wagonIndex].Remove(oldTask);
+
+        // Add the new task to the HashSet
+        string newTask = dropdown.options[dropdown.value].text;
+        wagonTasks[wagonIndex].Add(newTask);
+
+        // Print the updated wagon tasks for debugging
+        Debug.Log($"Wagon {wagonIndex + 1} tasks updated:");
+        foreach (string task in wagonTasks[wagonIndex])
+        {
+            Debug.Log($" - {task}");
+        }
     }
 
     public void OnAddTaskButtonClicked(GameObject panel)

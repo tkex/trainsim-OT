@@ -36,6 +36,9 @@ public class TrainControllerUI : MonoBehaviour
 
     public List<Dropdown> taskDropdowns;
 
+    // Create a dictionary to store the wagon index and the corresponding hashset of unique tasks
+    private Dictionary<int, HashSet<string>> wagonTasks = new Dictionary<int, HashSet<string>>();
+
 
     private int numWagons;
     private bool useRandomStates;
@@ -105,6 +108,30 @@ public class TrainControllerUI : MonoBehaviour
             // Add listener to the Add Task button on this panel
             Button addTaskButton = wagonTaskPanel.GetComponentInChildren<Button>();
             addTaskButton.onClick.AddListener(() => OnAddTaskButtonClicked(wagonTaskPanel));
+
+            // Initialize the hashset of tasks for this wagon
+            wagonTasks[i] = new HashSet<string>();
+
+            // Get the first task from the dropdown menu
+            TMP_Dropdown firstDropdown = wagonTaskPanel.transform.Find("Dropdown").GetComponent<TMP_Dropdown>();
+            string firstTask = firstDropdown.options[firstDropdown.value].text;
+            wagonTasks[i].Add(firstTask);
+
+            // # # # # # # # # # # # # # # 
+
+            // Print the contents of the dictionary
+            foreach (var entry in wagonTasks)
+            {
+                int wagonIndex = entry.Key;
+                HashSet<string> tasks = entry.Value;
+
+                Debug.Log($"Wagon {wagonIndex + 1} has tasks:");
+
+                foreach (string task in tasks)
+                {
+                    Debug.Log($" - {task}");
+                }
+            }
         }      
     }
 
@@ -271,12 +298,17 @@ public class TrainControllerUI : MonoBehaviour
 
         if (!useRandomStates)
         {
-            
+            AssignTasksTOWagon();
         }
         else
         {
             // ....
         }
+    }
+
+    private void AssignTasksTOWagon()
+    {
+        throw new NotImplementedException();
     }
 }
 

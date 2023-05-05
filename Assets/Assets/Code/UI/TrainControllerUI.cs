@@ -251,6 +251,12 @@ public class TrainControllerUI : MonoBehaviour
                 dropdown.interactable = false;
             }
 
+            // Get the wagonIndex using the panel index
+            int wagonIndex = wagonTaskPanels.IndexOf(panel);
+
+            // Update the wagonTasks dictionary with the new dropdown value
+            OnDropdownValueChanged(wagonIndex, dropdown);
+
             // Disable the "+" button if all task types are already selected in the other dropdown menus
             bool allTaskTypesSelected = true;
             foreach (Type taskType in taskTypes)

@@ -80,8 +80,18 @@ public class TrainController : MonoBehaviour
     #endregion
 
 
-    public static event Action OnTrainArrived;
+    public static event Action OnTrainArriving;
     public static event Action OnTrainDeparting;
+
+    private void TriggerTrainArrivedAtEntrance()
+    {
+        OnTrainArriving?.Invoke();
+    }
+
+    private void TriggerTrainArrivedAtExit()
+    {
+        OnTrainDeparting?.Invoke();
+    }
 
 
     private void Start()
@@ -135,7 +145,7 @@ public class TrainController : MonoBehaviour
         isMoving = true;
 
         // Open door
-        OnTrainArrived?.Invoke();
+        OnTrainArriving?.Invoke();
 
         // Move the locomotive to the maintenanceTargetPosition
         movementSequence = DOTween.Sequence();

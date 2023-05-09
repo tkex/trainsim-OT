@@ -37,7 +37,7 @@ public class TrainController : MonoBehaviour
     public Transform maintenanceTargetPosition; // End position of the train when its maintained and drives away
 
     [Tooltip("Duration value for drive in time of the train.")]
-    [Range(0.0f, 10f)]
+    [Range(0.0f, 20f)]
     public float trainMoveInDuration; // Duration of the train ride in seconds
     [Tooltip("Duration how long the decouple process takes.")]
     [Range(0.0f, 10f)]
@@ -78,6 +78,11 @@ public class TrainController : MonoBehaviour
     public GameObject[] wagons;  // An array to store all created wagons
 
     #endregion
+
+
+    public static event Action OnTrainArrived;
+    public static event Action OnTrainDeparting;
+
 
     private void Start()
     {
@@ -129,6 +134,9 @@ public class TrainController : MonoBehaviour
     {
         isMoving = true;
 
+        // Open door
+        OnTrainArrived?.Invoke();
+
         // Move the locomotive to the maintenanceTargetPosition
         movementSequence = DOTween.Sequence();
         movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
@@ -142,6 +150,8 @@ public class TrainController : MonoBehaviour
 
     public void MoveTrainOutOfHall()
     {
+        OnTrainDeparting?.Invoke();
+
         isMoving = true;
 
         // Move the locomotive to the maintenanceTargetPosition
@@ -152,7 +162,6 @@ public class TrainController : MonoBehaviour
             // Set the flag that the train is not moving anymore
             isMoving = false;
             });
-
     }
 
     // Encouple function once train moves in

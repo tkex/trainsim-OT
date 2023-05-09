@@ -5,72 +5,93 @@ using DG.Tweening;
 
 public class EntranceController : MonoBehaviour
 {
+    public enum DoorType
+    {
+        Entrance,
+        Exit
+    }
 
     [Header("Door Settings")]
-    // The game object representing the door
-    [SerializeField] private GameObject entranceGo;
-
-    // Flag to progress if the door should be opened
-    [SerializeField] private bool openDoor = false;
-
-    [Tooltip("Delay before the start of the vertical door movement")]
-    // Delay before the door movement starts
-
-    [SerializeField] private float delay = 1f;
-    [Tooltip("Duration of the vertical door movement")]
-
-    // Duration of the door movement
+    [SerializeField] private GameObject entranceDoor;
+    [SerializeField] private GameObject exitDoor;
+    [SerializeField] private DoorType doorType;
+    [SerializeField] private float delayForDoorClose = 1f;
     [SerializeField] private float duration = 3f;
-    [Tooltip("Distance of the vertical door movement")]
-
-    // Distance the door will move
     [SerializeField] private float distance = 3f;
 
-    // Original position of the door
-    private Vector3 originalPosition;
-
-    // Target position of the door
-    private Vector3 targetPosition;
-
+    private Vector3 entranceOriginalPosition;
+    private Vector3 entranceTargetPosition;
+    private Vector3 exitOriginalPosition;
+    private Vector3 exitTargetPosition;
+    private bool openDoor = false;
 
     private void Start()
     {
-        // Store the original position of the door
-        originalPosition = entranceGo.transform.position; 
-
-        // Calculate the target position of the door
-        targetPosition = originalPosition + Vector3.up * distance;
+        entranceOriginalPosition = entranceDoor.transform.position;
+        entranceTargetPosition = entranceOriginalPosition + Vector3.up * distance;
+        exitOriginalPosition = exitDoor.transform.position;
+        exitTargetPosition = exitOriginalPosition + Vector3.up * distance;
     }
 
     private void Update()
     {
         if (openDoor)
         {
-            // Door movement to open the door
             OpenDoor();
-           
-        } else
+        }
+        else
         {
             CloseDoor();
         }
     }
 
-    public void SetOpenDoor(bool value)
+    private void OnEnable()
     {
-        // Set the value of the openDoor flag
-        openDoor = value;
+        switch (doorType)
+        {
+            case DoorType.Entrance:
+                TrainController.OnTrainArrived += OpenDoor;
+                break;
+            case DoorType.Exit:
+                TrainController.OnTrainDeparting += OpenDoor;
+                break;
+        }
+    }
+
+    private void OnDisable()
+    {
+        switch (doorType)
+        {
+            case DoorType.Entrance:
+                TrainController.OnTrainArrived -= OpenDoor;
+                break;
+            case DoorType.Exit:
+                TrainController.OnTrainDeparting -= OpenDoor;
+                break;
+        }
     }
 
     public void OpenDoor()
     {
-        entranceGo.transform.DOMove(targetPosition, duration)
-               .SetEase(Ease.OutQuad);
+        entranceDoor.transform.DOMove(entranceTargetPosition, duration).SetEase(Ease.OutQuad);
+        exitDoor.transform.DOMove(exitTargetPosition, duration).SetEase(Ease.OutQuad);
+        openDoor = true;
+
+        // Close the door after delay
+        StartCoroutine(CloseDoorWithDelay(delayForDoorClose));
     }
 
     public void CloseDoor()
     {
-        // Door movement to close the door
-        entranceGo.transform.DOMove(originalPosition, duration)
-            .SetEase(Ease.OutQuad);
+        entranceDoor.transform.DOMove(entranceOriginalPosition, duration).SetEase(Ease.OutQuad);
+        exitDoor.transform.DOMove(exitOriginalPosition, duration).SetEase(Ease.OutQuad);
+        openDoor = false;
+    }
+
+    private IEnumerator CloseDoorWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        CloseDoor();
     }
 }

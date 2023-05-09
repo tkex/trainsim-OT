@@ -176,11 +176,11 @@ MonoBehaviour:
     type: 3}
   numWagons: 3
   wagonSpacing: 1.2
-  trainSpawnPosition: {x: 5, y: 2, z: -30}
+  trainSpawnPosition: {x: 5, y: 2, z: -50}
   trainMoveInDelay: 2
   endPosition: {fileID: 78739441}
   maintenanceTargetPosition: {fileID: 677865686}
-  trainMoveInDuration: 10
+  trainMoveInDuration: 15
   decoupleDuration: 3
   decoupleDistance: 2
   decoupleInterval: 1
@@ -400,7 +400,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1357303205}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &111216519
 MonoBehaviour:
@@ -463,7 +463,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1357303205}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114507222
 MonoBehaviour:
@@ -509,7 +509,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1357303205}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &127898983
 MonoBehaviour:
@@ -746,7 +746,7 @@ Transform:
   - {fileID: 1398061011}
   - {fileID: 998063776}
   m_Father: {fileID: 1357303205}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &286997848
 GameObject:
@@ -948,7 +948,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1357303205}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &347946627
 MonoBehaviour:
@@ -1031,55 +1031,6 @@ RectTransform:
   m_AnchoredPosition: {x: -4.999939, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &388676161
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 388676162}
-  - component: {fileID: 388676163}
-  m_Layer: 0
-  m_Name: ExitController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &388676162
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388676161}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1357303205}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &388676163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 388676161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0748068b1acdf0548a2736fa8e7f3600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entranceGo: {fileID: 620891970}
-  openDoor: 0
-  delay: 1
-  duration: 3
-  distance: 3
 --- !u!1 &395996163
 GameObject:
   m_ObjectHideFlags: 0
@@ -2064,7 +2015,7 @@ GameObject:
   - component: {fileID: 620891973}
   - component: {fileID: 620891972}
   m_Layer: 0
-  m_Name: Exit
+  m_Name: ExitDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2192,7 +2143,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1430, y: -323}
+  m_AnchoredPosition: {x: 1430, y: -309}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &639185655
@@ -4081,7 +4032,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1357303205}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &988968841
 MonoBehaviour:
@@ -6197,7 +6148,7 @@ GameObject:
   - component: {fileID: 1299447599}
   - component: {fileID: 1299447598}
   m_Layer: 0
-  m_Name: Entrance
+  m_Name: EntranceDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6760,7 +6711,6 @@ Transform:
   m_Children:
   - {fileID: 31492699}
   - {fileID: 1856129651}
-  - {fileID: 388676162}
   - {fileID: 111216518}
   - {fileID: 127898982}
   - {fileID: 347946626}
@@ -9800,7 +9750,7 @@ GameObject:
   - component: {fileID: 1856129651}
   - component: {fileID: 1856129653}
   m_Layer: 0
-  m_Name: EntranceController
+  m_Name: DoorController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9833,9 +9783,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0748068b1acdf0548a2736fa8e7f3600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entranceGo: {fileID: 1299447597}
-  openDoor: 0
-  delay: 1
+  entranceDoor: {fileID: 1299447597}
+  exitDoor: {fileID: 620891970}
+  doorType: 0
+  delayForDoorClose: 8
   duration: 3
   distance: 3
 --- !u!1 &1890797316

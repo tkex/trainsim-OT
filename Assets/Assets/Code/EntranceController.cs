@@ -40,9 +40,11 @@ public class EntranceController : MonoBehaviour
         {
             case DoorType.Entrance:
                 TrainController.OnTrainArriving += OpenDoor;
+                TrainController.OnTrainDeparting += CloseDoor;
                 break;
             case DoorType.Exit:
                 TrainController.OnTrainDeparting += OpenDoor;
+                TrainController.OnTrainArriving += CloseDoor;
                 break;
         }
     }
@@ -53,9 +55,11 @@ public class EntranceController : MonoBehaviour
         {
             case DoorType.Entrance:
                 TrainController.OnTrainArriving -= OpenDoor;
+                TrainController.OnTrainDeparting -= CloseDoor;
                 break;
             case DoorType.Exit:
                 TrainController.OnTrainDeparting -= OpenDoor;
+                TrainController.OnTrainArriving -= CloseDoor;
                 break;
         }
     }

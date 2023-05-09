@@ -19,7 +19,10 @@ public class TrainControllerUI : MonoBehaviour
     public Button spawnTrainButton;
 
     // Reference to the UI button for spawning the train
-    public Button moveTrainButton;
+    public Button moveTrainInsideButton;
+    public Button moveTrainOutsideButton;
+    public Button decoupleTrainButton;
+    public Button encoupleTrainButton;
 
     // Delay before the train moves into the platform
     public float trainMoveInDelay = 2f;
@@ -53,7 +56,13 @@ public class TrainControllerUI : MonoBehaviour
         numWagonsSlider.onValueChanged.AddListener(OnNumWagonsChanged);
         useRandomStatesToggle.onValueChanged.AddListener(OnUseRandomStatesChanged);
         spawnTrainButton.onClick.AddListener(OnSpawnTrainClicked);
-        moveTrainButton.onClick.AddListener(OnMoveTrainClicked);
+
+        // Additional button
+
+        moveTrainInsideButton.onClick.AddListener(OnMoveTrainInsideClicked);
+        decoupleTrainButton.onClick.AddListener(OnTrainDecoupleClicked);
+        moveTrainOutsideButton.onClick.AddListener(OnMoveTrainOutsideClicked);
+        encoupleTrainButton.onClick.AddListener(OnTrainEncoupleClicked);
 
         // Set the initial values
         numWagons = (int)numWagonsSlider.value;
@@ -67,10 +76,32 @@ public class TrainControllerUI : MonoBehaviour
 
     }
 
-    private void OnMoveTrainClicked()
+    private void OnMoveTrainInsideClicked()
     {
         // Move train inside when button is pressed
-        StartCoroutine(trainController.DelayedStartOfTrainMovementInsideHall(1.0f));
+        //StartCoroutine(trainController.DelayedStartOfTrainMovementInsideHall(1.0f));
+
+        trainController.MoveTrainInsideHall();
+    }
+
+    private void OnMoveTrainOutsideClicked()
+    {
+        // Move train inside when button is pressed
+        //StartCoroutine(trainController.DelayedStartOfTrainMovementInsideHall(1.0f));
+
+        trainController.MoveTrainOutOfHall();
+    }
+
+    private void OnTrainDecoupleClicked()
+    {
+        // Move train inside when button is pressed
+        StartCoroutine(trainController.ExecuteDecoupleAfterTime(1.0f));
+    }
+
+    private void OnTrainEncoupleClicked()
+    {
+        // Move train inside when button is pressed
+        StartCoroutine(trainController.ExecuteEncoupleAfterTime(1.0f));
     }
 
     void OnNumWagonsChanged(float value)

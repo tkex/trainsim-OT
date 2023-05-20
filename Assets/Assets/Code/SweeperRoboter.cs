@@ -101,7 +101,19 @@ public class SweeperRoboter : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         // Change the direction when a collision occurs
-        direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+        //direction = Vector3.Reflect(direction, collision.contacts[0].normal);
+
+        // Calculate reflection direction based on the angle of incidence and the normal at the point of collision
+        Vector3 reflectDirection = Vector3.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
+
+        // Ensure the reflection direction stays on the ground
+        reflectDirection.y = 0;
+
+        // Change the rotation of the robot to face the reflection direction
+        transform.rotation = Quaternion.LookRotation(reflectDirection);
+
+        // Update the movement direction of the robot
+        direction = transform.forward;
     }
 
     IEnumerator BlinkEyes(float interval)

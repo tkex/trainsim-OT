@@ -25,14 +25,28 @@ public class WagonTaskHandling : MonoBehaviour
         SpawnTasks();
     }
 
-    private void OnTriggerEnter(Collider other)
+
+    // ***
+
+    private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
             HandleTasks();
-            Debug.Log("Player detektiert auf " + gameObject.name);
+            Debug.Log("Inside");
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("Outside");
+        }
+    }
+
+    // ***
+
 
     // Looks good!
     public void SpawnTasks()

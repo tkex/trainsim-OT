@@ -1,11 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UltimateXR.Manipulation;
 
-[CreateAssetMenu(fileName = "RefuelTask", menuName = "Task/Refuel Task")]
+[CreateAssetMenu(fileName = "FireExtinguisherTask", menuName = "Task/Fire Extinguisher Task")]
 [System.Serializable]
 public class FireExtinguisherTask : WagonTask
 {
+
+    private bool isAnchorOccupied = false;
+    // Name of the Fire Extinguisher GameObject
+    private string fireExtinguisherName = "FireExtinguisher";
+
+
     [SerializeField]
     public FireExtinguisherTask()
     {
@@ -13,13 +20,54 @@ public class FireExtinguisherTask : WagonTask
         IsDone = false;
     }
 
+    private void OnEnable()
+    {
+        UxrGrabManager.Instance.ObjectPlaced += UxrGrabManager_ObjectPlaced;
+        UxrGrabManager.Instance.ObjectRemoved += UxrGrabManager_ObjectRemoved;
+    }
+
+    private void OnDisable()
+    {
+        UxrGrabManager.Instance.ObjectPlaced -= UxrGrabManager_ObjectPlaced;
+        UxrGrabManager.Instance.ObjectRemoved -= UxrGrabManager_ObjectRemoved;
+    }
+
+    private void UxrGrabManager_ObjectPlaced(object sender, UxrManipulationEventArgs e)
+    {
+        if (e.GrabbableObject.name == fireExtinguisherName)
+        {
+            isAnchorOccupied = true;
+            Debug.Log($"Fire Extinguisher was placed on anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
+
+            // Wenn der Feuerlöscher platziert wurde, führen Sie die Task aus
+            HandleTask();
+        }
+    }
+
+    private void UxrGrabManager_ObjectRemoved(object sender, UxrManipulationEventArgs e)
+    {
+        if (e.GrabbableObject.name == fireExtinguisherName)
+        {
+            isAnchorOccupied = false;
+            Debug.Log($"Fire Extinguisher was removed from anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
+        }
+    }
+
     public override void HandleTask()
     {
-        Debug.Log("Handling Fire Extinguisher Task");
-        IsDone = true;
-        Debug.Log("Fire Extinguisher Task task is now done.");
+        if (isAnchorOccupied)
+        {
+            //Debug.Log("Handling Fire Extinguisher Task");
 
-        CompleteTask();
+            IsDone = true;
+            Debug.Log("Fire Extinguisher Task task is now done.");
+
+            CompleteTask();
+        }
+        else
+        {
+            Debug.Log("Fire Extinguisher Task can't be handled because the fire extinguisher is not placed yet.");
+        }
     }
 
     public override void SpawnTaskObject(GameObject go, Transform parentTransform)

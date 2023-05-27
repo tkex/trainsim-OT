@@ -147,6 +147,8 @@ MonoBehaviour:
     type: 3}
   cleaningPrefab: {fileID: 955152896699838735, guid: 74a0fdfe4c660d04d92a50710acd27b9,
     type: 3}
+  fireExtinguisherAnchorPrefab: {fileID: 8713723431152107249, guid: f4ac7ffc113bb864f92ebabc8ff41d7e,
+    type: 3}
 --- !u!114 &-921253546799735532
 MonoBehaviour:
   m_ObjectHideFlags: 0

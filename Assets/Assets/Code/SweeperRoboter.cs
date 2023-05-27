@@ -48,6 +48,7 @@ public class SweeperRoboter : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
         direction = transform.forward;
     }
     

@@ -5,15 +5,26 @@ using UnityEngine;
 
 public class WagonTaskHandling : MonoBehaviour
 {
+
+    // WagonTaskAssigner reference of the individual wagon
     private WagonTaskAssigner wagonTaskAssigner;
 
-    // Tasks that get spawned on a wagon
+    // Holds the current WagonObject for task completion
+    public GameObject currentPlayerWagon;
+
+    /*
+     * Tasks Objects that get spawned in the wagons
+    */
+
+    // Refuel Prefab setable in the Inspector
     public GameObject refuelPrefab;
+
+    // Cleaning Prefab setable in the Inspector
     public GameObject cleaningPrefab;
 
+    // Fire Extinguisher Prefab setable in the Inspector
     public GameObject fireExtinguisherAnchorPrefab;
 
-    public GameObject currentPlayerWagon;
 
 
 
@@ -38,7 +49,7 @@ public class WagonTaskHandling : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            // Aktualisiere die Referenz auf den aktuellen Wagon
+            // Set the reference to the actual wagon
             currentPlayerWagon = gameObject;
             //wagonTaskAssigner = currentPlayerWagon.GetComponent<WagonTaskAssigner>();
             Debug.Log("Entered " + currentPlayerWagon);
@@ -48,7 +59,7 @@ public class WagonTaskHandling : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            // Setze die Referenz zurück, wenn der Spieler den Wagon verlässt
+            // Set the reference to null, once the players leaves the wagon
             currentPlayerWagon = null;
             //wagonTaskAssigner = null;
             Debug.Log("Exited " + currentPlayerWagon);

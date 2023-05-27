@@ -17,7 +17,7 @@ public class TrainController : MonoBehaviour
     [Header("Configurator Settings")]
     [Tooltip("Number of spawning wagons")]
     [Range(0, 5)]
-    public int numWagons = 5;
+    public int numWagons = 4;
 
     [Tooltip("Spacing value for wagon spawning")]
     [Range(0.0f, 20.0f)]

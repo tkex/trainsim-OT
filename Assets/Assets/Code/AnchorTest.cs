@@ -25,11 +25,11 @@ public class AnchorTest : MonoBehaviour
     {
         if (isAnchorOccupied)
         {
-            Debug.Log("Belegt");
+            Debug.Log("Occupied");
         }
         else
         {
-            Debug.Log("Nicht belegt");
+            Debug.Log("Not occupied");
         }
     }
 }

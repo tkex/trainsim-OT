@@ -7,4 +7,6 @@ public enum TaskType
     CleanInterior,      // Innenraum reinigen
     LubricateDoors,     // Tueren schmieren
     RefuelEngine,       // Motor betanken
+
+    FireExtinguisher,
 }

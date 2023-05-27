@@ -17,6 +17,7 @@ public class TaskDashboardController : MonoBehaviour
         { TaskType.CleanInterior, "Innenraum reinigen" },
         { TaskType.LubricateDoors, "Türen schmieren" },
         { TaskType.RefuelEngine, "Motor betanken" },
+        { TaskType.FireExtinguisher, "Feuerlöscher auffüllen" }
         // Add more mappings as needed (see enums)
     };
 

@@ -11,6 +11,8 @@ public class WagonTaskHandling : MonoBehaviour
     public GameObject refuelPrefab;
     public GameObject cleaningPrefab;
 
+    public GameObject fireExtinguisherAnchorPrefab;
+
     private void Start()
     {
         // Get the WagonTaskAssigner component from the wagon
@@ -28,6 +30,7 @@ public class WagonTaskHandling : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             HandleTasks();
+            Debug.Log("Player detektiert auf " + gameObject.name);
         }
     }
 
@@ -45,6 +48,10 @@ public class WagonTaskHandling : MonoBehaviour
                 case TaskType.RefuelEngine:
                     task.SpawnTaskObject(refuelPrefab, transform);
                     Debug.Log(gameObject.name + " has a refuel task!");
+                    break;
+                case TaskType.FireExtinguisher:
+                    task.SpawnTaskObject(fireExtinguisherAnchorPrefab, transform);
+                    Debug.Log(gameObject.name + " has a fire extinguisher task!");
                     break;
                 // add more cases for other task types
                 default:
@@ -67,6 +74,10 @@ public class WagonTaskHandling : MonoBehaviour
                         task.HandleTask();
                         break;
                     case TaskType.RefuelEngine:
+                        task.HandleTask();
+                        //HandleRefuelTask(task);
+                        break;
+                    case TaskType.FireExtinguisher:
                         task.HandleTask();
                         //HandleRefuelTask(task);
                         break;

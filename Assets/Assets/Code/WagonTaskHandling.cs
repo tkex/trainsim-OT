@@ -7,16 +7,22 @@ public class WagonTaskHandling : MonoBehaviour
 {
     private WagonTaskAssigner wagonTaskAssigner;
 
-    // Tasks that get spawned on a  wagon
+    // Tasks that get spawned on a wagon
     public GameObject refuelPrefab;
     public GameObject cleaningPrefab;
 
     public GameObject fireExtinguisherAnchorPrefab;
 
+    public GameObject currentPlayerWagon;
+
+
+
+
     private void Start()
     {
         // Get the WagonTaskAssigner component from the wagon
         wagonTaskAssigner = GetComponent<WagonTaskAssigner>();
+        //wagonTaskAssigner = currentPlayerWagon.GetComponent<WagonTaskAssigner>();
 
         // Show what tasks each wagon has (shows only when random is selected)
         LogWagonTasks();
@@ -28,22 +34,37 @@ public class WagonTaskHandling : MonoBehaviour
 
     // ***
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
+        {
+            // Aktualisiere die Referenz auf den aktuellen Wagon
+            currentPlayerWagon = gameObject;
+            //wagonTaskAssigner = currentPlayerWagon.GetComponent<WagonTaskAssigner>();
+            Debug.Log("Entered " + currentPlayerWagon);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            // Setze die Referenz zurück, wenn der Spieler den Wagon verlässt
+            currentPlayerWagon = null;
+            //wagonTaskAssigner = null;
+            Debug.Log("Exited " + currentPlayerWagon);
+        }
+    }
+
+    /*
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player") && gameObject == currentPlayerWagon)
         {
             HandleTasks();
             Debug.Log("Inside");
         }
     }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Outside");
-        }
-    }
+    */
 
     // ***
 
@@ -53,11 +74,16 @@ public class WagonTaskHandling : MonoBehaviour
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
+            // Assignment of the associated wagon
+            task.associatedWagon = this.gameObject;
+            task.wagonTaskHandling = this;
+
             switch (task.TaskType)
             {
                 case TaskType.Cleaning:
                     task.SpawnTaskObject(cleaningPrefab, transform);
                     Debug.Log(gameObject.name + " has a cleaning task!");
+
                     break;
                 case TaskType.RefuelEngine:
                     task.SpawnTaskObject(refuelPrefab, transform);
@@ -67,7 +93,7 @@ public class WagonTaskHandling : MonoBehaviour
                     task.SpawnTaskObject(fireExtinguisherAnchorPrefab, transform);
                     Debug.Log(gameObject.name + " has a fire extinguisher task!");
                     break;
-                // add more cases for other task types
+                // Add more cases for other task types
                 default:
                     Debug.LogWarning("Unknown task type: " + task.TaskType);
                     break;
@@ -75,8 +101,13 @@ public class WagonTaskHandling : MonoBehaviour
         }
     }
 
+    /*
     public void HandleTasks()
     {
+        // Überprüfung, ob der Wagon der currentPlayerWagon ist
+        if (currentPlayerWagon != null) return;
+
+
         foreach (WagonTask task in wagonTaskAssigner.tasks)
         {
             if (!task.IsDone)
@@ -84,12 +115,10 @@ public class WagonTaskHandling : MonoBehaviour
                 switch (task.TaskType)
                 {
                     case TaskType.Cleaning:
-                        //HandleCleaningTask(task);
-                        task.HandleTask();
+                        //task.HandleTask();
                         break;
                     case TaskType.RefuelEngine:
-                        task.HandleTask();
-                        //HandleRefuelTask(task);
+                        //task.HandleTask();
                         break;
                     case TaskType.FireExtinguisher:
                         task.HandleTask();
@@ -103,10 +132,8 @@ public class WagonTaskHandling : MonoBehaviour
             }
         }
     }
+    */
 
-
-
-    // Looks good!
     private void LogWagonTasks()
     {
         foreach (WagonTask task in wagonTaskAssigner.tasks)

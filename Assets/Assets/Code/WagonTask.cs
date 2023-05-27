@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,4 +19,9 @@ public abstract class WagonTask : ScriptableObject
 
     public abstract void SpawnTaskObject(GameObject go, Transform parentTransform);
     public abstract void HandleTask();
+
+
+    // References for individual task completion
+    public GameObject associatedWagon;
+    public WagonTaskHandling wagonTaskHandling;
 }

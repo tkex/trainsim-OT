@@ -9,7 +9,7 @@ public class FireExtinguisherTask : WagonTask
 {
 
     private bool isAnchorOccupied = false;
-    // Name of the Fire Extinguisher GameObject
+    // Name of the fire extinguisher GameObject
     private string fireExtinguisherName = "FireExtinguisher";
 
 
@@ -39,7 +39,7 @@ public class FireExtinguisherTask : WagonTask
             isAnchorOccupied = true;
             Debug.Log($"Fire Extinguisher was placed on anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
 
-            // Wenn der Feuerlöscher platziert wurde, führen Sie die Task aus
+            // Once fire ext. is placed, execute handle function
             HandleTask();
         }
     }
@@ -55,10 +55,21 @@ public class FireExtinguisherTask : WagonTask
 
     public override void HandleTask()
     {
+
+        // Make sure that wagonTaskHandling is not null and currentPlayerWagon is set
+        if (wagonTaskHandling == null || wagonTaskHandling.currentPlayerWagon == null)
+            return;
+
+        // If this task is not associated with the current wagon, cancel
+        if (associatedWagon != wagonTaskHandling.currentPlayerWagon)
+            return;
+
+        Debug.Log("Fire Extinguisher Task HandleTask called");
+
+
         if (isAnchorOccupied)
         {
-            //Debug.Log("Handling Fire Extinguisher Task");
-
+            Debug.Log("Handling Fire Extinguisher Task");
             IsDone = true;
             Debug.Log("Fire Extinguisher Task task is now done.");
 

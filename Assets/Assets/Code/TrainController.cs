@@ -16,9 +16,11 @@ public class TrainController : MonoBehaviour
     #region Configurator-Variables
     [Header("Configurator Settings")]
     [Tooltip("Number of spawning wagons")]
+    [Range(0, 5)]
     public int numWagons = 5;
 
     [Tooltip("Spacing value for wagon spawning")]
+    [Range(0.0f, 20.0f)]
     public float wagonSpacing = 1.0f;
 
     [Tooltip("Spawn position of the train.")]
@@ -27,8 +29,6 @@ public class TrainController : MonoBehaviour
 
     // Lerp (Movement) Variables
     [Header("LERP/Movement Settings")]
-    [Tooltip("Delay before the train moves into the platform.")]
-    public float trainMoveInDelay = 2f; // Delay before the train moves in (when space is pressed)
 
     [Tooltip("End position of train, dependent on empty GO position.")]
     public Transform endPosition; // End position of the train
@@ -39,9 +39,6 @@ public class TrainController : MonoBehaviour
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 20f)]
     public float trainMoveInDuration; // Duration of the train ride in seconds
-    [Tooltip("Duration how long the decouple process takes.")]
-    [Range(0.0f, 10f)]
-    public float decoupleDuration; // Duration of the decoupling process in seconds
 
     private bool isMoving = false; // Becomes true when the train is moving
     private Sequence movementSequence; // DOTween movement sequence
@@ -54,10 +51,13 @@ public class TrainController : MonoBehaviour
 
     [Header("En- and Decoupling Settings")]
     [Tooltip("The individual decouple distance for each wagon.")]
+    [Range(0.0f, 2f)]
     public float decoupleDistance = 2f;
-    [Tooltip("Value how long it takes for each wagon to separate or encouple.")]
-    public float decoupleInterval = 1.0f;
+    [Tooltip("Duration how long the decouple process takes per wagon.")]
+    [Range(0.0f, 10f)]
+    public float decoupleDuration = 4; 
     [Tooltip("Individual time in seconds (delay) for the encoupling and drive out.")]
+    [Range(0.0f, 5f)]
     [SerializeField] private float delayBetweenEncoupleAndDriveOut = 3f;
 
     [Header("Control-Flags Settings")]
@@ -74,8 +74,8 @@ public class TrainController : MonoBehaviour
 
     [Header("Dynamic - No touch here")]
     public GameObject emptyTrainGameObject; // Empty train parent
-    private GameObject locomotive; // Locomotive GO
-    public GameObject[] wagons;  // An array to store all created wagons
+    private GameObject locomotive; // Locomotive GameObject
+    public GameObject[] wagons;  // An array to store all created wagons (instiated in runtime)
 
     #endregion
 
@@ -149,24 +149,24 @@ public class TrainController : MonoBehaviour
 
         // Move the locomotive to the maintenanceTargetPosition
         movementSequence = DOTween.Sequence();
-        movementSequence.Append(locomotive.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+        movementSequence.Append(emptyTrainGameObject.transform.DOMove(endPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
             .OnComplete(() =>
             {
                 // Set the flag that the train is not moving anymore
                 isMoving = false;
             });
-
     }
 
     public void MoveTrainOutOfHall()
     {
+        // Open exit door
         TriggerTrainExit();
 
         isMoving = true;
 
         // Move the locomotive to the maintenanceTargetPosition
         movementSequence = DOTween.Sequence();
-        movementSequence.Append(locomotive.transform.DOMove(maintenanceTargetPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+        movementSequence.Append(emptyTrainGameObject.transform.DOMove(maintenanceTargetPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
             .OnComplete(() =>
             {
             // Set the flag that the train is not moving anymore
@@ -174,6 +174,7 @@ public class TrainController : MonoBehaviour
             });
     }
 
+    /* Old (not useable but for potential testing left inside)
     // Encouple function once train moves in
     public IEnumerator ExecuteDecoupleAfterTime(float time)
     {
@@ -190,6 +191,52 @@ public class TrainController : MonoBehaviour
             yield return new WaitForSeconds(time);
         }
     }
+    */
+
+    // Variant that encoupling starts from last wagon onwards  to first one
+    /*
+    public IEnumerator ExecuteDecoupleAfterTime(float time)
+    {
+        // Save position of each wagon in array before decoupling it for easier encoupling
+        SaveInitialWagonPositions();
+
+        // Decouple logic
+        for (int i = wagons.Length - 1; i >= 0; i--)
+        {
+            Vector3 wagonPosition = wagons[i].transform.position + (i + 1) * decoupleDistance * -transform.forward; 
+
+            // DOTween to move each wagon to its new position
+            wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic);
+
+            yield return new WaitForSeconds(time);
+        }
+    }
+    */
+
+    // Variant that encoupling starts from first wagon onwards instead of last one
+    public IEnumerator ExecuteDecoupleAfterTime(float time)
+    {
+        // Save position of each wagon in array before decoupling it for easier encoupling
+        SaveInitialWagonPositions();
+
+        // Decouple logic
+        for (int i = 0; i < wagons.Length; i++)
+        {
+            // For each iteration, move all wagons starting from the i-th one
+            for (int j = i; j < wagons.Length; j++)
+            {
+                // Calculate the new position for each wagon
+                Vector3 wagonPosition = wagons[j].transform.position - decoupleDistance * transform.forward;
+
+                // DOTween to move each wagon to its new position
+                wagons[j].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic);
+            }
+
+            // Wait
+            yield return new WaitForSeconds(time);
+        }
+    }
+
 
     // Encouple train again once maintenance is over
     public IEnumerator ExecuteEncoupleAfterTime(float time)
@@ -218,7 +265,7 @@ public class TrainController : MonoBehaviour
     private void PositionTrain(GameObject locomotiveGO)
     {
         // Move the entire train to the trainSpawnPosition
-        locomotive.transform.position = trainSpawnPosition;
+        locomotiveGO.transform.position = trainSpawnPosition;
     }
 
     private void SaveInitialWagonPositions()
@@ -254,7 +301,10 @@ public class TrainController : MonoBehaviour
                 Vector3 wagonPosition = transform.position + (i + 1) * -wagonSpacing * transform.forward;
                 Quaternion wagonRotation = locomotive.transform.rotation;
                 wagons[i] = Instantiate(wagonPrefab, wagonPosition, wagonRotation);
-                wagons[i].transform.parent = locomotive.transform;
+
+                // Set parent object
+                //wagons[i].transform.parent = locomotive.transform;
+                wagons[i].transform.parent = emptyTrainGameObject.transform;
 
                 // Assign a name to the wagon based on its index
                 wagons[i].name = "Wagon " + (i + 1);
@@ -284,6 +334,24 @@ public class TrainController : MonoBehaviour
         }
 
         return spawnedWagons;
+    }
+
+    private void SpawnLastLocomotive()
+    {
+        // Position of the rear locomotive based on the number of wagons and the wagons spacing
+        Vector3 lastLocomotivePosition = transform.position + (numWagons + 1) * -wagonSpacing * transform.forward;
+
+        // Instantiate the rear locomotive and set its rotation to be the same as the first locomotive
+        GameObject lastLocomotive = Instantiate(locomotivePrefab, lastLocomotivePosition, locomotive.transform.rotation);
+
+        // Rotate the locomotive by 180 degrees
+        lastLocomotive.transform.Rotate(0, 180, 0);
+
+        // Set the parent of the rear locomotive to the empty train game object
+        lastLocomotive.transform.SetParent(emptyTrainGameObject.transform);
+
+        // Name it
+        lastLocomotive.name = "Last Locomotive";
     }
 
     public void AssignTaskToWagon(int wagonIndex, WagonTask task)
@@ -318,6 +386,9 @@ public class TrainController : MonoBehaviour
 
         // Spawn the wagons
         SpawnWagons(numWagons, useRandomStates);
+
+        // Spawn the last (rear) locomotive
+        //SpawnLastLocomotive();
 
         // Position the entire train
         PositionTrain(emptyTrainGameObject);

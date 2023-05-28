@@ -1,23 +1,38 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 public class DirtRemove : MonoBehaviour
 {
-    private int hitCount;
-    public int maxMopHits = 3;
+    private bool isMopping = false;
+    // Time how long the mob needs to be on the dirt until its destroyed
+    public float requiredMopTime = 3f;
+
+    private IEnumerator MopTimer()
+    {
+        yield return new WaitForSeconds(requiredMopTime);
+
+        Destroy(gameObject);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.tag == "Mop" && !isMopping)
+        {
+            isMopping = true;
+            StartCoroutine(MopTimer());
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
         if (other.gameObject.tag == "Mop")
         {
-            hitCount++;
-
-            if (hitCount >= maxMopHits)
-            {
-                Destroy(gameObject);
-            }
+            isMopping = false;
+            StopCoroutine(MopTimer());
         }
     }
 }
+
+
+
+

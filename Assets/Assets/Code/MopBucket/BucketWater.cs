@@ -4,18 +4,31 @@ using UnityEngine;
 
 public class BucketWater : MonoBehaviour
 {
+    // Counter var
+    public int cleanCounter = 0;
+
+    // Hit amount until mop is clean again
+    public int maxHitAmount = 3;
+
     void OnTriggerEnter(Collider other)
     {
         // Check if the object that entered the trigger
         if (other.gameObject.CompareTag("Mop"))
         {
-            // Get the MopScript from the broom.
+            // Get the MopScript from the mop
             MopScript mopScript = other.gameObject.GetComponent<MopScript>();
 
-            // If the broom has the MopScript, set the isClean boolean
             if (mopScript != null)
             {
-                mopScript.isClean = true;
+                cleanCounter++;
+
+                if (cleanCounter >= maxHitAmount)
+                {
+                    // Set boolean to true when enough hits are counted
+                    mopScript.isClean = true;
+                    // Reset the cleaner counter
+                    cleanCounter = 0;
+                }
             }
         }
     }

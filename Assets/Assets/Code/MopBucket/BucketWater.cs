@@ -5,7 +5,7 @@ using UnityEngine;
 public class BucketWater : MonoBehaviour
 {
     // Counter var
-    public int cleanCounter = 0;
+    private int cleanCounter = 0;
 
     // Hit amount until mop is clean again
     public int maxHitAmount = 3;

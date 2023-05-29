@@ -8,6 +8,14 @@ public class CheckBox : MonoBehaviour
     private float timeEntered = 0;
     public float maxTimeInSeconds = 3;
 
+    public Color checkedColor = Color.green;
+    private new Renderer renderer;
+
+    private void Start()
+    {
+        renderer = GetComponent<Renderer>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("CheckStick"))
@@ -24,6 +32,12 @@ public class CheckBox : MonoBehaviour
             {
                 isChecked = true;
                 Debug.Log("Trigger checkbox is set!");
+
+                // Change the color
+                if (renderer != null)
+                {
+                    renderer.material.color = checkedColor;
+                }
             }
         }
     }

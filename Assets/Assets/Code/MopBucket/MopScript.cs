@@ -29,13 +29,4 @@ public class MopScript : MonoBehaviour
         }
     }
 
-
-    private void OnTriggerEnter(Collider other)
-    {
-        // If in CleanWater, mop is clean again
-        if (other.gameObject.tag == "CleanWater")
-        {
-            isClean = true;
-        }
-    }
 }

@@ -11,12 +11,12 @@ public class TaskDashboardController : MonoBehaviour
     private readonly Dictionary<TaskType, string> taskDescriptions = new Dictionary<TaskType, string>()
     {
         { TaskType.Cleaning, "Clean wagon clutter" },
-        { TaskType.CheckBrakes, "Check brakes" },
+        { TaskType.CheckBrakes, "Check brake/s" },
         { TaskType.InspectCouplers, "Check couplers" },
         { TaskType.CleanInterior, "Clean the floor" },
         { TaskType.RefuelEngine, "Refill the motor" },
         { TaskType.FireExtinguisher, "Refill Fire Extinguisher" },
-        { TaskType.Medkit, "Refill Medkits" }
+        { TaskType.Medkit, "Refill Medkit" }
         // Add more mappings as needed (see enums)
     };
 

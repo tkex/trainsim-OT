@@ -29,6 +29,8 @@ public class WagonTaskHandling : MonoBehaviour
     // Medkit Anchor Prefab setable in the Inspector
     public GameObject medkitAnchorPrefab;
 
+    // CheckBrakes Zone Prefab setable in the Inspector
+    public GameObject checkBrakeZonePrefab;
 
     private void Start()
     {
@@ -95,6 +97,10 @@ public class WagonTaskHandling : MonoBehaviour
                 case TaskType.Cleaning:
                     task.SpawnTaskObject(cleanPrefab, transform);
                     Debug.Log(gameObject.name + " has a cleaning (can) task!");
+                    break;
+                case TaskType.CheckBrakes:
+                    task.SpawnTaskObject(checkBrakeZonePrefab, transform);
+                    Debug.Log(gameObject.name + " has a checkbrake task!");
                     break;
                 case TaskType.RefuelEngine:
                     task.SpawnTaskObject(refuelPrefab, transform);

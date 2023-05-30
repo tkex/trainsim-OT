@@ -8,14 +8,14 @@ public class CheckBox : MonoBehaviour
 
     public event IsCheckedEventHandler IsCheckedChanged;
 
-    private bool _isChecked = false;
+    private bool isChecked = false;
     public bool IsChecked
     {
-        get { return _isChecked; }
+        get { return isChecked; }
         private set
         {
-            _isChecked = value;
-            if (_isChecked)
+            isChecked = value;
+            if (isChecked)
             {
                 IsCheckedChanged?.Invoke(this, System.EventArgs.Empty);
             }

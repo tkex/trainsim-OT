@@ -20,15 +20,14 @@ public class WagonTaskHandling : MonoBehaviour
     // Refuel Prefab setable in the Inspector
     public GameObject refuelPrefab;
 
-    // Cleaning Prefab setable in the Inspector
-    public GameObject cleaningPrefab;
+    // Cleaning Prefab (pepsi can right now) setable in the Inspector
+    public GameObject cleanPrefab;
 
     // Fire Extinguisher Anchor Prefab setable in the Inspector
     public GameObject fireExtinguisherAnchorPrefab;
 
     // Medkit Anchor Prefab setable in the Inspector
     public GameObject medkitAnchorPrefab;
-
 
 
     private void Start()
@@ -94,9 +93,8 @@ public class WagonTaskHandling : MonoBehaviour
             switch (task.TaskType)
             {
                 case TaskType.Cleaning:
-                    task.SpawnTaskObject(cleaningPrefab, transform);
-                    Debug.Log(gameObject.name + " has a cleaning task!");
-
+                    task.SpawnTaskObject(cleanPrefab, transform);
+                    Debug.Log(gameObject.name + " has a cleaning (can) task!");
                     break;
                 case TaskType.RefuelEngine:
                     task.SpawnTaskObject(refuelPrefab, transform);
@@ -109,7 +107,7 @@ public class WagonTaskHandling : MonoBehaviour
                 case TaskType.Medkit:
                     task.SpawnTaskObject(medkitAnchorPrefab, transform);
                     Debug.Log(gameObject.name + " has a medkit task!");
-                    break;
+                    break;  
                 // Add more cases for other task types
                 default:
                     Debug.LogWarning("Unknown task type: " + task.TaskType);

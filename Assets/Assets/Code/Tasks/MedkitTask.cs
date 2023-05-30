@@ -39,7 +39,7 @@ public class MedkitTask : WagonTask
             isAnchorOccupied = true;
             Debug.Log($"Medkit was placed on anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
 
-            // Once fire ext. is placed, execute handle function
+            // Once the medkit is placed, execute handle function
             HandleTask();
         }
     }
@@ -90,13 +90,13 @@ public class MedkitTask : WagonTask
         Vector3 rotationAngles = new Vector3(90f, 0f, -90f);
 
         // Instantiate GameObject with parent Transform
-        GameObject fireExtinguisherAnchorObject = GameObject.Instantiate(go, parentTransform);
+        GameObject medkitAnchorObject = GameObject.Instantiate(go, parentTransform);
 
         // Adjust position relative to the parent Transform
-        fireExtinguisherAnchorObject.transform.position = parentTransform.TransformPoint(offset);
+        medkitAnchorObject.transform.position = parentTransform.TransformPoint(offset);
 
         // Adjust rotation relative to the parent Transform
-        fireExtinguisherAnchorObject.transform.rotation = Quaternion.Euler(rotationAngles);
+        medkitAnchorObject.transform.rotation = Quaternion.Euler(rotationAngles);
     }
 }
 

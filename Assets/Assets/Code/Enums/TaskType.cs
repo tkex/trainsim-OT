@@ -1,6 +1,6 @@
 public enum TaskType
 {
-    Cleaning,           // Wagon reinigen
+    Cleaning,           // Wagon reinigen (Dose entfernen momentan)
     CheckBrakes,        // Bremsen ueberprüfen
     InspectCouplers,    // Kupplungen inspizieren
     CleanInterior,      // Innenraum reinigen

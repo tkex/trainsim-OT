@@ -4,7 +4,24 @@ using UnityEngine;
 
 public class CheckBox : MonoBehaviour
 {
-    public bool isChecked = false;
+    public delegate void IsCheckedEventHandler(object sender, System.EventArgs e);
+
+    public event IsCheckedEventHandler IsCheckedChanged;
+
+    private bool _isChecked = false;
+    public bool IsChecked
+    {
+        get { return _isChecked; }
+        private set
+        {
+            _isChecked = value;
+            if (_isChecked)
+            {
+                IsCheckedChanged?.Invoke(this, System.EventArgs.Empty);
+            }
+        }
+    }
+
     private float timeEntered = 0;
     public float maxTimeInSeconds = 3;
 
@@ -30,7 +47,7 @@ public class CheckBox : MonoBehaviour
         {
             if (Time.time - timeEntered >= maxTimeInSeconds)
             {
-                isChecked = true;
+                IsChecked = true;
                 Debug.Log("Trigger checkbox is set!");
 
                 // Change the color

@@ -10,14 +10,13 @@ public class TaskDashboardController : MonoBehaviour
     // Dictionary to map enum values to descriptions (used only for the dashboard)
     private readonly Dictionary<TaskType, string> taskDescriptions = new Dictionary<TaskType, string>()
     {
-        { TaskType.Cleaning, "Wagen reinigen" },
-        { TaskType.CheckBrakes, "Bremsen prüfen" },
-        { TaskType.InspectCouplers, "Kupplung inspizieren" },
-        { TaskType.RepairLighting, "Beleuchtung reparieren" },
-        { TaskType.CleanInterior, "Innenraum reinigen" },
-        { TaskType.LubricateDoors, "Türen schmieren" },
-        { TaskType.RefuelEngine, "Motor betanken" },
-        { TaskType.FireExtinguisher, "Feuerlöscher auffüllen" }
+        { TaskType.Cleaning, "Clean Wagon" },
+        { TaskType.CheckBrakes, "Check brakes" },
+        { TaskType.InspectCouplers, "Check couplers" },
+        { TaskType.CleanInterior, "Clean interior" },
+        { TaskType.RefuelEngine, "Refill the motor" },
+        { TaskType.FireExtinguisher, "Refill Fire Extinguisher" },
+        { TaskType.Medkit, "Refill Medkits" }
         // Add more mappings as needed (see enums)
     };
 

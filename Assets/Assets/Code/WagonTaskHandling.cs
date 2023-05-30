@@ -12,6 +12,7 @@ public class WagonTaskHandling : MonoBehaviour
     // Holds the current WagonObject for task completion
     public GameObject currentPlayerWagon;
 
+
     /*
      * Tasks Objects that get spawned in the wagons
     */
@@ -22,10 +23,11 @@ public class WagonTaskHandling : MonoBehaviour
     // Cleaning Prefab setable in the Inspector
     public GameObject cleaningPrefab;
 
-    // Fire Extinguisher Prefab setable in the Inspector
+    // Fire Extinguisher Anchor Prefab setable in the Inspector
     public GameObject fireExtinguisherAnchorPrefab;
 
-
+    // Medkit Anchor Prefab setable in the Inspector
+    public GameObject medkitAnchorPrefab;
 
 
 
@@ -103,6 +105,10 @@ public class WagonTaskHandling : MonoBehaviour
                 case TaskType.FireExtinguisher:
                     task.SpawnTaskObject(fireExtinguisherAnchorPrefab, transform);
                     Debug.Log(gameObject.name + " has a fire extinguisher task!");
+                    break;
+                case TaskType.Medkit:
+                    task.SpawnTaskObject(medkitAnchorPrefab, transform);
+                    Debug.Log(gameObject.name + " has a medkit task!");
                     break;
                 // Add more cases for other task types
                 default:

@@ -133,8 +133,7 @@ MonoBehaviour:
   GenerateAllMipmaps: 1
   OutputMaterial: {fileID: 2100000, guid: c9fed55f6e3689743bdfdc3d8003874e, type: 2}
   DefaultPreset: " <sbspreset pkgurl=\"pkg://MetalPlain\" label=\"\" >\n  <presetinput
-    identifier=\"$outputsize\" uid=\"665442015\" type=\"8\" value=\"10,10\" />\n
-    </sbspreset>\n"
+    identifier=\"$outputsize\" uid=\"665442015\" type=\"8\" value=\"10,10\" />\n</sbspreset>\n"
   MaterialShader: Universal Render Pipeline/Lit
   RenderTextures: 0
   OutputRemaped: 0

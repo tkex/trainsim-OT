@@ -123,8 +123,7 @@ MonoBehaviour:
   GenerateAllMipmaps: 1
   OutputMaterial: {fileID: 2100000, guid: 65e2e830513e13d4f9890ac7e2976a24, type: 2}
   DefaultPreset: " <sbspreset pkgurl=\"pkg://SmoothMetal\" label=\"\" >\n  <presetinput
-    identifier=\"$outputsize\" uid=\"3728126962\" type=\"8\" value=\"10,10\" />\n
-    </sbspreset>\n"
+    identifier=\"$outputsize\" uid=\"3728126962\" type=\"8\" value=\"10,10\" />\n</sbspreset>\n"
   MaterialShader: Universal Render Pipeline/Lit
   RenderTextures: 0
   OutputRemaped: 0

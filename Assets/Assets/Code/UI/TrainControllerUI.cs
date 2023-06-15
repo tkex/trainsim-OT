@@ -10,7 +10,7 @@ using System.Collections;
 public class TrainControllerUI : MonoBehaviour
 {
     public TrainController trainController;
-
+    public PlayerNavigation playerNavigation;
 
     [Header("References")]
     public Slider numWagonsSlider;
@@ -119,6 +119,8 @@ public class TrainControllerUI : MonoBehaviour
         // Deactivate startMaintenanceButton after starting maintenance
         startMaintenanceButton.interactable = false;
 
+        // Show navigation to taskdashboard
+        playerNavigation.ButtonIsClicked();
     }
 
     private IEnumerator WaitForTrainMoveInDuration()

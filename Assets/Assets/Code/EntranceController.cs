@@ -11,7 +11,7 @@ public class EntranceController : MonoBehaviour
     [SerializeField] private GameObject rightDoor;
     [SerializeField] private DoorType doorType;
     [SerializeField] private float delayForDoorClose = 1f;
-    [SerializeField] private float duration = 3f;
+    [SerializeField] private float openingDuration = 3f;
     [SerializeField] private float distance = 3f;
 
     private Vector3 leftDoorOriginalPosition;
@@ -73,8 +73,8 @@ public class EntranceController : MonoBehaviour
 
     public void OpenDoor()
     {
-        leftDoor.transform.DOMove(leftDoorTargetPosition, duration).SetEase(Ease.OutQuad);
-        rightDoor.transform.DOMove(rightDoorTargetPosition, duration).SetEase(Ease.OutQuad);
+        leftDoor.transform.DOMove(leftDoorTargetPosition, openingDuration).SetEase(Ease.OutQuad);
+        rightDoor.transform.DOMove(rightDoorTargetPosition, openingDuration).SetEase(Ease.OutQuad);
         openDoor = true;
 
         // Close the door after delay
@@ -83,8 +83,8 @@ public class EntranceController : MonoBehaviour
 
     public void CloseDoor()
     {
-        leftDoor.transform.DOMove(leftDoorOriginalPosition, duration).SetEase(Ease.OutQuad);
-        rightDoor.transform.DOMove(rightDoorOriginalPosition, duration).SetEase(Ease.OutQuad);
+        leftDoor.transform.DOMove(leftDoorOriginalPosition, openingDuration).SetEase(Ease.OutQuad);
+        rightDoor.transform.DOMove(rightDoorOriginalPosition, openingDuration).SetEase(Ease.OutQuad);
         openDoor = false;
     }
 

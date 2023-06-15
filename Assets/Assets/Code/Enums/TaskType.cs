@@ -7,5 +7,4 @@ public enum TaskType
     RefuelEngine,       // Motor betanken
     Medkit,             // Erste Hilfe auffüllen
     FireExtinguisher,   // Feuerlöscher auffüllen
-
 }

@@ -9,16 +9,13 @@ public class WagonTaskHandling : MonoBehaviour
     // WagonTaskAssigner reference of the individual wagon
     private WagonTaskAssigner wagonTaskAssigner;
 
-    // Holds the current WagonObject for task completion
-    public GameObject currentPlayerWagon;
-
 
     /*
      * Tasks Objects that get spawned in the wagons
     */
-
+    [Header("Prefab Spawn Objects")]
     // Refuel Prefab setable in the Inspector
-    public GameObject refuelPrefab;
+    //public GameObject refuelPrefab;
 
     // Cleaning Prefab (pepsi can right now) setable in the Inspector
     public GameObject cleanPrefab;
@@ -31,6 +28,14 @@ public class WagonTaskHandling : MonoBehaviour
 
     // CheckBrakes Zone Prefab setable in the Inspector
     public GameObject checkBrakeZonePrefab;
+
+    // CleaningInterior Prefab (Banana peel)
+    public GameObject cleaningInteriorPrefab;
+
+    [Header("Do not touchey (keep empty)")]
+    [Tooltip("Only public so each task script can access it.")]
+    // Holds the current WagonObject for task completion
+    public GameObject currentPlayerWagon;
 
     private void Start()
     {
@@ -102,10 +107,10 @@ public class WagonTaskHandling : MonoBehaviour
                     task.SpawnTaskObject(checkBrakeZonePrefab, transform);
                     Debug.Log(gameObject.name + " has a checkbrake task!");
                     break;
-                case TaskType.RefuelEngine:
-                    task.SpawnTaskObject(refuelPrefab, transform);
-                    Debug.Log(gameObject.name + " has a refuel task!");
-                    break;
+                //case TaskType.RefuelEngine:
+                    //task.SpawnTaskObject(refuelPrefab, transform);
+                    //Debug.Log(gameObject.name + " has a refuel task!");
+                    //break;
                 case TaskType.FireExtinguisher:
                     task.SpawnTaskObject(fireExtinguisherAnchorPrefab, transform);
                     Debug.Log(gameObject.name + " has a fire extinguisher task!");
@@ -113,7 +118,11 @@ public class WagonTaskHandling : MonoBehaviour
                 case TaskType.Medkit:
                     task.SpawnTaskObject(medkitAnchorPrefab, transform);
                     Debug.Log(gameObject.name + " has a medkit task!");
-                    break;  
+                    break;
+                case TaskType.CleanInterior:
+                    task.SpawnTaskObject(cleaningInteriorPrefab, transform);
+                    Debug.Log(gameObject.name + " has a cleaning interior task!");
+                    break;
                 // Add more cases for other task types
                 default:
                     Debug.LogWarning("Unknown task type: " + task.TaskType);

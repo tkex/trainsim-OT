@@ -38,7 +38,7 @@ public class TrainController : MonoBehaviour
 
     [Tooltip("Duration value for drive in time of the train.")]
     [Range(0.0f, 20f)]
-    public float trainMoveInDuration; // Duration of the train ride in seconds
+    public float trainMoveInDuration = 20f; // Duration of the train move in (in seconds)
 
     private bool isMoving = false; // Becomes true when the train is moving
     private Sequence movementSequence; // DOTween movement sequence
@@ -53,12 +53,15 @@ public class TrainController : MonoBehaviour
     [Tooltip("The individual decouple distance for each wagon.")]
     [Range(0.0f, 2f)]
     public float decoupleDistance = 2f;
+
     [Tooltip("Duration how long the decouple process takes per wagon.")]
     [Range(0.0f, 10f)]
     public float decoupleDuration = 4; 
-    [Tooltip("Individual time in seconds (delay) for the encoupling and drive out.")]
-    [Range(0.0f, 5f)]
-    [SerializeField] private float delayBetweenEncoupleAndDriveOut = 3f;
+
+    [Header("Door Delay Settings")]
+    [Tooltip("Delay between the opening door opening and until the train moves in.")]
+    [Range(0.0f, 4f)]
+    [SerializeField] private float delayBetweenDoorsAndTrainMoveOn = 4f;
 
     [Header("Control-Flags Settings")]
     [Tooltip("Flag to determine whether should encouple when moving into hall.")]
@@ -72,10 +75,11 @@ public class TrainController : MonoBehaviour
     [Tooltip("Flag to determine whether wagons get random states or defined ones.")]
     public bool useRandomStates;
 
+
     [Header("Dynamic - No touch here")]
     public GameObject emptyTrainGameObject; // Empty train parent
     private GameObject locomotive; // Locomotive GameObject
-    public GameObject[] wagons;  // An array to store all created wagons (instiated in runtime)
+    public GameObject[] wagons;  // Array to store all created wagons (instiated in runtime)
 
     #endregion
 
@@ -144,8 +148,8 @@ public class TrainController : MonoBehaviour
     {
         isMoving = true;
 
-        // Open door
-        TriggerTrainArriveAtEntrance();
+        // Open door with delay
+        StartCoroutine(OpenDoorWithDelay());
 
         // Move the locomotive to the maintenanceTargetPosition
         movementSequence = DOTween.Sequence();
@@ -157,6 +161,15 @@ public class TrainController : MonoBehaviour
             });
     }
 
+    private IEnumerator OpenDoorWithDelay()
+    {
+        // Open the door
+        TriggerTrainArriveAtEntrance();
+
+        // Wait for 3 seconds
+        yield return new WaitForSeconds(delayBetweenDoorsAndTrainMoveOn); 
+    }
+
     public void MoveTrainOutOfHall()
     {
         // Open exit door
@@ -166,7 +179,7 @@ public class TrainController : MonoBehaviour
 
         // Move the locomotive to the maintenanceTargetPosition
         movementSequence = DOTween.Sequence();
-        movementSequence.Append(emptyTrainGameObject.transform.DOMove(maintenanceTargetPosition.position, trainMoveInDuration).SetEase(Ease.OutCubic))
+        movementSequence.Append(emptyTrainGameObject.transform.DOMove(maintenanceTargetPosition.position, trainMoveInDuration).SetEase(Ease.InCubic))
             .OnComplete(() =>
             {
             // Set the flag that the train is not moving anymore
@@ -247,8 +260,8 @@ public class TrainController : MonoBehaviour
             // Encouple logic
             for (int i = 0; i < wagons.Length; i++)
             {
-                Vector3 wagonPosition = initialWagonPositions[i]; // Get initial position of wagon
-                wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic); // Animate and move position of each wagon
+                Vector3 wagonPosition = initialWagonPositions[i];
+                wagons[i].transform.DOMove(wagonPosition, decoupleDuration).SetEase(Ease.OutCubic);
 
                 yield return new WaitForSeconds(time);
             }
@@ -392,6 +405,36 @@ public class TrainController : MonoBehaviour
 
         // Position the entire train
         PositionTrain(emptyTrainGameObject);
+    }
+
+
+    public IEnumerator OpenAllDoors()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        foreach (Transform child in emptyTrainGameObject.transform)
+        {
+            WagonDoorHandling doorHandling = child.gameObject.GetComponent<WagonDoorHandling>();
+            if (doorHandling != null)
+            {
+                doorHandling.OpenDoors();
+            }
+        }
+    }
+
+    public IEnumerator CloseAllDoors()
+    {  
+        foreach (Transform child in emptyTrainGameObject.transform)
+        {
+            WagonDoorHandling doorHandling = child.gameObject.GetComponent<WagonDoorHandling>();
+            if (doorHandling != null)
+            {
+                doorHandling.CloseDoors();
+            }
+        }
+
+        yield return new WaitForSeconds(5.0f);
+
     }
 }
 

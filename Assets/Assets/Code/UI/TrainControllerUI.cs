@@ -11,6 +11,7 @@ public class TrainControllerUI : MonoBehaviour
 {
     public TrainController trainController;
 
+
     [Header("References")]
     public Slider numWagonsSlider;
     public Toggle useRandomStatesToggle;
@@ -24,8 +25,11 @@ public class TrainControllerUI : MonoBehaviour
     public Button decoupleTrainButton;
     public Button encoupleTrainButton;
 
-    // Delay before the train moves into the platform
-    public float trainMoveInDelay = 2f;
+    // Symbiose of the four buttons on top
+    public Button startMaintenanceButton;
+    public Button completeMaintenanceButton;
+
+
 
     // References to the UI elements for assigning tasks to wagons
     public GameObject tasksPanel;
@@ -64,6 +68,13 @@ public class TrainControllerUI : MonoBehaviour
         moveTrainOutsideButton.onClick.AddListener(OnMoveTrainOutsideClicked);
         encoupleTrainButton.onClick.AddListener(OnTrainEncoupleClicked);
 
+        startMaintenanceButton.onClick.AddListener(OnStartMaintenanceButtonClicked);
+        completeMaintenanceButton.onClick.AddListener(OnCompleteMaintenanceButtonClicked);
+
+        // Set buttons to non-interactable at start
+        startMaintenanceButton.interactable = false;
+        completeMaintenanceButton.interactable = false;
+
         // Set the initial values
         numWagons = (int)numWagonsSlider.value;
         useRandomStates = useRandomStatesToggle.isOn;
@@ -73,8 +84,106 @@ public class TrainControllerUI : MonoBehaviour
 
         // Initialize the wagon task panels
         InitializeWagonTaskPanels();
+    }
+
+    void Update()
+    {
+        // Get the TrainStateMachine from the trainController
+        var trainStateMachine = trainController.GetComponent<TrainStateMachine>();
+
+        // If there is a TrainStateMachine, check the state
+        if (trainStateMachine != null)
+        {
+            // Check maintenance status for maintained and actvicate the interactble
+            if (trainStateMachine.trainState == TrainState.Maintained)
+            {
+                completeMaintenanceButton.interactable = true;
+            }
+            else
+            {
+                completeMaintenanceButton.interactable = false;
+            }
+        }
+    }
+
+
+    // Button StartMaintenance
+    private void OnStartMaintenanceButtonClicked()
+    {
+        // Move train inside the hall
+        OnMoveTrainInsideClicked();
+
+        // Wait for the duration specified in trainMoveInDuration
+        StartCoroutine(WaitForTrainMoveInDuration());
+
+        // Deactivate startMaintenanceButton after starting maintenance
+        startMaintenanceButton.interactable = false;
 
     }
+
+    private IEnumerator WaitForTrainMoveInDuration()
+    {
+        // Get the trainMoveInDuration value
+        float duration = 20f;
+
+        // Wait for the duration
+        yield return new WaitForSeconds(duration);
+        
+        // Open doors
+        StartCoroutine(trainController.OpenAllDoors());
+
+        // Decouple train
+        OnTrainDecoupleClicked();
+    }
+
+    // Button CompleteMaintenance
+
+    private void OnCompleteMaintenanceButtonClicked()
+    {
+        // Start coroutine to close doors and then encouple train
+        StartCoroutine(CloseDoorsAndEncoupleTrain());
+
+        // Deactivate completeMaintenanceButton after completing maintenance
+        completeMaintenanceButton.interactable = false;
+    }
+
+    private IEnumerator CloseDoorsAndEncoupleTrain()
+    {
+        // Start coroutine to close doors and wait for it to finish
+        yield return StartCoroutine(trainController.CloseAllDoors());
+
+        // Encoupling train
+        OnTrainEncoupleClicked();
+
+        // Wait for  duration to move train outside
+        StartCoroutine(WaitBeforeTrainMoveOut());
+    }
+
+    private IEnumerator WaitBeforeTrainMoveOut()
+    {
+        // Delay duration in seconds
+        float delayDuration = 8f;
+
+         yield return new WaitForSeconds(delayDuration);
+
+        // Move train outside
+        OnMoveTrainOutsideClicked();
+    }
+
+    // To get the wagon door handling of a wagon
+    private WagonDoorHandling GetWagonDoorHandling(GameObject wagon)
+    {
+        WagonDoorHandling wagonDoorHandling = wagon.GetComponent<WagonDoorHandling>();
+
+        if (wagonDoorHandling == null)
+        {
+            Debug.LogError("WagonDoorHandling not found: " + wagon.name);
+        }
+
+        return wagonDoorHandling;
+    }
+
+    // Button n's
 
     private void OnMoveTrainInsideClicked()
     {
@@ -94,15 +203,17 @@ public class TrainControllerUI : MonoBehaviour
 
     private void OnTrainDecoupleClicked()
     {
-        // Move train inside when button is pressed
+        // Decouple train
         StartCoroutine(trainController.ExecuteDecoupleAfterTime(1.0f));
     }
 
     private void OnTrainEncoupleClicked()
     {
-        // Move train inside when button is pressed
+        //Encouple train
         StartCoroutine(trainController.ExecuteEncoupleAfterTime(1.0f));
     }
+
+    // --- 
 
     void OnNumWagonsChanged(float value)
     {
@@ -138,7 +249,8 @@ public class TrainControllerUI : MonoBehaviour
             {
                 RectTransform rectTransform = wagonTaskPanel.GetComponent<RectTransform>();
                 RectTransform prevRectTransform = wagonTaskPanels[i - 1].GetComponent<RectTransform>();
-                Vector2 position = prevRectTransform.anchoredPosition + new Vector2(prevRectTransform.sizeDelta.x / 2.5f, 0f);
+                // 2.5 before
+                Vector2 position = prevRectTransform.anchoredPosition + new Vector2(prevRectTransform.sizeDelta.x / 4.2f, 0f);
                 rectTransform.anchoredPosition = position;
             }
 
@@ -265,7 +377,9 @@ public class TrainControllerUI : MonoBehaviour
 
             // Calculate the new position based on the number of dropdown menus
             int dropdownCount = panel.transform.childCount - 3; // Exclude the "Dropdown" template
-            float yOffset = -0.15f * dropdownCount;
+
+            // -0.15f before
+            float yOffset = -0.10f * dropdownCount;
             Vector3 newPosition = new Vector3(dropdownTransform.position.x, dropdownTransform.position.y + yOffset, dropdownTransform.position.z);
             newDropdown.transform.position = newPosition;
 
@@ -409,13 +523,15 @@ public class TrainControllerUI : MonoBehaviour
 
         if (!useRandomStates)
         {
-            StartCoroutine(DelayedAssignTasksToWagon(2.0f));
-
+            StartCoroutine(DelayedAssignTasksToWagon(1.0f));
         }
         else
         {
             // ....
         }
+
+        // Activate startMaintenanceButton after spawning the train thus the maintenance can start
+        startMaintenanceButton.interactable = true;
     }
 
     private IEnumerator DelayedAssignTasksToWagon(float delay)
@@ -424,55 +540,60 @@ public class TrainControllerUI : MonoBehaviour
         AssignTasksToWagon();
     }
 
-    void AssignTasksToWagon()
+    // Important: Must be refined and customized the moment the structure of the train (TrainController) changes.
+    // Otherwise the UI wagon task mapping is not working properly. Might be overworked in the future.
+    public void AssignTasksToWagon()
     {
         if (trainController.emptyTrainGameObject != null)
         {
             Debug.Log("Empty train game object found");
-            Transform locomotive = trainController.emptyTrainGameObject.transform.Find("Locomotive");
-            if (locomotive != null)
-            {
-                Debug.Log("Locomotive found");
-                for (int i = 0; i < locomotive.transform.childCount; i++)
-                {
-                    Transform wagon = locomotive.transform.GetChild(i);
-                    WagonTaskAssigner wagonTaskAssigner = wagon.GetComponent<WagonTaskAssigner>();
-                    if (wagonTaskAssigner != null)
-                    {
-                        Debug.Log("WagonTaskAssigner found for wagon " + wagon.name);
-                        if (wagonTasks.TryGetValue(i, out HashSet<string> assignedTaskNames))
-                        {
-                            foreach (string taskName in assignedTaskNames)
-                            {
-                                if (taskTypeMapping.TryGetValue(taskName, out Type taskType))
-                                {
-                                    WagonTask taskToAssign = (WagonTask)Activator.CreateInstance(taskType);
-                                    wagonTaskAssigner.AssignSpecificTaskToWagon(taskToAssign);
 
-                                    // Get a reference to the WagonTaskHandling component attached to the wagon
-                                    WagonTaskHandling wagonTaskHandling = wagon.GetComponent<WagonTaskHandling>();
-                                    if (wagonTaskHandling != null)
-                                    {
-                                        // Call the HandleTask() function on the WagonTaskHandling component
-                                        wagonTaskHandling.SpawnTasks();
-                                    }
+            // Index for the dictionary mapping (workaround)
+            // Since index i was the key to retrieve the assigned tasks, it started from 0+1 and could not assign the tasks properly
+            int wagonDictTaskIndex = 0;
+
+            // Index 1 since locomotive is first child of the empty train GO
+            for (int i = 1; i < trainController.emptyTrainGameObject.transform.childCount; i++)
+            {
+                Transform wagon = trainController.emptyTrainGameObject.transform.GetChild(i);
+                WagonTaskAssigner wagonTaskAssigner = wagon.GetComponent<WagonTaskAssigner>();
+
+                if (wagonTaskAssigner != null)
+                {
+                    Debug.Log("WagonTaskAssigner found " + wagon.name);
+
+                    // Use a taskIndex now so wagon tasks are assigned properly
+                    if (wagonTasks.TryGetValue(wagonDictTaskIndex, out HashSet<string> assignedTaskNames))
+                    {
+                        foreach (string taskName in assignedTaskNames)
+                        {
+                            if (taskTypeMapping.TryGetValue(taskName, out Type taskType))
+                            {
+                                WagonTask taskToAssign = (WagonTask)Activator.CreateInstance(taskType);
+                                wagonTaskAssigner.AssignSpecificTaskToWagon(taskToAssign);
+
+                                // Get a reference to the WagonTaskHandling component attached to the wagon
+                                WagonTaskHandling wagonTaskHandling = wagon.GetComponent<WagonTaskHandling>();
+                                if (wagonTaskHandling != null)
+                                {
+                                    // Spawn the tasks of the wagon
+                                    wagonTaskHandling.SpawnTasks();
                                 }
                             }
-                        }
-                        else
-                        {
-                            Debug.LogWarning("No wagon tasks found for wagon " + wagon.name);
                         }
                     }
                     else
                     {
-                        Debug.LogWarning("WagonTaskAssigner not found for wagon " + wagon.name);
+                        Debug.LogWarning("No wagon tasks found " + wagon.name);
                     }
+
+                    // Increse taskIndex the moment a WagonTaskAssigner is found on a wagon
+                    wagonDictTaskIndex++;
                 }
-            }
-            else
-            {
-                Debug.LogWarning("Locomotive not found");
+                else
+                {
+                    Debug.LogWarning("WagonTaskAssigner not found " + wagon.name);
+                }
             }
         }
         else

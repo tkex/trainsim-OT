@@ -28,8 +28,9 @@ public class CheckBrakeTask : WagonTask
 
     private void CheckBox_IsCheckedChanged(object sender, System.EventArgs e)
     {
-        // Call HandleTask when isChecked is set to true
-        HandleTask();
+        // Call HandleTask when isChecked is set to true (not used)
+        // Reason for settings isDone here directly is due the BoxCollider of the train is not set for outer wagon tasks (WIP) thus returns when box is check and player is out of wagon box coll. range
+        IsDone = true;
     }
 
     public override void HandleTask()
@@ -45,11 +46,11 @@ public class CheckBrakeTask : WagonTask
 
 
         Debug.Log("Handling CheckBrakes Task");
-        IsDone = true;
+        //IsDone = true;
 
         Debug.Log("CheckBrakes Task is now done.");
 
-        CompleteTask();
+        //CompleteTask();
     }
 
     public override void SpawnTaskObject(GameObject go, Transform parentTransform)
@@ -71,6 +72,7 @@ public class CheckBrakeTask : WagonTask
 
         // Subscribe to IsCheckedChanged event
         checkBox = checkBrakeZoneObject.GetComponent<CheckBox>();
+
         if (checkBox != null)
         {
             checkBox.IsCheckedChanged += CheckBox_IsCheckedChanged;

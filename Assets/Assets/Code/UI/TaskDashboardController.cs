@@ -10,11 +10,10 @@ public class TaskDashboardController : MonoBehaviour
     // Dictionary to map enum values to descriptions (used only for the dashboard)
     private readonly Dictionary<TaskType, string> taskDescriptions = new Dictionary<TaskType, string>()
     {
-        { TaskType.Cleaning, "Clean wagon clutter" },
-        { TaskType.CheckBrakes, "Check brake/s" },
-        { TaskType.InspectCouplers, "Check couplers" },
+        { TaskType.Cleaning, "Clean Wagon Garbage" },
+        { TaskType.CheckBrakes, "Check Brake" },
+        { TaskType.InspectCouplers, "Check Couplers" },
         { TaskType.CleanInterior, "Clean the floor" },
-        { TaskType.RefuelEngine, "Refill the motor" },
         { TaskType.FireExtinguisher, "Refill Fire Extinguisher" },
         { TaskType.Medkit, "Refill Medkit" }
         // Add more mappings as needed (see enums)
@@ -48,10 +47,12 @@ public class TaskDashboardController : MonoBehaviour
                     string text = $"{checkbox} {description}";
 
                     // Cross out the task text if it's done
-                    if (task.IsDone)
+                    /*
+                     * if (task.IsDone)
                     {
                         text = $"<s>{text}</s>";
                     }
+                    */
 
                     dashboardText.text += text + "\n";
                 }

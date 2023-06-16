@@ -5,8 +5,6 @@ using DG.Tweening;
 
 public class SweeperRoboter : MonoBehaviour
 {
-
-
     // Boolean flag to check if the robot is turned on
     public bool isTurnedOn = false;
 
@@ -45,6 +43,11 @@ public class SweeperRoboter : MonoBehaviour
     private Vector3 direction;
 
 
+    // The target GameObject
+    [Header("Target Settings")]
+    public GameObject targetDirection;
+    public GameObject targetDirectionTrigger;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -63,7 +66,7 @@ public class SweeperRoboter : MonoBehaviour
             leftBrush.transform.DORotate(new Vector3(0, 0, brushRotationSpeed), 1, RotateMode.LocalAxisAdd).SetLoops(-1, LoopType.Incremental);
             rightBrush.transform.DORotate(new Vector3(0, 0, -brushRotationSpeed), 1, RotateMode.LocalAxisAdd).SetLoops(-1, LoopType.Incremental);
 
-            // Start the timer and turn off the robot after the specified duration
+            // Start the timer and turn off the robot after the duration
             StartCoroutine(TurnOffAfterDuration(activeDuration));
 
             // Start blinking the eyes
@@ -84,7 +87,7 @@ public class SweeperRoboter : MonoBehaviour
             // Stop blinking the eyes
             if (isBlinking)
             {
-                StopCoroutine(BlinkEyes(blinkInterval));
+                //StopCoroutine(BlinkEyes(blinkInterval));
                 isBlinking = false;
             }
 
@@ -99,22 +102,46 @@ public class SweeperRoboter : MonoBehaviour
         isTurnedOn = false;
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
+        // If object has screwdriver tag
+        if (other.gameObject.CompareTag("Screwdriver"))
+        {
+            // Change direction towards the target GO
+            direction = (targetDirection.transform.position - transform.position).normalized;
+
+            Debug.Log("Robo-Screwdriver collision occurs!");
+
+            // Activate robot
+            isTurnedOn = true;
+        }
+
+        // Once robot is at the target place...
+        if (other.gameObject == targetDirectionTrigger)
+        {
+            // Turn robot off
+            isTurnedOn = false;
+
+            // Stop movement
+            rb.velocity = Vector3.zero;
+
+            Debug.Log("Robo has reached the destination!");
+        }
+
         // Change the direction when a collision occurs
         //direction = Vector3.Reflect(direction, collision.contacts[0].normal);
 
         // Calculate reflection direction based on the angle of incidence and the normal at the point of collision
-        Vector3 reflectDirection = Vector3.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
+        //Vector3 reflectDirection = Vector3.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
 
         // Ensure the reflection direction stays on the ground
-        reflectDirection.y = 0;
+        //reflectDirection.y = 0;
 
         // Change the rotation of the robot to face the reflection direction
-        transform.rotation = Quaternion.LookRotation(reflectDirection);
+        //transform.rotation = Quaternion.LookRotation(reflectDirection);
 
         // Update the movement direction of the robot
-        direction = transform.forward;
+        //direction = transform.forward;
     }
 
     IEnumerator BlinkEyes(float interval)
@@ -127,4 +154,5 @@ public class SweeperRoboter : MonoBehaviour
             yield return new WaitForSeconds(interval);
         }
     }
+
 }

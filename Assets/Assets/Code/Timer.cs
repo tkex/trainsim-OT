@@ -5,21 +5,26 @@ public class Timer : MonoBehaviour
 {
     [Header("Timer Settings")]
     [Tooltip("Drag in the Timer text.")]
-    public TextMeshProUGUI timerText; // Reference to the TextMeshProUGUI component that will display the timer
-    [Tooltip("Value of the number that gets counted down or up from.")]
-    public float startTime = 60f; // The time that the timer will start at (default is 60 seconds)
-    [Tooltip("If false, the countdown counts up and if true the timer counts down from the value of start time.")]
-    public bool countDown = false; // Whether the timer will count down instead of up
+    // Reference to the TextMeshProUGUI component that will display the timer
+    public TextMeshProUGUI timerText;
 
-    private float currentTime; // The current time on the timer
-    private bool isRunning; // Whether the timer is currently running or not
+    [Tooltip("Value of the number that gets counted down or up from.")]
+    // The time that the timer will start at
+    public float startTime = 60f;
+
+    [Tooltip("If false, the countdown counts up and if true the timer counts down from the value of start time.")]
+    // If the timer will count down instead of up
+    public bool countDown = false;
+
+    private float currentTime;
+    private bool isRunning;
 
     void Start()
     {
         // Set time inits
         currentTime = startTime;
 
-        // Disable later and start when game start is init.
+        // Disable later and start when game start is init
         StartTimer();
     }
 
@@ -37,7 +42,7 @@ public class Timer : MonoBehaviour
                 currentTime += Time.deltaTime;
             }
 
-            // Clamp the current time to zero if it goes below zero
+            // Stop the current time to zero if it goes below zero
             currentTime = Mathf.Max(currentTime, 0f);
 
             // Calculate the minutes and seconds from the current time
@@ -45,10 +50,11 @@ public class Timer : MonoBehaviour
             int seconds = (int)(currentTime % 60f);
 
             // Format the minutes and seconds as strings
-            string minutesStr = minutes.ToString().PadLeft(2, '0'); // Adds a leading zero if minutes < 10
-            string secondsStr = seconds.ToString().PadLeft(2, '0'); // Adds a leading zero if seconds < 10
+            // Adds a zero if minutes < 10
+            string minutesStr = minutes.ToString().PadLeft(2, '0');
+            // Adds a zero if seconds < 10
+            string secondsStr = seconds.ToString().PadLeft(2, '0');
 
-            // Set the TextMeshProUGUI component to display the time in the format "mm:ss"
             timerText.SetText(minutesStr + ":" + secondsStr);
 
             // Check if the timer has run out
@@ -56,7 +62,8 @@ public class Timer : MonoBehaviour
             {
                 StopTimer();
 
-                Debug.Log("Time's up!"); // Do something when the timer runs out
+                // Do something when the timer runs out
+                // Debug.Log("Time's up!");
             }
         }
     }
@@ -76,6 +83,7 @@ public class Timer : MonoBehaviour
         isRunning = false;
         string minutesStr = ((int)(currentTime / 60f)).ToString().PadLeft(2, '0');
         string secondsStr = ((int)(currentTime % 60f)).ToString().PadLeft(2, '0');
+
         timerText.SetText(minutesStr + ":" + secondsStr);
     }
 }

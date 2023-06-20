@@ -550,11 +550,8 @@ public class TrainControllerUI : MonoBehaviour
         {
             Debug.Log("Empty train game object found");
 
-            // Index for the dictionary mapping (workaround)
-            // Since index i was the key to retrieve the assigned tasks, it started from 0+1 and could not assign the tasks properly
             int wagonDictTaskIndex = 0;
 
-            // Index 1 since locomotive is first child of the empty train GO
             for (int i = 1; i < trainController.emptyTrainGameObject.transform.childCount; i++)
             {
                 Transform wagon = trainController.emptyTrainGameObject.transform.GetChild(i);
@@ -564,7 +561,6 @@ public class TrainControllerUI : MonoBehaviour
                 {
                     Debug.Log("WagonTaskAssigner found " + wagon.name);
 
-                    // Use a taskIndex now so wagon tasks are assigned properly
                     if (wagonTasks.TryGetValue(wagonDictTaskIndex, out HashSet<string> assignedTaskNames))
                     {
                         foreach (string taskName in assignedTaskNames)
@@ -573,15 +569,15 @@ public class TrainControllerUI : MonoBehaviour
                             {
                                 WagonTask taskToAssign = (WagonTask)Activator.CreateInstance(taskType);
                                 wagonTaskAssigner.AssignSpecificTaskToWagon(taskToAssign);
-
-                                // Get a reference to the WagonTaskHandling component attached to the wagon
-                                WagonTaskHandling wagonTaskHandling = wagon.GetComponent<WagonTaskHandling>();
-                                if (wagonTaskHandling != null)
-                                {
-                                    // Spawn the tasks of the wagon
-                                    wagonTaskHandling.SpawnTasks();
-                                }
                             }
+                        }
+
+                        // Get reference to  WagonTaskHandling component
+                        WagonTaskHandling wagonTaskHandling = wagon.GetComponent<WagonTaskHandling>();
+                        if (wagonTaskHandling != null)
+                        {
+                            // Spawn the tasks of the wagon
+                            wagonTaskHandling.SpawnTasks();
                         }
                     }
                     else
@@ -589,7 +585,6 @@ public class TrainControllerUI : MonoBehaviour
                         Debug.LogWarning("No wagon tasks found " + wagon.name);
                     }
 
-                    // Increse taskIndex the moment a WagonTaskAssigner is found on a wagon
                     wagonDictTaskIndex++;
                 }
                 else

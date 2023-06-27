@@ -12,8 +12,8 @@ public class CleaningTask : WagonTask
 
     private bool isAnchorOccupied = true;
 
-    // Name of the fire extinguisher GameObject
-    private string cleaningName = "PepsiCan";
+    // Name of the bottle GameObject
+    private string cleaningName = "ClubMateBottleFixed";
 
 
     [SerializeField]
@@ -40,7 +40,7 @@ public class CleaningTask : WagonTask
         if (e.GrabbableObject.name == cleaningName)
         {
             isAnchorOccupied = true;
-            Debug.Log($"Can was placed on anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
+            Debug.Log($"Bottle was placed on anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
         }
     }
 
@@ -49,9 +49,9 @@ public class CleaningTask : WagonTask
         if (e.GrabbableObject.name == cleaningName)
         {
             isAnchorOccupied = false;
-            Debug.Log($"Can was removed from anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
+            Debug.Log($"Bottle was removed from anchor {e.GrabbableAnchor.name} by {e.Grabber.Avatar.name}");
 
-            // Once the cleaning object (right now a Pepsi can) is placed, execute handle function
+            // Once the cleaning object (Club Mate bottle) is placed, execute handle function
             HandleTask();
         }
     }
@@ -80,7 +80,7 @@ public class CleaningTask : WagonTask
         }
         else
         {
-            Debug.Log("Cleaning Task can't be handled because the fire extinguisher is not placed yet.");
+            Debug.Log("Cleaning Task can't be handled because the bottle is not placed yet.");
         }
     }
 
@@ -90,15 +90,15 @@ public class CleaningTask : WagonTask
         Vector3 offset = new Vector3(-1.111f, 1.83f, 3.1f);
 
         // Offset for rotation
-        //Vector3 rotationAngles = new Vector3(90f, 0f, -90f);
+        Vector3 rotationAngles = new Vector3(0f, 180f, 0f);
 
         // Instantiate GameObject with parent Transform
-        GameObject cleaningCanAnchorObject = GameObject.Instantiate(go, parentTransform);
+        GameObject cleaningBottleAnchorObject = GameObject.Instantiate(go, parentTransform);
 
         // Adjust position relative to the parent Transform
-        cleaningCanAnchorObject.transform.position = parentTransform.TransformPoint(offset);
+        cleaningBottleAnchorObject.transform.position = parentTransform.TransformPoint(offset);
 
         // Adjust rotation relative to the parent Transform
-        //cleaningCanAnchorObject.transform.rotation = Quaternion.Euler(rotationAngles);
+        cleaningBottleAnchorObject.transform.rotation = Quaternion.Euler(rotationAngles);
     }
 }

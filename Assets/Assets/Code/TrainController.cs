@@ -81,6 +81,7 @@ public class TrainController : MonoBehaviour
     private GameObject locomotive; // Locomotive GameObject
     public GameObject[] wagons;  // Array to store all created wagons (instiated in runtime)
 
+    private GameObject lastLocomotive;
     #endregion
 
 
@@ -238,7 +239,7 @@ public class TrainController : MonoBehaviour
             // For each iteration, move all wagons starting from the i-th one
             for (int j = i; j < wagons.Length; j++)
             {
-                // Calculate the new position for each wagon
+                // New wagon position
                 Vector3 wagonPosition = wagons[j].transform.position - decoupleDistance * transform.forward;
 
                 // DOTween to move each wagon to its new position
@@ -247,6 +248,12 @@ public class TrainController : MonoBehaviour
 
             // Wait
             yield return new WaitForSeconds(time);
+        }
+
+        // Check if the last loc exists and only then move it
+        if (lastLocomotive != null)
+        {
+            // TODO
         }
     }
 
@@ -265,6 +272,12 @@ public class TrainController : MonoBehaviour
 
                 yield return new WaitForSeconds(time);
             }
+        }
+
+        // Check if the last loco exists and only move it
+        if (lastLocomotive != null)
+        {
+            // TODO
         }
     }
 
@@ -355,7 +368,7 @@ public class TrainController : MonoBehaviour
         Vector3 lastLocomotivePosition = transform.position + (numWagons + 1) * -wagonSpacing * transform.forward;
 
         // Instantiate the rear locomotive and set its rotation to be the same as the first locomotive
-        GameObject lastLocomotive = Instantiate(locomotivePrefab, lastLocomotivePosition, locomotive.transform.rotation);
+        lastLocomotive = Instantiate(locomotivePrefab, lastLocomotivePosition, locomotive.transform.rotation);
 
         // Rotate the locomotive by 180 degrees
         lastLocomotive.transform.Rotate(0, 180, 0);
@@ -364,7 +377,7 @@ public class TrainController : MonoBehaviour
         lastLocomotive.transform.SetParent(emptyTrainGameObject.transform);
 
         // Name it
-        lastLocomotive.name = "Last Locomotive";
+        lastLocomotive.name = "LastLocomotive";
     }
 
     public void AssignTaskToWagon(int wagonIndex, WagonTask task)
@@ -401,7 +414,7 @@ public class TrainController : MonoBehaviour
         SpawnWagons(numWagons, useRandomStates);
 
         // Spawn the last (rear) locomotive
-        //SpawnLastLocomotive();
+        // SpawnLastLocomotive();
 
         // Position the entire train
         PositionTrain(emptyTrainGameObject);

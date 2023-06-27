@@ -10,6 +10,7 @@ TagManager:
   - CheckZone
   - CheckStick
   - Screwdriver
+  - Bottle
   layers:
   - Default
   - TransparentFX
